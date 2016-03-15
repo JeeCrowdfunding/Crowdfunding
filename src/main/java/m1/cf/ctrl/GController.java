@@ -24,6 +24,11 @@ public class GController {
 	public String index() {
 		return "index";
 	}
+	
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
+	public String signup() {
+		return "inscription";
+	}
 
 	// mni tsift chi 9lwa b POST l add.html ghadi texecuta hadi
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
