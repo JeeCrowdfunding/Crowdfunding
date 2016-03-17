@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -28,15 +29,23 @@ public class Avantage implements Serializable {
 	
 	private String description;
 	
-	@ManyToOne
+	/*@ManyToOne
     @JoinColumn(name="id_projet")
-	private Projet projet;
+	private Projet projet;*/
 	
-	@ManyToMany(mappedBy="avantages")
+	@OneToMany(mappedBy="avantage")
+	private Set<Contribution> contribution;
+	
+
+	 @ManyToOne
+	    @JoinColumn(name="id_projet")
+		private Projet projet;
+	
+	/*@ManyToMany(mappedBy="avantages")
 	private Set<User> users = new HashSet<User>();
 	public float getMontant() {
 		return montant;
-	}
+	} */
 	public void setMontant(float montant) {
 		this.montant = montant;
 	}
@@ -46,12 +55,8 @@ public class Avantage implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Projet getProjet() {
-		return projet;
-	}
-	public void setProjet(Projet projet) {
-		this.projet = projet;
-	}
+	
+	
 	public Avantage(){}
 	public long getId() {
 		return id;
@@ -61,4 +66,14 @@ public class Avantage implements Serializable {
 		this.montant = montant;
 		this.description = description;
 	}
+	public Projet getProjet() {
+		return projet;
+	}
+	public void setProjet(Projet projet) {
+		this.projet = projet;
+	}
+	public float getMontant() {
+		return montant;
+	}
+	
 }

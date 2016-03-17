@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,12 +43,30 @@ public class User implements Serializable {
 	@Column(name = "numtel", unique = true)
 	private String numtel;
 	
+	
+	
+	
 	@OneToMany(mappedBy="user")
 	private Set<Projet> projets;
 	
-	@ManyToMany(cascade = {CascadeType.ALL})
+	@OneToMany( mappedBy="user" )
+	private Set<Contribution> contribution;
+	
+	public Set<Projet> getProjets() {
+		return projets;
+	}
+
+	public void setProjets(Set<Projet> projets) {
+		this.projets = projets;
+	}
+
+	
+
+	
+	
+	/*@ManyToMany(cascade = {CascadeType.ALL})
 	 @JoinTable(name="CONTRIBUTION", joinColumns={@JoinColumn(name="id_user")}, inverseJoinColumns={@JoinColumn(name="id_avantage")})
-	private Set<Avantage> avantages = new HashSet<Avantage>();
+	private Set<Avantage> avantages = new HashSet<Avantage>(); */
 	
 	public long getId() {
 		return id;

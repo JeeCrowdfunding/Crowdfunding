@@ -25,6 +25,7 @@ public class Projet implements Serializable {
 	
 	private String titre;
 	
+	@Column(columnDefinition = "text")
 	private String description;
 	
 	private float montant;

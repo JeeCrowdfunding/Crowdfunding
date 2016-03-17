@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,8 +25,32 @@ public class Contribution implements Serializable {
 	private float montant;
 	
 	private Date contribuer_le;
+    
+    @ManyToOne
+    @JoinColumn(name="id_user")
+	private User user;
+    
+    @ManyToOne
+    @JoinColumn(name="id_avantage")
+	private Avantage avantage;
 	
+	public User getUser() {
+		return user;
+	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Avantage getAvantage() {
+		return avantage;
+	}
+
+	public void setAvantage(Avantage avantage) {
+		this.avantage = avantage;
+	}
+   
+    
 	public float getMontant() {
 		return montant;
 	}
