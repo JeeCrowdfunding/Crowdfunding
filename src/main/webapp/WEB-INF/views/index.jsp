@@ -9,13 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <link href="assets/css/resp.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/resp.css" rel="stylesheet">
     <style type="text/css"></style>
 
-    <script src="assets/js/angular.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/app.js"></script>
+
+
 
 </head>
 
@@ -43,7 +45,8 @@
 
                 <li class="bleft first socialz"><a class="active" href="#">EN</a></li>
                 <li class="bleft socialz"><a href="#">FR</a></li>
-     
+                <li class="bleft socialz"><a href="#">IT</a></li>
+                <li class="bleft last socialz"><a href="#">DE</a></li>
             </ul>
         </div>
     </div>
@@ -310,7 +313,7 @@
     
     <div class="footer_bot">
         <div class="footer_bott">
-            <div class="fleft">Â© All Rights Reserved. Project M1 info Univ Angers.</div>
+            <div class="fleft">© All Rights Reserved. Project M1 info Univ Angers.</div>
             <div class="fright">
                 <ul id="social_b" class="socialbott inline">
                     <li><a href="https://twitter.com/" target="_blank" original-title="twitter"><img src="img/social/icon_footer_face.png" alt=""></a></li>
@@ -325,6 +328,12 @@
         </div>
     </div>
 </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/jquery.placeholder.js"></script>
+    <script src="js/css3-mediaqueries.js"></script>
+    <script src="js/jquery_interaction.js"></script>
 
 </body>
 </html>
