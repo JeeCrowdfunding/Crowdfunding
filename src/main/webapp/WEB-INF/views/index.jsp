@@ -11,10 +11,10 @@
     </head>
 
     <body>
-<<<<<<< HEAD
+
         <h1>Home page</h1>
         <a href="/crowdfunding/signup.html" >S'instrire </a>
-=======
+
         <div ng-controller="ctrl">
             <label>Nom</label>
             <input ng-model="nom" type="text" /><br >
@@ -61,7 +61,7 @@
             }]);
         </script>
         <a href="nouveauProjet.html">nouveau projet  </a>
->>>>>>> c5537916856515e6ee6b4ffb31d208b115cb7251
+
     </body>
 
     </html>

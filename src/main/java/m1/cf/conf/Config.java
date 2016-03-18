@@ -24,7 +24,7 @@ public class Config {
 	private static final String HOST_MYSQL = "localhost";
 	private static final String PORT_MYSQL = "3306";
 	private static final String USER_MYSQL = "root";
-	private static final String PASS_MYSQL = "root";
+	private static final String PASS_MYSQL = "ismail963";
 	private static final String DB_NAME_MYSQL = "crowdfunding";
 
 	private static final Class<com.mysql.jdbc.Driver> DRIVER_MY = com.mysql.jdbc.Driver.class;

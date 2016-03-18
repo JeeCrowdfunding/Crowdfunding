@@ -1,15 +1,19 @@
 package m1.cf.ctrl;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import m1.cf.db.UserRepo;
 import m1.cf.db.Avantage;
@@ -46,6 +51,7 @@ public class GController {
 	@Autowired
 	private ContributionRepo contributionRepo;
 
+	@Autowired
 	private ServletContext servletContext;
 
 	
@@ -66,14 +72,14 @@ public class GController {
 		return "index";
 	}
 	
-<<<<<<< HEAD
+
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signup() {
 		return "inscription";
 	}
 
 	// mni tsift chi 9lwa b POST l add.html ghadi texecuta hadi
-=======
+
 	// formulaire de contribution
 	@RequestMapping(value = "/contribution", method = RequestMethod.GET)
 	public String cContribution() {
@@ -83,12 +89,15 @@ public class GController {
 	// ajouter un nouveau projet (emprunter)
 	@RequestMapping(value = "/np", method = RequestMethod.POST)
 	@ResponseBody
-	public String addP(@ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc")String description,
-			@ModelAttribute(value = "montant") float montant, @RequestParam(value = "img", required = false) MultipartFile image,
-			@ModelAttribute(value = "dure") int duree){
+	/*
+	 * @ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
+			@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile image,
+			@ModelAttribute(value = "dure") int duree,
+	 */
+	public String addP(HttpServletRequest request){
 		
 		
-		if (!image.isEmpty()) {
+		/*if (!image.isEmpty()) {
 			try {
 			//validateImage(image);
 			 
@@ -106,19 +115,25 @@ public class GController {
 			}
 			}
 			//return "image";
-		
+		*/
 		 
-		User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
+		/*User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
 		utilisateurRepo.saveAndFlush(user);
 		Projet P = new Projet(titre, description, montant , duree ,chemin + image.getOriginalFilename());
 		//Projet p2 new Projet(titre, description, montant, duree, image)
 		P.setUser(user);
 		if(projetRepo!=null) {projetRepo.saveAndFlush(P); return "redirect:/Avantage"; }
-		else return "no";
+		else return "no";*/
+		String test ="";
+		int nbr=Integer.parseInt(request.getParameter("nbr"));
+		for(int i=1;i<=nbr;i++) {
+			test +=" "+request.getParameter("montant_av_"+i);
+		}
+		return "ok ==> "+test;
 		
 	}
 	
->>>>>>> c5537916856515e6ee6b4ffb31d208b115cb7251
+
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public String add(@ModelAttribute(value = "nom") String nom, @ModelAttribute(value = "prenom")String prenom, 
@@ -195,7 +210,32 @@ public class GController {
 			}
 	
 	
-	
+		@RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
+		@ResponseBody
+		public String imageUpload(@RequestParam("image") MultipartFile file,
+									   RedirectAttributes redirectAttributes) {
+			File k= new File(servletContext.getRealPath("/Images/")+"/myrep");
+			if (!file.isEmpty()) {
+				try {
+					
+					
+					if(!k.exists()) k.mkdir();
+					
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(new File(servletContext.getRealPath("/Images/")+"/"+k.getName()+"/" +file.getOriginalFilename())));
+	                FileCopyUtils.copy(file.getInputStream(), stream);
+					stream.close();
+					return ""+servletContext.getContextPath()+"/Images/"+k.getName()+"/" +file.getOriginalFilename();
+				}
+				catch (Exception e) {
+					return "Erreur : You failed to upload  => "+e.getMessage();
+				}
+			}
+			else {
+				return "Erreur : You failed to upload  because the file was empty";
+			}
+
+		}	
 	
 	 
 	private void validateImage(MultipartFile image) {
@@ -222,6 +262,7 @@ public class GController {
 	throw e;
 	}
 	}
+	
 	
 	
 
