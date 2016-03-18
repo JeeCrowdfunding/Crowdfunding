@@ -39,9 +39,8 @@ public class GController {
 		if(mdp.equals(confmdp)){
 		User user = new User(nom, prenom, email, numtel, mdp);
 		utilisateurRepo.saveAndFlush(user);
-		return "success";
+		return "";
 		}
-		return "9laoui";
+		return "";
 	}
-
 }

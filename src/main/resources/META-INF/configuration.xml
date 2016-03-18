@@ -15,7 +15,7 @@
 
 	<mvc:annotation-driven />
 
-	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/assets/**" location="/assets/" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 

@@ -45,7 +45,7 @@
                             transformRequest: angular.identity
                         })
                         .success(function(result) {
-                            // 7el console sur firebug pour voir message
+                            
                             $log.info(result);
                         })
                         .error(function(data, status) {
