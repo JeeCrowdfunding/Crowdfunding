@@ -40,6 +40,10 @@ public class Projet implements Serializable {
     @JoinColumn(name="id_user")
 	private User user;
 
+	@ManyToOne
+    @JoinColumn(name="id_categorie")
+	private Categorie categorie;
+	
 	@OneToMany(mappedBy="projet")
 	private Set<Avantage> avantages;
 	
@@ -111,6 +115,12 @@ public class Projet implements Serializable {
 		this.user = user;
 	}
 	
-	
+	public Categorie getCategorie() {
+		return categorie;
+	}
+
+	public void setUser(Categorie categorie) {
+		this.categorie = categorie;
+	}	
 	
 }

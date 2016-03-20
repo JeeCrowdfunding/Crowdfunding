@@ -8,6 +8,9 @@
 		<class>m1.cf.db.Projet</class>
 		<class>m1.cf.db.Avantage</class>
 		<class>m1.cf.db.Contribution</class>
+		<class>m1.cf.db.Categorie</class>
+		<class>m1.cf.db.APourCategorie</class>
+		<class>m1.cf.db.Commentaire</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 </persistence>

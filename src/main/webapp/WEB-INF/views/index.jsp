@@ -1,4 +1,5 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <!DOCTYPE html>
     <html lang="en-us" ng-app="app">
 
@@ -61,7 +62,15 @@
             }]);
         </script>
         <a href="nouveauProjet.html">nouveau projet  </a>
-
+		    <c:url value="/afficherProjet.html" var="url">
+                                <c:param name="id_projet" value="1"/>
+            </c:url>
+                           <a href="${url}">
+                                projet 1
+                            </a>
+                            
+       <br/>
+       <a href="projets.html">Les Projet !  </a>
     </body>
 
     </html>

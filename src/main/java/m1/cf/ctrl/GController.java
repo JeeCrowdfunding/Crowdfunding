@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -12,7 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,14 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import m1.cf.db.UserRepo;
-import m1.cf.db.Avantage;
-import m1.cf.db.AvantageRepo;
-import m1.cf.db.Contribution;
-import m1.cf.db.ContributionRepo;
-import m1.cf.db.Projet;
-import m1.cf.db.ProjetRepo;
-import m1.cf.db.User;
+import m1.cf.db.*;
 
 @Controller
 @EnableWebMvc
@@ -41,16 +40,19 @@ public class GController {
 	//static String chemin = "/home/etudiant/Documents/crowdfunding/Crowdfunding/src/main/webapp/Images/";
 	static String chemin = "./Images/";
 	@Autowired
-	private UserRepo utilisateurRepo;
-	
+	private UserRepo utilisateurRepo;	
 	@Autowired
-	private ProjetRepo projetRepo;
-	
+	private ProjetRepo projetRepo;	
 	@Autowired
 	private AvantageRepo avantageRepo;
 	@Autowired
 	private ContributionRepo contributionRepo;
-
+	@Autowired
+	private CategorieRepo categorieRepo;
+	@Autowired
+	private APourCategorieRepo apcRepo;
+	@Autowired
+	private CommentaireRepo comRepo;
 	@Autowired
 	private ServletContext servletContext;
 
@@ -89,48 +91,69 @@ public class GController {
 	// ajouter un nouveau projet (emprunter)
 	@RequestMapping(value = "/np", method = RequestMethod.POST)
 	@ResponseBody
-	/*
-	 * @ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
-			@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile image,
-			@ModelAttribute(value = "dure") int duree,
-	 */
-	public String addP(HttpServletRequest request){
-		
-		
-		/*if (!image.isEmpty()) {
+
+	public String addP(@ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
+			@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile file,
+			@ModelAttribute(value = "dure") int duree, @RequestParam(value = "categorie") String[] c, HttpServletRequest request){
+
+		if (!file.isEmpty()) {
 			try {
-			//validateImage(image);
-			 
-			} catch (RuntimeException re) {
-			//bindingResult.reject(re.getMessage());
-			//return "redirect:/person?new";
-			return "veillez choisir une image .jpg ou .png";
+				
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(new File(servletContext.getRealPath("/Images/")+"/" +file.getOriginalFilename())));
+                FileCopyUtils.copy(file.getInputStream(), stream);
+				stream.close();
 			}
-			 
-			try {
-			saveImage( image.getOriginalFilename(), image);
-			} catch (IOException e) {
-			//bindingResult.reject(e.getMessage());
-			return "cant save this file";
+			catch (Exception e) {
+				return "Erreur : You failed to upload  => "+e.getMessage();
 			}
-			}
-			//return "image";
-		*/
+		}
 		 
-		/*User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
+		User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
 		utilisateurRepo.saveAndFlush(user);
-		Projet P = new Projet(titre, description, montant , duree ,chemin + image.getOriginalFilename());
-		//Projet p2 new Projet(titre, description, montant, duree, image)
+		String name_of_dir_images="new_1";
+		File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
+		Projet P = new Projet(titre, description, montant , duree ,chemin + file.getOriginalFilename());
 		P.setUser(user);
-		if(projetRepo!=null) {projetRepo.saveAndFlush(P); return "redirect:/Avantage"; }
-		else return "no";*/
-		String test ="";
+		boolean ver=true;
+		if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
+		else ver=false;
+		
+		if(k.exists() && k.isDirectory()) {
+			description=description.replaceAll(name_of_dir_images, ""+P.getTitre()+"_"+P.getId());
+			P.setDescription(description);
+			File [] files = k.listFiles();
+			for(int i=0;i<files.length;i++) {
+				if(description.indexOf(files[i].getName()) == -1) {
+					files[i].delete();
+				}
+			}
+			k.renameTo(new File(servletContext.getRealPath("/Images/")+"/"+P.getTitre()+"_"+P.getId()));
+			projetRepo.save(P);
+		}
 		int nbr=Integer.parseInt(request.getParameter("nbr"));
 		for(int i=1;i<=nbr;i++) {
-			test +=" "+request.getParameter("montant_av_"+i);
+			if(ver){
+				float a=Float.parseFloat(request.getParameter("montant_av_"+i));
+				Avantage av = new Avantage(a,request.getParameter("desc_av_"+i));
+				av.setProjet(P);
+				if(avantageRepo!=null) {avantageRepo.saveAndFlush(av); }
+				else ver=false;
+			}
+			else break;
 		}
-		return "ok ==> "+test;
-		
+		//boolean ver=true;
+		if(ver) {
+
+			for(int i=0;i<c.length;i++) {
+				Categorie categ= categorieRepo.findOne((long) Integer.parseInt(c[i]));
+				APourCategorie ac= new APourCategorie(P,categ);
+				apcRepo.saveAndFlush(ac);
+			}
+			return "Le projet est ajouté avec succès ";
+		}
+		else return "Erreur: adam howa sbab ";
+
 	}
 	
 
@@ -147,31 +170,6 @@ public class GController {
 		return "9laoui";
 	}
 
-	
-	//ajouter un nouveau avantage
-	@RequestMapping(value = "/av", method = RequestMethod.POST)
-	@ResponseBody
-	public String addAv(@ModelAttribute(value = "desc") String description, @ModelAttribute(value = "montant")float montant) {
-
-	
-		User user = new User("benjbara13", "adam", "benjbara@gmail.com", "06617", "123456" );
-		utilisateurRepo.saveAndFlush(user);
-		Projet P = new Projet("titre", "description", 16.5f , 12 ,"image");
-		
-		P.setUser(user);
-		projetRepo.saveAndFlush(P);
-		
-		
-		
-	Avantage av = new Avantage(montant,description);
-	av.setProjet(P);
-	avantageRepo.saveAndFlush(av);
-	
-	
-
-	
-		return "avantage ajoute";
-		}
 	
 	
 	//ajouter une contribution
@@ -193,34 +191,51 @@ public class GController {
 			
 			
 			
-		Avantage av = new Avantage(montant,"description");
-		av.setProjet(P);
-		avantageRepo.saveAndFlush(av);
-		
-		Contribution con = new Contribution(montant); 
-		con.setAvantage(av);
-		con.setUser(user2);
-		
-		contributionRepo.saveAndFlush(con);
+			Avantage av = new Avantage(montant,"description");
+			av.setProjet(P);
+			avantageRepo.saveAndFlush(av);
+			
+			Contribution con = new Contribution(montant); 
+			con.setAvantage(av);
+			con.setUser(user2);
+			
+			contributionRepo.saveAndFlush(con);
 	     
 		
 		
-		if(contributionRepo!=null)	return "success";
-		else return "objet vide";
-			}
+			if(contributionRepo!=null)	return "success";
+			else return "objet vide";
+		}
 	
-	
+		//ajouter une categorie
+		@RequestMapping(value = "/addCategorie", method = RequestMethod.GET)
+		@ResponseBody
+		public String addCat( @ModelAttribute(value = "titre") String titre) {
+
+				Categorie c= new Categorie (titre);
+				if(categorieRepo.saveAndFlush(c)!=null) {
+					return ""+c.getId();
+				}		
+				else return "Erreur : ";
+		}
+		
+		
 		@RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
 		@ResponseBody
 		public String imageUpload(@RequestParam("image") MultipartFile file,
 									   RedirectAttributes redirectAttributes) {
-			File k= new File(servletContext.getRealPath("/Images/")+"/myrep");
+			
+			int user_id=1;
+			File k= new File(servletContext.getRealPath("/Images/")+"/new_"+user_id);
 			if (!file.isEmpty()) {
-				try {
-					
-					
+				try {			
 					if(!k.exists()) k.mkdir();
-					
+					else {
+						File[] fs=k.listFiles();
+						for (int i=0;i<fs.length;i++) {
+							fs[i].delete();
+						}
+					}
 					BufferedOutputStream stream = new BufferedOutputStream(
 							new FileOutputStream(new File(servletContext.getRealPath("/Images/")+"/"+k.getName()+"/" +file.getOriginalFilename())));
 	                FileCopyUtils.copy(file.getInputStream(), stream);
@@ -237,33 +252,84 @@ public class GController {
 
 		}	
 	
-	 
-	private void validateImage(MultipartFile image) {
-	if ( (!image.getContentType().equals("image/jpeg") ) || ( !image.getContentType().equals("image/png") )  ) {
-	throw new RuntimeException("Only JPG images are accepted");
-	}
-	}
-	 
-	public void setServletContext(ServletContext servletContext) {
-	this.servletContext = servletContext;
-	 
-	}
-	 
-	private void saveImage(String filename, MultipartFile image)
-	throws RuntimeException, IOException {
-	try {
 
-	File file = new File(chemin + filename);
-	 
-	FileUtils.writeByteArrayToFile(file, image.getBytes());
-	System.out.println("Go to the location:  " + file.toString()
-	+ " on your computer and verify that the image has been stored.");
-	} catch (IOException e) {
-	throw e;
-	}
-	}
-	
-	
-	
+		@RequestMapping(value = "/afficherProjet", method = RequestMethod.GET)
+		@ResponseBody
+		public String afficherProjet(@ModelAttribute(value = "id_projet") int id) {
+				
+			Projet p=projetRepo.findOne((long) id);
+				if(p!=null) { 
+				
+				/*return "{"
+						+ "projetName: "+p.getTitre()+","
+						+ "projetId: "+p.getId()+","
+						+ "}";*/
+				
+				return "<center> "
+						+ "<h1>"+p.getTitre()+"</h1>"
+						+"Photo de projet : <br/> <img width=\"200\" src=\"http://localhost:8080/crowdfunding/"+p.getImage()+"\" />"
+						+ "<p><h3>Déscription</h3><br/>"+p.getDescription()+"</p>"
+						+ " </center>";
+				}
+				
+				else return "No id";
+		}
 
+		@RequestMapping(value = "/projets", method = RequestMethod.GET)
+		@ResponseBody
+		public String projets() {
+			Page<Projet> pp=projetRepo.findAll(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id")));
+			List<Projet> p= pp.getContent();
+			String myP="";			
+			for(int i=0;i<p.size();i++) {
+				myP+= "<center> "
+						+ "<h1> Projet ==> "+(i+1)+" "+p.get(i).getTitre()+"</h1>"
+						+"Photo de projet : <br/> <img width=\"200\" src=\"http://localhost:8080/crowdfunding/"+p.get(i).getImage()+"\" />"
+						+ " </center><br/>";
+			}
+				myP +="Page "+(pp.getNumber()+1)+" of "+pp.getTotalPages()+" affichage par => "+pp.getSize()+"<br/>";
+				return myP;
+
+		}	
+
+		@RequestMapping(value = "/getCat", method = RequestMethod.GET)
+		@ResponseBody
+		public String getCategories() {
+			List<Categorie> p= categorieRepo.findAll();
+			String myP="";			
+			for(int i=0;i<p.size();i++) {
+				myP+= ""+p.get(i).getId()+" "+p.get(i).getTitre()+";";
+			}
+			if(myP!="") return myP;
+			else return "Erreur : Pas de catégorie ...";
+		}
+		
+		@RequestMapping(value = "/addCommentaire", method = RequestMethod.GET)
+		@ResponseBody
+		public String addCom(@ModelAttribute(value = "id_projet") long id_projet, @ModelAttribute(value = "msg") String msg) {
+				
+				Projet p=projetRepo.getOne(id_projet);
+				User u=utilisateurRepo.getOne((long) 1);
+				Commentaire c=new Commentaire (u,p,msg);
+				if(comRepo.saveAndFlush(c)!=null) return ""+c.getId();
+				else return "Erreur : une erreur c'est produite !";
+		}		
+		
+		@RequestMapping(value = "/getCommentaire", method = RequestMethod.GET)
+		@ResponseBody
+		public String getCom(@ModelAttribute(value = "id_projet") long id_projet) {
+				
+				Projet p=projetRepo.getOne(id_projet);
+				List<Commentaire> c= comRepo.findByProjetOrderByIdDesc(p,new PageRequest(0, 10));
+				String m="";
+				for(int i=0;i<c.size();i++) {
+					m+=""+c.get(i).getId();
+				}
+				return "ok"+m;
+		}		
+		
+		public void setServletContext(ServletContext servletContext) {
+			this.servletContext = servletContext;
+		}
+	 		
 }
