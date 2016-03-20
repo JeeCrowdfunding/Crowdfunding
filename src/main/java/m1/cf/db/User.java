@@ -81,6 +81,11 @@ public class User implements Serializable {
 		this.numtel = numtel;
 	}
 	
+	public User(String email, String mp) {
+		this.email = email;
+		this.mdp = encryptedPassword(mp);
+	}
+	
 	public User(){}
 	
 	public String getNom() {

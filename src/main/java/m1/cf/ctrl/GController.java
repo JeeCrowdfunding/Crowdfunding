@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.runner.Request;
@@ -57,106 +58,40 @@ public class GController {
 	private ServletContext servletContext;
 
 	
-	@RequestMapping(value = "/nouveauProjet", method = RequestMethod.GET)
-	public String nouveauProjet() {
-		return "NouveauProjet";
-	}
 	
-	// pour ajouter un nouveau avantage
-	@RequestMapping(value = "/nouveauAvantage", method = RequestMethod.GET)
-	public String nouveauAvantage() {
-		return "Avantage";
-	}
-
 	// mni tkteb index.html f navigator ghadi texecuta hadi w trje3 lik la page index.jsp
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index() {
 		return "index";
 	}
 	
-
+	/* =========>  users   <========= */
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signup() {
 		return "inscription";
 	}
 
-	// mni tsift chi 9lwa b POST l add.html ghadi texecuta hadi
-
-	// formulaire de contribution
-	@RequestMapping(value = "/contribution", method = RequestMethod.GET)
-	public String cContribution() {
-		return "Contribution";
+	@RequestMapping(value = "/signin", method = RequestMethod.GET)
+	public String signin() {
+		return "signin";
 	}
-	
-	// ajouter un nouveau projet (emprunter)
-	@RequestMapping(value = "/np", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/cnx", method = RequestMethod.POST)
 	@ResponseBody
-
-	public String addP(@ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
-			@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile file,
-			@ModelAttribute(value = "dure") int duree, @RequestParam(value = "categorie") String[] c, HttpServletRequest request){
-
-		if (!file.isEmpty()) {
-			try {
-				
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(new File(servletContext.getRealPath("/Images/")+"/" +file.getOriginalFilename())));
-                FileCopyUtils.copy(file.getInputStream(), stream);
-				stream.close();
-			}
-			catch (Exception e) {
-				return "Erreur : You failed to upload  => "+e.getMessage();
-			}
-		}
-		 
-		User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
-		utilisateurRepo.saveAndFlush(user);
-		String name_of_dir_images="new_1";
-		File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
-		Projet P = new Projet(titre, description, montant , duree ,chemin + file.getOriginalFilename());
-		P.setUser(user);
-		boolean ver=true;
-		if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
-		else ver=false;
+	public String cnx( @ModelAttribute(value = "log") String email,
+			@ModelAttribute(value = "mp") String mp, HttpServletRequest request) {
 		
-		if(k.exists() && k.isDirectory()) {
-			description=description.replaceAll(name_of_dir_images, ""+P.getTitre()+"_"+P.getId());
-			P.setDescription(description);
-			File [] files = k.listFiles();
-			for(int i=0;i<files.length;i++) {
-				if(description.indexOf(files[i].getName()) == -1) {
-					files[i].delete();
-				}
-			}
-			k.renameTo(new File(servletContext.getRealPath("/Images/")+"/"+P.getTitre()+"_"+P.getId()));
-			projetRepo.save(P);
+		
+		User tmp =new User(email,mp);
+		User n =utilisateurRepo.findUserByEmailAndMdp(tmp.getEmail(), tmp.getMdp());
+		if(n!=null) {
+			HttpSession session = request.getSession();
+			session.setAttribute( "SessionCR", n );
+			return "ok";
 		}
-		int nbr=Integer.parseInt(request.getParameter("nbr"));
-		for(int i=1;i<=nbr;i++) {
-			if(ver){
-				float a=Float.parseFloat(request.getParameter("montant_av_"+i));
-				Avantage av = new Avantage(a,request.getParameter("desc_av_"+i));
-				av.setProjet(P);
-				if(avantageRepo!=null) {avantageRepo.saveAndFlush(av); }
-				else ver=false;
-			}
-			else break;
-		}
-		//boolean ver=true;
-		if(ver) {
-
-			for(int i=0;i<c.length;i++) {
-				Categorie categ= categorieRepo.findOne((long) Integer.parseInt(c[i]));
-				APourCategorie ac= new APourCategorie(P,categ);
-				apcRepo.saveAndFlush(ac);
-			}
-			return "Le projet est ajouté avec succès ";
-		}
-		else return "Erreur: adam howa sbab ";
-
+		else return "Login ou mot de passe invalide !";
 	}
 	
-
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public String add(@ModelAttribute(value = "nom") String nom, @ModelAttribute(value = "prenom")String prenom, 
@@ -170,7 +105,12 @@ public class GController {
 		return "9laoui";
 	}
 
-	
+	/* =========>  contribution   <========= */
+	// formulaire de contribution
+	@RequestMapping(value = "/contribution", method = RequestMethod.GET)
+	public String cContribution() {
+		return "Contribution";
+	}
 	
 	//ajouter une contribution
 		@RequestMapping(value = "/contribuer", method = RequestMethod.POST)
@@ -207,19 +147,86 @@ public class GController {
 			else return "objet vide";
 		}
 	
-		//ajouter une categorie
-		@RequestMapping(value = "/addCategorie", method = RequestMethod.GET)
-		@ResponseBody
-		public String addCat( @ModelAttribute(value = "titre") String titre) {
 
-				Categorie c= new Categorie (titre);
-				if(categorieRepo.saveAndFlush(c)!=null) {
-					return ""+c.getId();
-				}		
-				else return "Erreur : ";
+		/* =========>  Les Projet  <========= */
+		
+		@RequestMapping(value = "/nouveauProjet", method = RequestMethod.GET)
+		public String nouveauProjet(HttpServletRequest request) {
+			HttpSession session = request.getSession();
+			User n=(User) session.getAttribute("SessionCR");
+			if(n!=null) return "NouveauProjet";
+			else return "no";
 		}
 		
+		// ajouter un nouveau projet (emprunter)
+		@RequestMapping(value = "/np", method = RequestMethod.POST)
+		@ResponseBody
+
+		public String addP(@ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
+				@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile file,
+				@ModelAttribute(value = "dure") int duree, @RequestParam(value = "categorie") String[] c, HttpServletRequest request){
+
+			if (!file.isEmpty()) {
+				try {
+					
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(new File(servletContext.getRealPath("/Images/")+"/" +file.getOriginalFilename())));
+	                FileCopyUtils.copy(file.getInputStream(), stream);
+					stream.close();
+				}
+				catch (Exception e) {
+					return "Erreur : You failed to upload  => "+e.getMessage();
+				}
+			}
+			 
+			User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
+			utilisateurRepo.saveAndFlush(user);
+			String name_of_dir_images="new_1";
+			File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
+			Projet P = new Projet(titre, description, montant , duree ,chemin + file.getOriginalFilename());
+			P.setUser(user);
+			boolean ver=true;
+			if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
+			else ver=false;
+			
+			if(k.exists() && k.isDirectory()) {
+				description=description.replaceAll(name_of_dir_images, ""+P.getTitre()+"_"+P.getId());
+				P.setDescription(description);
+				File [] files = k.listFiles();
+				for(int i=0;i<files.length;i++) {
+					if(description.indexOf(files[i].getName()) == -1) {
+						files[i].delete();
+					}
+				}
+				k.renameTo(new File(servletContext.getRealPath("/Images/")+"/"+P.getTitre()+"_"+P.getId()));
+				projetRepo.save(P);
+			}
+			int nbr=Integer.parseInt(request.getParameter("nbr"));
+			for(int i=1;i<=nbr;i++) {
+				if(ver){
+					float a=Float.parseFloat(request.getParameter("montant_av_"+i));
+					Avantage av = new Avantage(a,request.getParameter("desc_av_"+i));
+					av.setProjet(P);
+					if(avantageRepo!=null) {avantageRepo.saveAndFlush(av); }
+					else ver=false;
+				}
+				else break;
+			}
+			//boolean ver=true;
+			if(ver) {
+
+				for(int i=0;i<c.length;i++) {
+					Categorie categ= categorieRepo.findOne((long) Integer.parseInt(c[i]));
+					APourCategorie ac= new APourCategorie(P,categ);
+					apcRepo.saveAndFlush(ac);
+				}
+				return "Le projet est ajouté avec succès ";
+			}
+			else return "Erreur: adam howa sbab ";
+
+		}
 		
+		// upload une image du description de projet
 		@RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
 		@ResponseBody
 		public String imageUpload(@RequestParam("image") MultipartFile file,
@@ -292,6 +299,23 @@ public class GController {
 
 		}	
 
+		// rechercher un projet par son titre
+		@RequestMapping(value = "/findProjet", method = RequestMethod.GET)
+		@ResponseBody
+		public String getProjets(@ModelAttribute(value = "titre") String titre,
+				@ModelAttribute(value = "page") int page) {
+			page--;
+			List<Projet> p= projetRepo.findByTitreContaining(titre, new PageRequest(page, 10));
+			String myP="";			
+			for(int i=0;i<p.size();i++) {
+				myP+= ""+p.get(i).getId()+" "+p.get(i).getTitre()+";";
+			}
+			if(myP!="") return myP;
+			else return "Erreur : Pas de produit ...";
+		}
+		
+		/* =========>  Les Catégotrie <========= */
+		
 		@RequestMapping(value = "/getCat", method = RequestMethod.GET)
 		@ResponseBody
 		public String getCategories() {
@@ -304,6 +328,39 @@ public class GController {
 			else return "Erreur : Pas de catégorie ...";
 		}
 		
+		//ajouter une categorie
+		@RequestMapping(value = "/addCategorie", method = RequestMethod.GET)
+		@ResponseBody
+		public String addCat( @ModelAttribute(value = "titre") String titre) {
+
+				Categorie c= new Categorie (titre);
+				if(categorieRepo.saveAndFlush(c)!=null) {
+					return ""+c.getId();
+				}		
+				else return "Erreur : ";
+		}
+		
+		// les projets par cartégorie
+		
+		@RequestMapping(value = "/proCat", method = RequestMethod.GET)
+		@ResponseBody
+		public String proCat( @ModelAttribute(value = "id_cat") long id, @ModelAttribute(value = "page") int page) {
+				page--;
+				Categorie c= categorieRepo.getOne(id);
+			
+				if(c!=null) {
+					List<APourCategorie> p= apcRepo.findAPourCategorieByCategorie(c, new PageRequest(page, 10));
+					String res="";
+					for(int i=0;i<p.size();i++) {
+						res+=""+p.get(i).getProjet().getTitre()+"<br/>";
+					}
+					return res;
+				}
+				else return "Erreur : ";
+		}
+		
+		
+		/* =========>  Les Commantaires <========= */
 		@RequestMapping(value = "/addCommentaire", method = RequestMethod.GET)
 		@ResponseBody
 		public String addCom(@ModelAttribute(value = "id_projet") long id_projet, @ModelAttribute(value = "msg") String msg) {
@@ -317,10 +374,12 @@ public class GController {
 		
 		@RequestMapping(value = "/getCommentaire", method = RequestMethod.GET)
 		@ResponseBody
-		public String getCom(@ModelAttribute(value = "id_projet") long id_projet) {
+		public String getCom(@ModelAttribute(value = "id_projet") long id_projet, 
+				@ModelAttribute(value = "page") int page) {
 				
+				page--;
 				Projet p=projetRepo.getOne(id_projet);
-				List<Commentaire> c= comRepo.findByProjetOrderByIdDesc(p,new PageRequest(0, 10));
+				List<Commentaire> c= comRepo.findByProjetOrderByIdDesc(p,new PageRequest(page, 10));
 				String m="";
 				for(int i=0;i<c.size();i++) {
 					m+=""+c.get(i).getId();
