@@ -11,18 +11,18 @@
     <link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,700,200,300' rel='stylesheet' type='text/css'>
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/jquery-ui.css" rel="stylesheet">
-    <link href="css/resp.css" rel="stylesheet">
-    <link href="css/colorbox.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet">
+    <link href="assets/css/resp.css" rel="stylesheet">
+    <link href="assets/css/colorbox.css" rel="stylesheet">
 
-    <link rel="shortcut icon" href="favicon.html" />
-    <link rel="apple-touch-icon" href="img/touch-icon.html" />
-    <link rel="image_src" href="img/touch-icon.html" />
+    <link rel="apple-touch-icon" href="assets/img/touch-icon.html" />
+    <link rel="image_src" href="assets/img/touch-icon.html" />
 
-    <script src="js/angular.min.js"></script>
-    <script src="js/app.js"></script>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/jquery.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -50,7 +50,7 @@
     </style>
     <![endif]-->
 
-    <script src="js/jquery.js"></script>
+ 
     <script>
         /* <![CDATA[ */
         $(window).scroll(function fade() {
@@ -80,12 +80,12 @@
                 <ul id="social">
                 <li class="bleft inline">
                     <ul style="margin-left: 10px">
-                        <li><a href="https://www.facebook.com/" target="_blank"  original-title="twitter"><img src="img/social/icon_header_face.png" alt=""></a></li>
-                        <li><a href="https://plus.google.com/" target="_blank"  original-title="googleplus"><img src="img/social/icon_header_g.png" alt=""></a></li>
-                        <li><a href="https://twitter.com/" title="facebook" target="_blank" ><img src="img/social/icon_header_tw.png" alt=""></a></li>
-                        <li><a href="http://www.linkedin.com/" target="_blank" original-title="linkedin"><img src="img/social/icon_header_in.png" alt=""></a></li>
-                        <li><a href="johndoe_domainname.html" target="_self" original-title="mail"><img src="img/social/icon_header_p.png" alt=""></a></li>
-                        <li><a href="johndoe_domainname.html" target="_self" original-title="mail"><img src="img/social/icon_header_ball.png" alt=""></a></li>
+                        <li><a href="https://www.facebook.com/" target="_blank"  original-title="twitter"><img src="assets/img/social/icon_header_face.png" alt=""></a></li>
+                        <li><a href="https://plus.google.com/" target="_blank"  original-title="googleplus"><img src="assets/img/social/icon_header_g.png" alt=""></a></li>
+                        <li><a href="https://twitter.com/" title="facebook" target="_blank" ><img src="assets/img/social/icon_header_tw.png" alt=""></a></li>
+                        <li><a href="http://www.linkedin.com/" target="_blank" original-title="linkedin"><img src="assets/img/social/icon_header_in.png" alt=""></a></li>
+                        <li><a href="johndoe_domainname.html" target="_self" original-title="mail"><img src="assets/img/social/icon_header_p.png" alt=""></a></li>
+                        <li><a href="johndoe_domainname.html" target="_self" original-title="mail"><img src="assets/img/social/icon_header_ball.png" alt=""></a></li>
                     </ul>
                 </li>
                     <li class="bleft first socialz"><a class="active" href="#">EN</a></li>
@@ -180,8 +180,8 @@
                                 <table class="icons">
                                     <tbody>
                                     <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="img/proj{{project.idProject}}.jpg" title=""><img src="img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="img/icon_lock.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj{{project.idProject}}.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="assets/img/icon_lock.png" alt=""></a></td>
                                     </tr>
                                     </tbody>
                                  </table>
@@ -221,8 +221,8 @@
                                 <table class="icons">
                                     <tbody>
                                     <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="img/proj{{project.idProject}}.jpg" title=""><img src="img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="img/icon_lock.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj{{project.idProject}}.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="assets/img/icon_lock.png" alt=""></a></td>
                                     </tr>
                                     </tbody>
                                  </table>
@@ -281,50 +281,50 @@
                         </div>
                         
                         <ul>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/01.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/02.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/03.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/04.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/05.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/06.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/07.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/08.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/09.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/10.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/11.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/12.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/13.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/01.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/02.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/03.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/04.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/05.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/06.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/07.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/08.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/09.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/10.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/11.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/12.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/13.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
                         </ul>
                         <ul>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/14.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/15.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/16.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/17.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/18.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/19.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/20.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/21.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/22.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/23.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/01.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/02.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/03.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/14.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/15.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/16.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/17.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/18.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/19.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/20.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/21.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/22.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/23.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/01.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/02.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/03.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
 
                         </ul>  
                         <ul>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/16.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/07.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/08.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/10.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/11.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/02.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/03.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/13.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/14.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/15.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/17.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/18.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
-                            <li><a href="#"><img width="155" height="155" src="img/slide/19.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/16.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/07.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/08.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/10.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/11.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/02.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/03.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/13.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/14.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/15.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/17.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/18.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
+                            <li><a href="#"><img width="155" height="155" src="assets/img/slide/19.jpg" class="attachment-post-thumbnail wp-post-image" alt=""></a></li>
 
                         </ul>
 
@@ -346,28 +346,28 @@
         <div class="row-fluid folders">
             <div class="span4">
                 <div class="folder_bordered">
-                    <div class="folder"><a href="#"><img src="img/folder1.png" alt=""></a></div>
+                    <div class="folder"><a href="#"><img src="assets/img/folder1.png" alt=""></a></div>
                     <div class="folder"><h3 class="nomarg text-center">Step 1:</h3></div>
                     <div class="folder"><p class="green text-center"><strong>Choose a project</strong></p></div>
                 </div>
-                <div class="folder"><img src="img/folder_n.png" alt=""></div>
+                <div class="folder"><img src="assets/img/folder_n.png" alt=""></div>
             </div>
             <div class="span4">
                 <div class="folder_bordered">
-                    <div class="folder"><a href="#"><img src="img/folder2.png" alt=""></a></div>
+                    <div class="folder"><a href="#"><img src="assets/img/folder2.png" alt=""></a></div>
                     <div class="folder"><h3 class="nomarg text-center">Step 2:</h3></div>
                     <div class="folder"><p class="green text-center"><strong>Back a project</strong></p></div>
                 </div>
-                <div class="folder"><img src="img/folder_n.png" alt=""></div>
+                <div class="folder"><img src="assets/img/folder_n.png" alt=""></div>
             </div>
             <div class="span4">
                 <div class="folder_bordered">
-                    <div class="folder"><a href="#"><img src="img/folder3.png" alt=""></a></div>
+                    <div class="folder"><a href="#"><img src="assets/img/folder3.png" alt=""></a></div>
                     <div class="folder"><h3 class="nomarg text-center">Step 3:</h3></div> <a name="id3"></a>
                     <div class="folder"><p class="green strong text-center"><strong>Receive a gift</strong></p></div>
 
                 </div>
-                <div class="folder"><img src="img/folder_n.png" alt=""></div>
+                <div class="folder"><img src="assets/img/folder_n.png" alt=""></div>
             </div>
 
         </div>
@@ -417,8 +417,8 @@
                                 <table class="icons">
                                     <tbody>
                                     <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="img/proj{{project.idProject}}.jpg" title=""><img src="img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="img/icon_lock.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj{{project.idProject}}.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="assets/img/icon_lock.png" alt=""></a></td>
                                     </tr>
                                     </tbody>
                                  </table>
@@ -459,8 +459,8 @@
                                 <table class="icons">
                                     <tbody>
                                     <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="img/proj4.jpg" title=""><img src="img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj4"><img src="img/icon_lock.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj4.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj4"><img src="assets/img/icon_lock.png" alt=""></a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -718,7 +718,7 @@
     <div class="partners">
         <h5 class="decoration text-center"><span class="nobacgr_whit">OUR GITHUB</span></h5>
         <div class="partn_pics">
-                    <a href="https://github.com/JeeCrowdfunding/Crowdfunding" class="partner"><img src="img/github.png" alt=""></a>      
+                    <a href="https://github.com/JeeCrowdfunding/Crowdfunding" class="partner"><img src="assets/img/github.png" alt=""></a>      
          </div>
         </div>
     </div>
@@ -732,12 +732,12 @@
               <div class="fleft">© All Rights Reserved. M1 info Univ Angers.</div>
               <div class="fright">
                 <ul id="social_b" class="socialbott inline">
-                    <li><a href="https://twitter.com/" target="_blank" original-title="twitter"><img src="img/social/icon_footer_face.png" alt=""></a></li>
-                    <li><a href="https://plus.google.com/" target="_blank" original-title="googleplus"><img src="img/social/icon_footer_g.png" alt=""></a></li>
-                    <li><a href="https://www.facebook.com/" title="facebook" target="_blank"><img src="img/social/icon_footer_tw.png" alt=""></a></li>
-                    <li><a href="http://www.linkedin.com/" target="_blank" original-title="linkedin"><img src="img/social/icon_footer_in.png" alt=""></a></li>
-                    <li><a href="http://www.linkedin.com/" target="_self" original-title="mail"><img src="img/social/icon_footer_p.png" alt=""></a></li>
-                    <li><a href="http://www.linkedin.com/" target="_self" original-title="mail"><img src="img/social/icon_footer_ball.png" alt=""></a></li>
+                    <li><a href="https://twitter.com/" target="_blank" original-title="twitter"><img src="assets/img/social/icon_footer_face.png" alt=""></a></li>
+                    <li><a href="https://plus.google.com/" target="_blank" original-title="googleplus"><img src="assets/img/social/icon_footer_g.png" alt=""></a></li>
+                    <li><a href="https://www.facebook.com/" title="facebook" target="_blank"><img src="assets/img/social/icon_footer_tw.png" alt=""></a></li>
+                    <li><a href="http://www.linkedin.com/" target="_blank" original-title="linkedin"><img src="assets/img/social/icon_footer_in.png" alt=""></a></li>
+                    <li><a href="http://www.linkedin.com/" target="_self" original-title="mail"><img src="assets/img/social/icon_footer_p.png" alt=""></a></li>
+                    <li><a href="http://www.linkedin.com/" target="_self" original-title="mail"><img src="assets/img/social/icon_footer_ball.png" alt=""></a></li>
                 </ul>
               </div>
             <div class="clear"></div>
@@ -984,16 +984,16 @@
 
 </script>
 
-<script src="js/jquery.selectbox.min.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/jquery-uii.js"></script>
-<script src="js/contact.js"></script>
-<script src="js/jquery.colorbox.js"></script>
-<script src="js/jquery.placeholder.js"></script>
-<script src="js/jquery.tweet.js"></script>
-<script src="js/jflickrfeed.min.js"></script>
-<script src="js/scripts.js"></script>
+<script src="assets/js/jquery.selectbox.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/jquery-uii.js"></script>
+<script src="assets/js/contact.js"></script>
+<script src="assets/js/jquery.colorbox.js"></script>
+<script src="assets/js/jquery.placeholder.js"></script>
+<script src="assets/js/jquery.tweet.js"></script>
+<script src="assets/js/jflickrfeed.min.js"></script>
+<script src="assets/js/scripts.js"></script>
 
 <!--[if IE 8]>
 <script src="js/css3-mediaqueries.js"></script>
