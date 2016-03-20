@@ -29,7 +29,7 @@ myApp.controller("BackThisProjectBlockCtrl", function($scope) {
 	$scope.backersDetails.daysToGo = "60";
 });
 
-myApp.controller("PledgesBlock", function($scope) {
+myApp.controller("PledgesBlockCtrl", function($scope) {
 	$scope.pledges = [
 		{
 			pledged: "$5",
@@ -61,6 +61,72 @@ myApp.controller("PledgesBlock", function($scope) {
 			estimateDelivery: "12-08-2016",
 			details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 		}		
-	];
-	
+	];	
+});
+
+
+myApp.controller("ProjectsCtrl", function($scope) {
+	$scope.projects = [
+		{
+			idProject:"1",
+			projectName: "Project Name 1",
+			authorName: "Author Name 1",
+			pledgedGoal:"400",
+			pledged: "$25",
+			backers: "10",
+			daysToGo:"25",
+			ImgUrl:"/adresse",
+			categorie:"creative developments",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{	
+			idProject:"2",
+			projectName: "Project Name 2",
+			pledgedGoal:"500",
+			authorName: "AuthorName 2",
+			pledged: "$25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{	
+			idProject:"3",
+			pledgedGoal:"500",
+			projectName: "Project Name 3",
+			authorName: "AuthorName 3",
+			pledged: "$25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "$25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "$25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "$25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		}		
+	];	
 });
