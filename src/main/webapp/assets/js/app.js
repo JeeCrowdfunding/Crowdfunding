@@ -1,5 +1,37 @@
 var myApp = angular.module("myApp", []);
 
+ 
+ myApp.controller("registerUserCtrl", ['$scope', '$log', '$http', function($scope, $log, $http) {
+               
+                //
+                $scope.name = '3bi9a';
+                $scope.send = function() {
+                    // formulaire a envoyé
+                    var form = new FormData();
+                    form.append('name', $scope.name);
+                    form.append('surname', $scope.surname);
+                    form.append('phone', $scope.phone);
+                    form.append('email', $scope.email);
+                    form.append('pwd', $scope.pwd);
+                    form.append('rpwd', $scope.rpwd);
+                    $http.post('inscription.html', form, {
+                            withCredentials: true,
+                            headers: {
+                                'Content-Type': undefined
+                            },
+                            transformRequest: angular.identity
+                        })
+                        .success(function(result) {
+                            // 7el console sur firebug pour voir message
+                            $log.info(result);
+                        })
+                        .error(function(data, status) {
+                            $log.info(data);
+                            $log.info(status);
+                        });
+                };
+            }]);
+
 myApp.controller("TabContentCtrl", function($scope) {
 	$scope.content = {};
 	$scope.content.titleDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec massa ut justo accumsan malesuada ut pharetra sapien. Nullam ac nisi vel augue ultrices venenatis sed sed felis.";

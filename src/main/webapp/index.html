@@ -536,24 +536,24 @@
                                 <em class="icon-fixed-width fa fa-plus"></em>Step 1: <span class="green">Registration</span>
                               </a>
                             </div>
-                            <div style="height: 0px;" id="collapse_1" class="accordion-body collapse" >
-                              <div class="accordion-inner" ng-controller="registerUserCtrl">
-                                <div class="row-fluid border_proj duration" >
+                            <div style="height: 0px;" id="collapse_1" class="accordion-body collapse">
+                              <div class="accordion-inner">
+                                <div class="row-fluid border_proj duration" ng-controller="registerUserCtrl">
                                 <div class="span10 ">
                                     <div class="column_project">
                                         <h4 class="text-center">Personal Info:</h4>
                                         <div action="inscription"  class="form-search" >
                                             <input ng-model="name" type="text" class="inputp search-query span12" placeholder="Name">
-                                            <input ng-model="surname" type="text" class="inputp search-query span12" placeholder="Surname">
-                                            <input ng-model="email" type="text" class="inputp search-query span12" placeholder="Email">
-                                            <input ng-model="phone" type="text" class="inputp search-query span12" placeholder="Phone">
-                                            <input ng-model="pwd" type="password" class="inputp search-query span12" placeholder="Password">
-                                            <input ng-model="rpwd" type="password" class="inputp search-query span12" placeholder="Repeat Password">
+                                            <input type="text" class="inputp search-query span12" placeholder="Surname">
+                                            <input type="text" class="inputp search-query span12" placeholder="Email">
+                                            <input type="text" class="inputp search-query span12" placeholder="Phone">
+                                            <input type="text" class="inputp search-query span12" placeholder="Password">
+                                            <input type="text" class="inputp search-query span12" placeholder="Repeat Password">
                                         </div>
                                     </div>
                                 </div>
                                 </div>
-                                    <button ng-click="send()" type="button">Send</button>
+
                               </div>
                             </div>
                           </div>
@@ -976,6 +976,17 @@
 
 </script>
 
+<script src="assets/js/jquery.selectbox.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/jquery-uii.js"></script>
+<script src="assets/js/contact.js"></script>
+<script src="assets/js/jquery.colorbox.js"></script>
+<script src="assets/js/jquery.placeholder.js"></script>
+<script src="assets/js/jquery.tweet.js"></script>
+<script src="assets/js/jflickrfeed.min.js"></script>
+<script src="assets/js/scripts.js"></script>
+
 <!--[if IE 8]>
 <script src="assets/js/css3-mediaqueries.js"></script>
 <![endif]-->
@@ -1050,15 +1061,6 @@ function accordionAfterClick(e, id) {
 }
 </script>
 
-<script src="assets/js/jquery.selectbox.min.js"></script>
-<script src="assets/js/jquery.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/jquery-uii.js"></script>
-<script src="assets/js/contact.js"></script>
-<script src="assets/js/jquery.colorbox.js"></script>
-<script src="assets/js/jquery.placeholder.js"></script>
-<script src="assets/js/jquery.tweet.js"></script>
-<script src="assets/js/jflickrfeed.min.js"></script>
-<script src="assets/js/scripts.js"></script>
+
 </body>
 </html>

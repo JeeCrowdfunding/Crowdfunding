@@ -94,15 +94,15 @@ public class GController {
 	
 	@RequestMapping(value = "/inscription", method = RequestMethod.POST)
 	@ResponseBody
-	public String add(@ModelAttribute(value = "nom") String nom, @ModelAttribute(value = "prenom")String prenom, 
-			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "tel") String numtel, 
-			@ModelAttribute(value = "mdp") String mdp, @ModelAttribute(value = "cmdp") String confmdp) {
+	public String inscription(@ModelAttribute(value = "name") String nom, @ModelAttribute(value = "surname")String prenom, 
+			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "phone") String numtel, 
+			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp) {
 		if(mdp.equals(confmdp)){
 			User user = new User(nom, prenom, email, numtel, mdp);
 			utilisateurRepo.saveAndFlush(user);
-			return "";
+			return "#success";
 		}
-		return "";
+		return "#error";
 	}
 
 
