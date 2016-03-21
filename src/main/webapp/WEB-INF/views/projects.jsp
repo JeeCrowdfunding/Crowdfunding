@@ -7,13 +7,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/resp.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/resp.css" rel="stylesheet">
     <style type="text/css"></style>
 
-    <script src="js/angular.min.js"></script>
-    <script src="js/app.js"></script>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/app.js"></script>
 
 
 
@@ -327,11 +327,11 @@
     </div>
 </div>
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/jquery.placeholder.js"></script>
-    <script src="js/css3-mediaqueries.js"></script>
-    <script src="js/jquery_interaction.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/jquery.placeholder.js"></script>
+    <script src="assets/js/css3-mediaqueries.js"></script>
+    <script src="assets/js/jquery_interaction.js"></script>
 
 <script>
     /* <![CDATA[ */

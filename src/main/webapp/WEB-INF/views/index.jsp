@@ -62,9 +62,11 @@
             }
         });
         /* ]]> */
-
+        
+        //for saving last this "accordion"
+		var preClassActive; 
     </script>
-
+	
 </head>
 
 <body>
@@ -530,33 +532,23 @@
                         <div class="accordion" id="accordion2">
                           <div class="accordion-group">
                             <div class="accordion-heading">
-                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" onclick="accordionAfterClick(this,1)">
                                 <em class="icon-fixed-width fa fa-plus"></em>Step 1: <span class="green">Registration</span>
                               </a>
                             </div>
-                            <div style="height: 0px;" id="collapseOne" class="accordion-body collapse">
+                            <div style="height: 0px;" id="collapse_1" class="accordion-body collapse">
                               <div class="accordion-inner">
                                 <div class="row-fluid border_proj duration">
                                 <div class="span10 ">
                                     <div class="column_project">
                                         <h4 class="text-center">Personal Info:</h4>
-                                        <form class="form-search" >
+                                        <form action="inscription" method="post" class="form-search" >
                                             <input type="text" class="inputp search-query span12" placeholder="Name">
                                             <input type="text" class="inputp search-query span12" placeholder="Surname">
                                             <input type="text" class="inputp search-query span12" placeholder="Email">
-                                            <input type="text" class="inputp search-query span12" placeholder="Username">
+                                            <input type="text" class="inputp search-query span12" placeholder="Phone">
                                             <input type="text" class="inputp search-query span12" placeholder="Password">
                                             <input type="text" class="inputp search-query span12" placeholder="Repeat Password">
-                                            <select class="">
-                                                <option>Location</option>
-                                                <option>Belarus</option>
-                                                <option>Armenia</option>
-                                                <option>England</option>
-                                                <option>China</option>
-                                            </select>
-                                            <input type="text" class="inputp search-query span12 face" style="padding-left: 30px;" placeholder="Account Name">
-                                            <input type="text" class="inputp search-query span12 tweet" style="padding-left: 30px;" placeholder="Account Name">
-                                            <input type="text" class="inputp search-query span12" placeholder="Payment Gateway">
                                         </form>
                                     </div>
                                 </div>
@@ -567,11 +559,11 @@
                           </div>
                           <div class="accordion-group">
                             <div class="accordion-heading">
-                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" onclick="accordionAfterClick(this,2)">
                                 <em class="icon-fixed-width fa fa-plus"></em>Step 2: <span class="green">Project Summary
                               </a>
                             </div>
-                            <div style="height: 0px;" id="collapseTwo" class="accordion-body collapse">
+                            <div style="height: 0px;" id="collapse_2" class="accordion-body collapse">
                               <div class="accordion-inner">
                                 <div class="row-fluid border_proj duration">
                                     <div class="span10">
@@ -606,11 +598,11 @@
                           </div>
                           <div class="accordion-group">
                             <div class="accordion-heading">
-                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree" onclick="accordionAfterClick(this,3)" >
                                 <em class="icon-fixed-width fa fa-plus"></em>Step 3: <span class="green">Project page</span>
                               </a>
                             </div>
-                            <div style="height: 0px;" id="collapseThree" class="accordion-body collapse">
+                            <div style="height: 0px;" id="collapse_3" class="accordion-body collapse">
                               <div class="accordion-inner">
                                 <div class="row-fluid border_proj duration">
                                     <div class="span10">
@@ -642,11 +634,11 @@
                           </div>
                           <div class="accordion-group">
                             <div class="accordion-heading">
-                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" onclick="accordionAfterClick(this,4)">
                                 <em class="icon-fixed-width fa fa-plus"></em>Step 4: <span class="green">Project Duration</span>
                               </a>
                             </div>
-                            <div style="height: 0px;" id="collapseFour" class="accordion-body collapse">
+                            <div style="height: 0px;" id="collapse_4" class="accordion-body collapse">
                               <div class="accordion-inner">
                                 <div class="row-fluid border_proj duration">
                                            <div class="span10">
@@ -746,7 +738,7 @@
 </div>
 
 
-
+<!--  
 <div class="popup-wrapper" id="popup">
     <div class="popup-container" id="popup-2">
 
@@ -758,13 +750,13 @@
                 <p><input type="password" id="pwd" name="pwd" placeholder="Password"  required ></p>
 
                 <p> 
-                <!--
+                
                 <input type="hidden" name="action" value="subscribe"> 
                 <input type="hidden" name="source" value="http://www.syakirurohman.net/2015/01/tutorial-membuat-popup-tanpa-javascript-jquery.html"> 
                 <input type="hidden" name="sub-type" value="widget"> 
                 <input type="hidden" name="redirect_fragment" value="blog_subscription-2"> 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="aaf0b68fcd"> 
-                -->
+                
                 <input id = "submit_id" type="button" value="Submit"  >
                 </p>
             </div>
@@ -788,7 +780,7 @@
     popup.classList.add("popup-closed");
     });
 
-</script>
+</script> -->
     <script>
         /* <![CDATA[ */
         (function($) {
@@ -996,7 +988,7 @@
 <script src="assets/js/scripts.js"></script>
 
 <!--[if IE 8]>
-<script src="js/css3-mediaqueries.js"></script>
+<script src="assets/js/css3-mediaqueries.js"></script>
 <![endif]-->
 <script>
     /* <![CDATA[ */
@@ -1055,23 +1047,18 @@
 
 <script>
 // Accordion Toggle Items
-    
-(function($) {
- "use strict"
-   var iconOpen = 'fa fa-minus',
-        iconClose = 'fa fa-plus';
+   
 
-    $(document).on('show.bs.collapse hide.bs.collapse', '.accordion', function (e) {
-        var $target = $(e.target)
-          $target.siblings('.accordion-heading')
-          .find('em').toggleClass(iconOpen + ' ' + iconClose);
-          if(e.type == 'show')
-              $target.prev('.accordion-heading').find('.accordion-toggle').addClass('active');
-          if(e.type == 'hide')
-              $(this).find('.accordion-toggle').not($target).removeClass('active');
-    });
-    
-})(jQuery);
+function accordionAfterClick(e, id) {
+	
+	for(var i= 1 ;i<=4 ;i++) {
+		document.getElementById('collapse_'+i).style.height='0';
+	}
+	if(preClassActive !=null) preClassActive.className="accordion-toggle";
+	document.getElementById('collapse_'+id).style.height='auto';
+	e.className="accordion-toggle active";
+	preClassActive=e;
+}
 </script>
 
 

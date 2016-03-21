@@ -92,15 +92,15 @@ public class GController {
 		else return "Login ou mot de passe invalide !";
 	}
 	
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/inscription", method = RequestMethod.POST)
 	@ResponseBody
 	public String add(@ModelAttribute(value = "nom") String nom, @ModelAttribute(value = "prenom")String prenom, 
-			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "numtel") String numtel, 
-			@ModelAttribute(value = "mdp") String mdp, @ModelAttribute(value = "confmdp") String confmdp) {
+			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "tel") String numtel, 
+			@ModelAttribute(value = "mdp") String mdp, @ModelAttribute(value = "cmdp") String confmdp) {
 		if(mdp.equals(confmdp)){
-		User user = new User(nom, prenom, email, numtel, mdp);
-		utilisateurRepo.saveAndFlush(user);
-		return "";
+			User user = new User(nom, prenom, email, numtel, mdp);
+			utilisateurRepo.saveAndFlush(user);
+			return "";
 		}
 		return "";
 	}
@@ -283,8 +283,7 @@ public class GController {
 				else return "No id";
 		}
 
-		@RequestMapping(value = "/projets", method = RequestMethod.GET)
-		@ResponseBody
+		@RequestMapping(value = "/projects", method = RequestMethod.GET)
 		public String projets() {
 			Page<Projet> pp=projetRepo.findAll(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id")));
 			List<Projet> p= pp.getContent();
@@ -296,7 +295,7 @@ public class GController {
 						+ " </center><br/>";
 			}
 				myP +="Page "+(pp.getNumber()+1)+" of "+pp.getTotalPages()+" affichage par => "+pp.getSize()+"<br/>";
-				return myP;
+				return "projects";
 
 		}	
 
