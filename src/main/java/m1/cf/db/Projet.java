@@ -34,6 +34,9 @@ public class Projet implements Serializable {
 	
 	private Date cree_le;
 	
+	private String miniDescription;
+	
+
 	private String image;
 	
 	@ManyToOne
@@ -87,10 +90,19 @@ public class Projet implements Serializable {
 		return cree_le;
 	}
 
-	public Projet(String titre, String description, float montant, int duree, String image) {
+	public String getMiniDescription() {
+		return miniDescription;
+	}
+
+	public void setMiniDescription(String miniDescription) {
+		this.miniDescription = miniDescription;
+	}
+	
+	public Projet(String titre, String miniDescription,String description, float montant, int duree, String image) {
 		super();
 		this.titre = titre;
 		this.description = description;
+		this.miniDescription = miniDescription;
 		this.montant = montant;
 		this.duree = duree;
 		this.cree_le = new Date(System.currentTimeMillis());

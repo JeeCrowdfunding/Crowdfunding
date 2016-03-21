@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class Config {
 
 	// validate, update, create, create-drop
-	private static final String HBM2DDL = "update";
+	private static final String HBM2DDL = "create";
 
 	private static final String HOST_MYSQL = "localhost";
 	private static final String PORT_MYSQL = "3306";

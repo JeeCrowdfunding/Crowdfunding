@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -58,7 +59,8 @@ public class GController {
 	private ServletContext servletContext;
 
 	
-	
+	private User u;
+
 	// mni tkteb index.html f navigator ghadi texecuta hadi w trje3 lik la page index.jsp
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index() {
@@ -97,12 +99,12 @@ public class GController {
 	public String inscription(@ModelAttribute(value = "name") String nom, @ModelAttribute(value = "surname")String prenom, 
 			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "phone") String numtel, 
 			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp) {
-		if(mdp.equals(confmdp)){
 			User user = new User(nom, prenom, email, numtel, mdp);
-			utilisateurRepo.saveAndFlush(user);
-			return "#success";
-		}
-		return "#error";
+			if(utilisateurRepo.saveAndFlush(user)!=null) {
+				return "{ error : \"false\" }";
+			}
+
+			return "{ error : user was not able to be regetered }";
 	}
 
 
@@ -125,7 +127,7 @@ public class GController {
 			utilisateurRepo.saveAndFlush(user);
 			utilisateurRepo.saveAndFlush(user2);
 			
-			Projet P = new Projet("titre", "description", 16.5f , 12 ,"image");
+			Projet P = new Projet("titre", "des","description", 16.5f , 12 ,"image");
 			
 			P.setUser(user);
 			projetRepo.saveAndFlush(P);
@@ -165,8 +167,13 @@ public class GController {
 
 		public String addP(@ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
 				@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile file,
-				@ModelAttribute(value = "dure") int duree, @RequestParam(value = "categorie") String[] c, HttpServletRequest request){
-
+				@ModelAttribute(value = "dure") int duree, @RequestParam(value = "categorie") String[] c,
+				@ModelAttribute(value = "minidesc") String  minidesc, HttpServletRequest request){
+			if(!this.isConnected(request)) {
+				return "{"
+						+ "error : user not connected"
+						+ "}";
+			}
 			if (!file.isEmpty()) {
 				try {
 					
@@ -176,16 +183,14 @@ public class GController {
 					stream.close();
 				}
 				catch (Exception e) {
-					return "Erreur : You failed to upload  => "+e.getMessage();
+					return "{ error : You failed to upload  => "+e.getMessage()+"}";
 				}
 			}
 			 
-			User user = new User("benjbara", "adam", "benjbara@gmail.com", "06617", "123456" );
-			utilisateurRepo.saveAndFlush(user);
 			String name_of_dir_images="new_1";
 			File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
-			Projet P = new Projet(titre, description, montant , duree ,chemin + file.getOriginalFilename());
-			P.setUser(user);
+			Projet P = new Projet(titre, minidesc,description, montant , duree ,chemin + file.getOriginalFilename());
+			P.setUser(this.u);
 			boolean ver=true;
 			if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
 			else ver=false;
@@ -221,9 +226,11 @@ public class GController {
 					APourCategorie ac= new APourCategorie(P,categ);
 					apcRepo.saveAndFlush(ac);
 				}
-				return "Le projet est ajouté avec succès ";
+				return "{"
+						+ "error : \"false\""
+						+ "}";
 			}
-			else return "Erreur: adam howa sbab ";
+			else return "{ error : Project Error}";
 
 		}
 		
@@ -266,21 +273,45 @@ public class GController {
 		public String afficherProjet(@ModelAttribute(value = "id_projet") int id) {
 				
 			Projet p=projetRepo.findOne((long) id);
-				if(p!=null) { 
+			
+			if(p!=null) { 
+				Date d=p.getCree_le();
+				d.setTime( ( d.getTimezoneOffset()+p.getDuree() ) );
+				Date aujourdhui = new Date();
 				
-				/*return "{"
-						+ "projetName: "+p.getTitre()+","
-						+ "projetId: "+p.getId()+","
-						+ "}";*/
-				
-				return "<center> "
-						+ "<h1>"+p.getTitre()+"</h1>"
-						+"Photo de projet : <br/> <img width=\"200\" src=\"http://localhost:8080/crowdfunding/"+p.getImage()+"\" />"
-						+ "<p><h3>Déscription</h3><br/>"+p.getDescription()+"</p>"
-						+ " </center>";
+				List<APourCategorie> ap=apcRepo.findAPourCategorieByProjet(p);
+				String categoriesOfProjet="[ ";
+				for(int i=0;i<ap.size();i++) {
+					if(i<ap.size()-1) categoriesOfProjet+=ap.get(i).getCategorie().getTitre()+", ";
+					else categoriesOfProjet+=ap.get(i).getCategorie().getTitre();
 				}
+				categoriesOfProjet+=" ]";
+				int nombreDeConstribution=0;
+				float mantatConstribution=0.0f;
+				List<Avantage> av=avantageRepo.findAvantageByProjet(p);
+				for(int i=0;i<av.size();i++) {
+					List<Contribution> constribution = contributionRepo.findContributionByAvantage(av.get(i));
+					for(int j=0;j<constribution.size();j++) {
+						mantatConstribution+=constribution.get(i).getMontant();
+						nombreDeConstribution++;
+					}
+				}
+				return "{"
+						+ "idProject : \""+p.getId()+"\","
+						+ "projectName : \""+p.getTitre()+"\","
+						+ "authorName : \""+p.getUser().getId()+"\","
+						+ "pledgedGoal : \""+p.getMontant()+"\","
+						+ "pledged : \""+mantatConstribution+"\","
+						+ "backers : \""+nombreDeConstribution+"\","
+						+ "daysToGo : \""+aujourdhui.compareTo(d)+"\","
+						+ "ImgUrl : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
+						+ "categorie : \""+categoriesOfProjet+","
+						+ "description : \""+p.getMiniDescription()+"\","
+						+ "error : \"false\""
+						+ "}";
+			}
 				
-				else return "No id";
+			else return "{ error : Project not find }";
 		}
 
 		@RequestMapping(value = "/projects", method = RequestMethod.GET)
@@ -391,5 +422,14 @@ public class GController {
 			this.servletContext = servletContext;
 		}
 	 		
-
+		private boolean isConnected(HttpServletRequest request){
+			HttpSession session = request.getSession();
+			this.u=(User) session.getAttribute("SessionCR");
+			if(u!=null) {
+				return true;
+			}
+			return false;
+		}
+		
+		
 }
