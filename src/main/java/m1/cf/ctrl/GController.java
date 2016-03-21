@@ -97,12 +97,11 @@ public class GController {
 	public String inscription(@ModelAttribute(value = "name") String nom, @ModelAttribute(value = "surname")String prenom, 
 			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "phone") String numtel, 
 			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp) {
-		if(mdp.equals(confmdp)){
+		
 			User user = new User(nom, prenom, email, numtel, mdp);
 			utilisateurRepo.saveAndFlush(user);
 			return "#success";
-		}
-		return "#error";
+		
 	}
 
 
