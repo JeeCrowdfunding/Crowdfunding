@@ -10,4 +10,5 @@ import org.springframework.stereotype.Component;
 public interface APourCategorieRepo extends JpaRepository<APourCategorie, Long> {
 
 		public List<APourCategorie> findAPourCategorieByCategorie(Categorie c, Pageable page);
+		public List<APourCategorie> findAPourCategorieByProjet(Projet p);
 }
