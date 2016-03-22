@@ -89,9 +89,9 @@ public class GController {
 		if(n!=null) {
 			HttpSession session = request.getSession();
 			session.setAttribute( "SessionCR", n );
-			return "ok";
+			return "{ error : false }";
 		}
-		else return "Login ou mot de passe invalide !";
+		else return "{ error : \"Login ou mot de passe invalide\" }";
 	}
 	
 	@RequestMapping(value = "/inscription", method = RequestMethod.POST)
@@ -104,7 +104,7 @@ public class GController {
 				return "{ error : \"false\" }";
 			}
 
-			return "{ error : user was not able to be regetered }";
+			return "{ error : \"user was not able to be regetered\" }";
 	}
 
 
@@ -158,7 +158,7 @@ public class GController {
 			HttpSession session = request.getSession();
 			User n=(User) session.getAttribute("SessionCR");
 			if(n!=null) return "NouveauProjet";
-			else return "no";
+			else return "NouveauProjet";
 		}
 		
 		// ajouter un nouveau projet (emprunter)
@@ -171,7 +171,7 @@ public class GController {
 				@ModelAttribute(value = "minidesc") String  minidesc, HttpServletRequest request){
 			if(!this.isConnected(request)) {
 				return "{"
-						+ "error : user not connected"
+						+ "error : \"user not connected\" "
 						+ "}";
 			}
 			if (!file.isEmpty()) {
@@ -183,7 +183,7 @@ public class GController {
 					stream.close();
 				}
 				catch (Exception e) {
-					return "{ error : You failed to upload  => "+e.getMessage()+"}";
+					return "{ error : \"You failed to upload  => "+e.getMessage()+"\" }";
 				}
 			}
 			 
@@ -230,7 +230,7 @@ public class GController {
 						+ "error : \"false\""
 						+ "}";
 			}
-			else return "{ error : Project Error}";
+			else return "{ error : \"Project Error\" }";
 
 		}
 		
@@ -306,7 +306,7 @@ public class GController {
 						+ "daysToGo : \""+aujourdhui.compareTo(d)+"\","
 						+ "ImgUrl : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
 						+ "categorie : \""+categoriesOfProjet+","
-						+ "description : \""+p.getMiniDescription()+"\","
+						+ "description : \""+p.getDescription()+"\","
 						+ "error : \"false\""
 						+ "}";
 			}
