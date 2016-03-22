@@ -99,12 +99,18 @@ public class GController {
 	public String inscription(@ModelAttribute(value = "name") String nom, @ModelAttribute(value = "surname")String prenom, 
 			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "phone") String numtel, 
 			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp) {
-			User user = new User(nom, prenom, email, numtel, mdp);
+
+			User user = new User(nom, prenom, email, numtel, mdp);			
 			if(utilisateurRepo.saveAndFlush(user)!=null) {
 				return "{ error : \"false\" }";
 			}
+<<<<<<< HEAD
 
 			return "{ error : \"user was not able to be regetered\" }";
+=======
+			return "{ error : user was not able to be regetered }";
+
+>>>>>>> ad4698b33ffa53a50de9e0bf83a66d3d0be73b6c
 	}
 
 
@@ -305,8 +311,13 @@ public class GController {
 						+ "backers : \""+nombreDeConstribution+"\","
 						+ "daysToGo : \""+aujourdhui.compareTo(d)+"\","
 						+ "ImgUrl : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
+<<<<<<< HEAD
 						+ "categorie : \""+categoriesOfProjet+","
 						+ "description : \""+p.getDescription()+"\","
+=======
+						+ "categorie : \""+categoriesOfProjet+"\","
+						+ "description : \""+p.getMiniDescription()+"\","
+>>>>>>> ad4698b33ffa53a50de9e0bf83a66d3d0be73b6c
 						+ "error : \"false\""
 						+ "}";
 			}
