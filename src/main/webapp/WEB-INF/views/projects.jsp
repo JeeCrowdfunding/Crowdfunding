@@ -19,7 +19,7 @@
 
 </head>
 
-<body>
+<body ng-controller="ProjectDetailsCtrl">
 
 <div id="header" class="header">
     <div class="width titul">
@@ -118,11 +118,11 @@
             <li class="span4"><a href="#tab3" data-toggle="tab">UPDATES</a></li>
         </ul>
     </div>
-    <div class="tab-content" style="padding-bottom: 9px;"ng-controller="TabContentCtrl" >
+    <div class="tab-content" style="padding-bottom: 9px;" >
         <div class="tab-pane active" id="tab1">
             <div id="description_content">
-                <div class="title_description_content"> {{content.titleDescription}} </div>
-                <div class="text_description_content"> {{content.textDescription}} </div>
+                <div class="title_description_content"> {{projectDetails.content.titleDescription}} </div>
+                <div class="text_description_content"> {{projectDetails.content.textDescription}} </div>
                
             </div>
         </div>
@@ -146,7 +146,7 @@
 </div>
 <div class="clear"></div>
 
-<div id="author_review" ng-controller="authorCtrl">
+<div id="author_review" >
     <h3 class="decoration text-center"><span class="nobacgr">Author</span></h3>
     <div id="face_social_text">
         <div class="left_face_social_text span4">
@@ -164,16 +164,16 @@
             </div>
         </div>
         <div class="right_face_social_text span8">
-            <div class="name_surname">{{authorDetails.name}}</div>
-            <div class="proff">{{authorDetails.job}}</div>
-            <div class="text_author_right">{{authorDetails.about}}</div>
+            <div class="name_surname">{{projectDetails.authorDetails.name}}</div>
+            <div class="proff">{{projectDetails.authorDetails.job}}</div>
+            <div class="text_author_right">{{projectDetails.authorDetails.about}}</div>
         </div>
     </div>
 </div>
 
 <div class="clear"></div>
 <h4 class="decoration text-center"><span class="nobacgr">Ask a Question</span></h4>
-<div id="asc_a_question" ng-controller="askQuestionCtrl">
+<div id="asc_a_question" >
 
     <div class="reply_user main_reply">
         <div class="row-fluid">
@@ -181,8 +181,8 @@
                 <div class="image_face"></div>
             </div>
             <div class="span10">
-                <div class="name_and_date"><span class="user_name">{{messageDetails.user}}</span> - {{messageDetails.time}} - <span class="reply_t">Reply</span></div>
-                <div class="text_reply">{{messageDetails.msg}}</div>
+                <div class="name_and_date"><span class="user_name">{{projectDetails.messageDetails.user}}</span> - {{projectDetails.messageDetails.time}} - <span class="reply_t">Reply</span></div>
+                <div class="text_reply">{{projectDetails.messageDetails.msg}}</div>
 
             </div>
         </div>
@@ -194,8 +194,8 @@
                 <div class="image_face"></div>
             </div>
             <div class="span10">
-                <div class="name_and_date"><span class="user_name">{{messageDetails.user}}</span> - {{messageDetails.time}} - <span class="reply_t">Reply</span></div>
-                <div class="text_reply">{{messageDetails.msg}}</div>
+                <div class="name_and_date"><span class="user_name">{{projectDetails.messageDetails.user}}</span> - {{projectDetails.messageDetails.time}} - <span class="reply_t">Reply</span></div>
+                <div class="text_reply">{{projectDetails.messageDetails.msg}}</div>
 
             </div>
         </div>
@@ -221,15 +221,15 @@
 </div>
 </div>
 
-<!-- ######################### OPEN Div: backThisProjectBlockCtrl ################################### -->
+<!--------------------------------- OPEN Div: Project Details + pledged +Payment  ----------------------- -->
 
 <div class="sidebar_descr span4">
-    <div id="back_this_project_block" ng-controller="BackThisProjectBlockCtrl">
+    <div id="back_this_project_block" >
         <div class="backers_days_blocks first">
             <div class="row-fluid">
                 <div class="span1" style="margin-right: 10px"><div class="image_first"></div></div>
                 <div class="text_backers_days_blocks span10">
-                    <div class="top_text_backers_days_blocks">{{backersDetails.backers}}</div>
+                    <div class="top_text_backers_days_blocks">{{projectDetails.backers}}</div>
                     <div class="bottom_text_backers_days_blocks">Backers</div>
                 </div>
             </div>
@@ -238,8 +238,8 @@
             <div class="row-fluid">
                 <div class="span1" style="margin-right: 10px"><div class="image_second"></div></div>
                 <div class="text_backers_days_blocks span10">
-                    <div class="top_text_backers_days_blocks">{{backersDetails.pledged}}</div>
-                    <div class="bottom_text_backers_days_blocks">pledged of {{backersDetails.pledgedGoal}} goal</div>
+                    <div class="top_text_backers_days_blocks">{{projectDetails.pledged}}</div>
+                    <div class="bottom_text_backers_days_blocks">pledged of {{projectDetails.pledgedGoal}} goal</div>
                 </div>
             </div>
         </div>
@@ -247,7 +247,7 @@
             <div class="row-fluid">
                 <div class="span1" style="margin-right: 10px"><div class="image_third"></div></div>
                 <div class="text_backers_days_blocks span10">
-                    <div class="top_text_backers_days_blocks">{{backersDetails.daysToGo}}</div>
+                    <div class="top_text_backers_days_blocks">{{projectDetails.daysToGo}}</div>
                     <div class="bottom_text_backers_days_blocks">days to go</div>
                 </div>
             </div>
@@ -258,9 +258,9 @@
             <small>BACK THIS PROJECT</small>
         </button>
     </div>
-    <div id="pledges_block" ng-controller="PledgesBlockCtrl">
+    <div id="pledges_block" >
         <h3 class="decoration text-center"><span class="nobacgr_desc">Pledges</span></h3>
-        <div class="pledges_block_info" ng-repeat="pledge in pledges">
+        <div class="pledges_block_info" ng-repeat="pledge in projectDetails.pledges">
             <div class="pledges_block_info_link" ><a id="link_pledges_block_info_link_1">Pledge {{pledge.pledged}} or more</a></div>
 
             <div id="pledges_block_info_1" >
@@ -328,7 +328,7 @@
 </div>
 
     <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/jquery.placeholder.js"></script>
     <script src="assets/js/css3-mediaqueries.js"></script>
     <script src="assets/js/jquery_interaction.js"></script>

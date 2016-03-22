@@ -409,7 +409,7 @@
                 <div class="portfolio-container" ng-repeat="project in projects">
 
                     <div class="portfolio-listing {{project.categorie}} block"  ng-if="$index < 6" style="display: block;">
-                        <div class="span4 bordered">
+                        <div class="span4 bordered" ng-click="chooseProject(project)">
                             <div class="folder">
                             <h4 class="text-center title"><a href="projects.html#proj{{project.idProject}}">{{project.projectName}}</a></h4>
                             </div>

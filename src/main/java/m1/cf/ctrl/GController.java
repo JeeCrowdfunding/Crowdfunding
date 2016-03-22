@@ -99,20 +99,13 @@ public class GController {
 	public String inscription(@ModelAttribute(value = "name") String nom, @ModelAttribute(value = "surname")String prenom, 
 			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "phone") String numtel, 
 			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp) {
-<<<<<<< HEAD
-		
-			User user = new User(nom, prenom, email, numtel, mdp);
-			utilisateurRepo.saveAndFlush(user);
-			return "#success";
-		
-=======
-			User user = new User(nom, prenom, email, numtel, mdp);
+
+			User user = new User(nom, prenom, email, numtel, mdp);			
 			if(utilisateurRepo.saveAndFlush(user)!=null) {
 				return "{ error : \"false\" }";
 			}
-
 			return "{ error : user was not able to be regetered }";
->>>>>>> 9b0e9bd884b50216aa1e7c00bb27cddc6fd9002a
+
 	}
 
 
@@ -313,7 +306,7 @@ public class GController {
 						+ "backers : \""+nombreDeConstribution+"\","
 						+ "daysToGo : \""+aujourdhui.compareTo(d)+"\","
 						+ "ImgUrl : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
-						+ "categorie : \""+categoriesOfProjet+","
+						+ "categorie : \""+categoriesOfProjet+"\","
 						+ "description : \""+p.getMiniDescription()+"\","
 						+ "error : \"false\""
 						+ "}";
