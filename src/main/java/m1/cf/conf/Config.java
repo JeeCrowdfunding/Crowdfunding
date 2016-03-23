@@ -19,12 +19,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class Config {
 
 	// validate, update, create, create-drop
-	private static final String HBM2DDL = "update";
+	private static final String HBM2DDL = "create";
 
 	private static final String HOST_MYSQL = "localhost";
 	private static final String PORT_MYSQL = "3306";
 	private static final String USER_MYSQL = "root";
-	private static final String PASS_MYSQL = "root";
+	private static final String PASS_MYSQL = "ismail963";
 	private static final String DB_NAME_MYSQL = "crowdfunding";
 
 	private static final Class<com.mysql.jdbc.Driver> DRIVER_MY = com.mysql.jdbc.Driver.class;

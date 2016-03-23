@@ -1,6 +1,6 @@
 var myApp = angular.module("myApp", []);
 
- 
+
  myApp.controller("registerUserCtrl", ['$scope', '$log', '$http', function($scope, $log, $http) {
                
                 //
@@ -30,13 +30,64 @@ var myApp = angular.module("myApp", []);
                         });
                 };
             }]);
+ 
+ 
+ myApp.controller("addProjectCtrl", ['$scope', '$log', '$http', function($scope, $log, $http) {
+     
+     //
+	    $scope.img = 'none';
+	    $scope.addImg = function(){
+	      var f = document.getElementById('file').files[0],
+	          r = new FileReader();
+	      r.onloadend = function(e){
+	        $scope.img = e.target.result;
+	      }
+	      r.readAsBinaryString(f);
+	    }
+	    
+     $scope.addProject = function() {
+    	 $scope.data={
+    			 singleSelect:null,
+    			 multipleSelect: []
+    	 };
+    	 
+         // formulaire a envoyé
+    	 //var categorieSelect = $scope.categorie;
+         var form = new FormData();
+         form.append('title', $scope.title);
+         form.append('shortDesc', $scope.shortDesc);
+         form.append('categorie', $scope.data);
+         form.append('image', $scope.img);
+         form.append('montant', $scope.montant);
+         form.append('descAventage', $scope.descAventage);
+         form.append('montantAventage', $scope.montantAventage);
+         form.append('desc', $scope.desc);
+         form.append('duration', $scope.duration);
+         $http.post('addProject.html', form, {
+                 withCredentials: true,
+                 headers: {
+                     'Content-Type': undefined
+                 },
+                 transformRequest: angular.identity
+             })
+             .success(function(result) {
+                 // 7el console sur firebug pour voir message
+                 $log.info(result);
+             })
+             .error(function(data, status) {
+                 $log.info(data);
+                 $log.info(status);
+             });
+     };
+ }]);
 
- myApp.controller("ProjectsCtrl", ['$scope', '$log', '$http', function($scope, $log, $http,projectService) {
+ myApp.controller("ProjectsCtrl", ['$scope', '$log', '$http','projectsService', function($scope, $log, $http,projectsService) {
                
                 //
                 $scope.projects = projectsService.getProjects();
 				 
                 $scope.chooseProject = function(project) {
+                	
                     // id project
                     var idProject = new FormData();
                     idProject.append('idProject', project.idProject);
@@ -61,15 +112,11 @@ var myApp = angular.module("myApp", []);
 
 
 
-myApp.controller("ProjectDetailsCtrl", function($scope,) {
+myApp.controller("ProjectDetailsCtrl", function($scope,projectService) {
 	$scope.projectDetails = projectService.getProject();
 
 });
 
-
-myApp.controller("", function($scope,projectsService) {
-	
-});
 
 
 myApp.factory("projectsService", function() {
@@ -281,3 +328,4 @@ myApp.factory("projectService", function() {
 		}
 	}
 });
+ 

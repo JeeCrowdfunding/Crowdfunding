@@ -60,6 +60,7 @@
 
 
     function addAv(){
+    	/*
     	var av=document.getElementById("les_aventeges");
     	var nbr=parseInt(document.getElementById("nbr").value);
     	nbr=nbr+1;
@@ -75,8 +76,24 @@
     	for(var i=1;i<nbr;i++) {
     		document.getElementById("id_desc_av_"+i).value=ar_d[i-1];
     		document.getElementById("id_montant_av_"+i).value=ar_m[i-1];
+    	}*/
+
+    	var mydesc=document.getElementById("id_desc_av");
+    	var mym=document.getElementById("id_montant_av");
+    	
+    	if(mydesc.value!="" && mym.value!="" && !isNaN(mym.value)){
+	    	var av=document.getElementById("les_aventeges");
+	    	document.getElementById("id_real_desc_av").value +=mydesc.value+";";
+	    	document.getElementById("id_real_montant_av").value+=mym.value+";";
+	    	av.innerHTML +="<p>" +
+	    			"" +mydesc.value+
+	    			" >> Montant : <strong>"+mym.value+"</strong>"+
+	    			"</p>";
+	    	mydesc.value="";
+	    	mym.value="";
     	}
     	
+    	else alert("Veuillez remplir les champs ! (Montant doit être réel) ");
     }
     
     function addCat(){

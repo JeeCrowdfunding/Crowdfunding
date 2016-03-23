@@ -16,13 +16,54 @@
     <link href="assets/css/jquery-ui.css" rel="stylesheet">
     <link href="assets/css/resp.css" rel="stylesheet">
     <link href="assets/css/colorbox.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="assets/js/CLEditor/jquery.cleditor.css" type="text/css" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+ <!-- CSS reset -->
+	<link rel="stylesheet" href="assets/js/login-signup-modal-window/css/style.css">
     <link rel="apple-touch-icon" href="assets/img/touch-icon.html" />
     <link rel="image_src" href="assets/img/touch-icon.html" />
 
     <script src="assets/js/angular.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/CLEditor/jquery.cleditor.js"></script>
+	<script src="assets/js/addProjet.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="assets/js/login-signup-modal-window/js/modernizr.js"></script>
+		<script type="text/javascript">
+    
+	    $(document).ready(function () { 
+			$(".editeur").cleditor({
+				height: 400,
+				width: 900
+			}); 
+			
+			 dialog= $( "#df" ).dialog({
+			      autoOpen: false,
+			      height: 200,
+			      width: 400,
+			      modal: true
+			 });
+			 
+			 dialog_add_cat = $( "#add_cat" ).dialog({
+			      autoOpen: false,
+			      height: 200,
+			      width: 400,
+			      modal: true
+			 });
+			 
+			$(".cleditorToolbar").append( "<div class=\"cleditorGroup\" style=\"width: 49px;\"><button type=\"button\"style=\"width: 25px; height: 25px;\" id=\"bf\"><img style=\"width: 25px; height: 25px;margin-left: -15px; margin-top: -6px\" src=\"Images/pi.png\"/></button> </div>" );
+			$( "#bf" ).button().on( "click", function() {
+				      dialog.dialog( "open" );
+			});
+		    ed=$(".editeur").cleditor()[0];
+		    document.getElementById("select_cat").style.position ="relative";
+		    document.getElementById("select_cat").style.top="";
+		    //position: absolute; top: -9999px;
+		    //getCat();
+	    });
+
+	</script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -70,6 +111,21 @@
 </head>
 
 <body>
+	<!--  Upload une image pour la description -->
+	<div id="df">
+	   <form id="my_form" method="post" action="imageUpload.html" enctype="multipart/form-data">
+		    <div class="form-group"  > <label class="control-label">Votre image :</label> <input type="file" name="image" accept="image/*"> </div>
+		    <div align="right" class="form-group"> <button type="submit" class="form-control btn btn-success" onclick=" dialog.dialog( 'close' ); ">OK</button></div>
+		</form>
+	</div>
+	
+	<!-- Ajouter une catégorie -->
+ 	<div id="add_cat">
+	   <form id="form_add_cat" method="get" action="addCategorie.html" >
+		    <div class="form-group"  > <label class="control-label">Titre du catégorie :</label> <input type="text" id="titre_categorie" name="titre" /> </div>
+		    <div align="right" class="form-group"> <button type="button" class="form-control btn btn-success" onclick="addCat();">OK</button></div>
+		</form>
+	</div> 
 <div id="header" class="header">
     <a name="id_home"></a>
         <div class="width titul">
@@ -518,13 +574,13 @@
 
 
 <h1 class="decoration text-center proj"><span class="nobacgr">Create Your Project</span></h1>
-<div class="create_projects">
+<div class="create_projects" ng-controller="addProjectCtrl">
 
-
-
+<!--  <form class="form-search" action="addProject.html" method="post" enctype="multipart/form-data">
+-->
 <!-----------------------------------------According: Create a Project ---------------------------------------->
 
-<div class="container">
+<div class="container" >
     <div class="row">
     <div class="col-md-12">
      
@@ -542,14 +598,12 @@
                                 <div class="span10 ">
                                     <div class="column_project">
                                         <h4 class="text-center">Personal Info:</h4>
-                                        <form action="inscription" method="post" class="form-search" >
                                             <input type="text" class="inputp search-query span12" placeholder="Name">
                                             <input type="text" class="inputp search-query span12" placeholder="Surname">
                                             <input type="text" class="inputp search-query span12" placeholder="Email">
                                             <input type="text" class="inputp search-query span12" placeholder="Phone">
                                             <input type="text" class="inputp search-query span12" placeholder="Password">
                                             <input type="text" class="inputp search-query span12" placeholder="Repeat Password">
-                                        </form>
                                     </div>
                                 </div>
                                 </div>
@@ -566,29 +620,50 @@
                             <div style="height: 0px;" id="collapse_2" class="accordion-body collapse">
                               <div class="accordion-inner">
                                 <div class="row-fluid border_proj duration">
-                                    <div class="span10">
+                                    <div class="span10" style="min-height:900px;">
                                         <div class="bleft column_project">
                                             <h4 class="text-center">Project Description:</h4>
-                                            <form class="form-search">
-                                                <input type="text" class="inputp search-query span12" placeholder="Project Name">
-                                                <select class="">
-                                                    <option>Category</option>
-                                                    <option>Armenia</option>
-                                                    <option>England</option>
-                                                    <option>China</option>
-                                                </select>
-                                                <select class="">
-                                                    <option>Location</option>
-                                                    <option>Armenia</option>
-                                                    <option>England</option>
-                                                    <option>China</option>
-                                                </select>
-                                                <div class="upload_img inline">
-                                                    <input type="file" name="upload"/>
-                                                </div>
-                                                <textarea id="redex2" class="inputp search-query span12" rows="9" placeholder="Short description"></textarea>
-                                                <input type="text" class="inputp search-query span12" placeholder="Payment Gateway">
-                                            </form>
+											 	<div class="form-group">	
+											
+											 	</div>
+										 		<div >
+										 			<div class="form-group">
+										 				<input type="text" name="title"  ng-model="title" class="inputp search-query span12" placeholder="Title"/>
+										 				<div class="clear"></div>
+										 				<input type="text" name="montant"  ng-model="montant" class="inputp search-query span12" placeholder="Montant"/>
+										 				<div class="clear"></div>
+										 				
+										 				<textarea name="shortDesc" ng-model="shortDesc" class="inputp search-query span12"  rows="5" placeholder="Short Description"></textarea>
+										 				<div class="clear"></div>
+										 		 		<label class="control-label" id="cat" >Categorie : </label>
+											 			<select id="select_cat" ng-model="data.multipleSelect" class="inputp search-query span12" name="categorie"  multiple>
+											 				<option value="1">Informatique</option>
+											 				
+											 			</select>
+											 			 <p>{{data.multipleSelect}}</p>
+											 			  <input class="inputp search-query span12" type="file" id="file" name="image"/>
+  														<button ng-click="addImg()">Add</button>
+											 			<input type="hidden" ng-model="descAventage" id="id_real_desc_av" name="descAventage"/>
+											 			<input type="hidden" ng-model="montantAventage" id="id_real_montant_av"  name="montantAventage"/>
+											 		</div><br/><br/>
+											 		<div class="clear"></div>
+											 		<!--  <input type="button" value="+" onclick="javascript: dialog_add_cat.dialog('open');" /> -->
+													<fieldset>
+														<legend>Add new aventage </legend>
+															<input class="inputp search-query span4" type="text" id="id_montant_av"  placeholder="Mantant">
+            												<div class="clear"></div>
+           											 		<textarea id="id_desc_av"  class="inputp search-query span4"  rows="5" placeholder="Description"></textarea>
+           											 		<input type="button" onclick="addAv()" value="+" />
+           											 </fieldset>
+           											 
+           											 <div id="les_aventeges">
+           											 
+           											 </div>
+
+            
+												</div>
+												
+												
                                         </div>
                                     </div>
 
@@ -608,23 +683,7 @@
                                     <div class="span10">
                                         <div class="bleft column_project">
                                             <h4 class="text-center">Project Details:</h4>
-                                            <form class="form-search">
-                                                <input type="text" class="inputp search-query span12" placeholder="Video URL">
-                                                <div class="upload_pic1 inline">
-                                                    <input type="file" name="upload"/>
-                                                </div>
-                                                <div class="upload_pic2 inline">
-                                                    <input type="file" name="upload"/>
-                                                </div>
-                                                <div class="upload_pic3 inline">
-                                                    <input type="file" name="upload"/>
-                                                </div>
-                                                <input type="text" class="inputp search-query span12 face" style="padding-left: 30px;" placeholder="Account Name">
-                                                <input type="text" class="inputp search-query span12 tweet" style="padding-left: 30px;" placeholder="Account Name"> <textarea id="redex3" class="inputp search-query span12"  rows="5" placeholder="Project description"></textarea>
-                                                <div class="upload_html inline">
-                                                    <input type="file" name="upload"/>
-                                                </div>
-                                            </form>
+											<textarea id="id_desc" ng-model="desc" name="desc" rows = "5" cols="20" class="form-control editeur"> </textarea>
                                         </div>
                                     </div>
 
@@ -646,15 +705,15 @@
                                                     <h4 class="text-center ">Project Duration:</h4>
                                                     <ul>
                                                         <li>
-                                                            <input id="rfirst" type="radio" name="radio" checked hidden />
+                                                            <input ng-model="duration" id="rfirst" type="radio" name="duration" value="30" checked hidden />
                                                             <label for="rfirst">30 Days ($15)</label>
                                                         </li>
                                                         <li>
-                                                            <input id="rsecond" type="radio" name="radio" hidden />
+                                                            <input ng-model="duration" id="rsecond" type="radio" name="duration" value="45" hidden />
                                                             <label for="rsecond">45 Days ($20)</label>
                                                         </li>
                                                         <li>
-                                                            <input id="re" type="radio" name="radio" hidden />
+                                                            <input ng-model="duration" id="re" type="radio" name="duration" value="60" hidden />
                                                             <label for="re">60 Days ($25)</label>
                                                         </li>
                                                     </ul>
@@ -674,9 +733,8 @@
 
 
 
-
-    <div class="decoration text-center create_butt"><span class="nobacgr_whit"><button class="btn btn-large search-query" type="button"> <span class="butt_small"><strong>CREATE</strong></span></button></span><a name="id_cont"></a></div>
-
+    <div class="decoration text-center create_butt"><span class="nobacgr_whit"><button class="btn btn-large search-query" ng-click="addProject()" type="button"> <span class="butt_small"><strong>CREATE</strong></span></button></span><a name="id_cont"></a></div>
+<!-- </form> -->
 </div>
 
 
@@ -781,42 +839,7 @@
     });
 
 </script> -->
-    <script>
-        /* <![CDATA[ */
-        (function($) {
-            $(function() {
 
-                $('select').selectbox();
-
-                $('#add').click(function(e) {
-                    $(this).parents('div.section').append('<br /><br /><select><option>-- Выберите --</option><option>Пункт 1</option><option>Пункт 2</option><option>Пункт 3</option><option>Пункт 4</option><option>Пункт 5</option></select>');
-                    $('select').selectbox();
-                    e.preventDefault();
-                })
-
-                $('#add2').click(function(e) {
-                    var options = '';
-                    for (i = 1; i <= 5; i++) {
-                        options += '<option>Option ' + i + '</option>';
-                    }
-                    $(this).parents('div.section').find('select').each(function() {
-                        $(this).append(options);
-                    })
-                    $('select').trigger('refresh');
-                    e.preventDefault();
-                })
-
-                $('#che').click(function(e) {
-                    $(this).parents('div.section').find('option:nth-child(5)').attr('selected', true);
-                    $('select').trigger('refresh');
-                    e.preventDefault();
-                })
-
-            })
-        })(jQuery)
-        /* ]]> */
-
-    </script>
 
     <script>
         /* <![CDATA[ */
@@ -930,54 +953,9 @@
 
 
 </script>
-<script>
-    /* <![CDATA[ */
-    function hexFromRGB(r, g, b) {
-        var hex = [
-            r.toString( 16 ),
-            g.toString( 16 ),
-            b.toString( 16 )
-        ];
-        $.each( hex, function( nr, val ) {
-            if ( val.length === 1 ) {
-                hex[ nr ] = "0" + val;
-            }
-        });
-        return hex.join( "" ).toUpperCase();
-    }
-    function refreshSwatch() {
-        var red = $( "#project1" ).slider( "value" ),
-                green = $( "#project2" ).slider( "value" ),
-                blue = $( "#project3" ).slider( "value" ),
-                blues = $( "#project4" ).slider( "value" ),
-                hex = hexFromRGB( red, green, blue);
-        $( "#swatch" ).css( "background-color", "#" + hex );
 
-    }
-    $(function() {
-        $( "#project1, #project2, #project3, #project4, #project5, #project6, #project7, #project8, #project9, #project10, #project11, #project12" ).slider({
-            orientation: "horizontal",
-            range: "min",
-            disabled: true,
-            max: 100,
-            slide: refreshSwatch,
-            change: refreshSwatch
-        });
-
-        $.each($('.project_value'), function(k,v){
-            var value = 100 * Number($(v).text())/Number($($(v).attr('href')).attr('value'));
-            value = Math.floor(value);
-            $($(v).attr('href')).slider("value", value);
-            $($(v).attr('href')).find(".ui-slider-handle").text(value+'%');
-        });
-
-    });
-    /* ]]> */
-
-</script>
 
 <script src="assets/js/jquery.selectbox.min.js"></script>
-<script src="assets/js/jquery.js"></script>
 <script src="assets/js/bootstrap.js"></script>
 <script src="assets/js/jquery-uii.js"></script>
 <script src="assets/js/contact.js"></script>
@@ -1029,20 +1007,7 @@
     /* ]]> */
 
 </script>
-<script>
-    /* <![CDATA[ */
-    $(function(){
-        // bind change event to select
-        $('#dynamic_select').bind('change', function () {
-            var url = $(this).val(); // get selected value
-            if (url) { // require a URL
-                window.location = url; // redirect
-            }
-            return false;
-        });
-    });
-    /* ]]> */
-</script>
+
 
 
 <script>

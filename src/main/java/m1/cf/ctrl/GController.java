@@ -104,13 +104,10 @@ public class GController {
 			if(utilisateurRepo.saveAndFlush(user)!=null) {
 				return "{ error : \"false\" }";
 			}
-<<<<<<< HEAD
+
 
 			return "{ error : \"user was not able to be regetered\" }";
-=======
-			return "{ error : user was not able to be regetered }";
 
->>>>>>> ad4698b33ffa53a50de9e0bf83a66d3d0be73b6c
 	}
 
 
@@ -168,18 +165,22 @@ public class GController {
 		}
 		
 		// ajouter un nouveau projet (emprunter)
-		@RequestMapping(value = "/np", method = RequestMethod.POST)
+		@RequestMapping(value = "/addProject", method = RequestMethod.POST)
 		@ResponseBody
 
-		public String addP(@ModelAttribute(value = "titr") String titre, @ModelAttribute(value = "desc") String  description,
-				@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "img", required = false) MultipartFile file,
-				@ModelAttribute(value = "dure") int duree, @RequestParam(value = "categorie") String[] c,
-				@ModelAttribute(value = "minidesc") String  minidesc, HttpServletRequest request){
-			if(!this.isConnected(request)) {
+		public String addP(@ModelAttribute(value = "title") String titre, @ModelAttribute(value = "desc") String  description,
+				@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "image", required = false) MultipartFile file,
+				@ModelAttribute(value = "duration") int duree, @RequestParam(value = "categorie") String[] c,
+				@ModelAttribute(value = "shortDesc") String  minidesc,
+				@ModelAttribute(value = "descAventage") String  avDesc, @ModelAttribute(value = "montantAventage") String  avM,
+				 HttpServletRequest request){
+			/*if(!this.isConnected(request)) {
 				return "{"
 						+ "error : \"user not connected\" "
 						+ "}";
-			}
+			}*/
+			this.u=new User("elf","ismail","elfaqir963@gmail.com","123456","06502222");
+			utilisateurRepo.saveAndFlush(this.u);
 			if (!file.isEmpty()) {
 				try {
 					
@@ -195,7 +196,7 @@ public class GController {
 			 
 			String name_of_dir_images="new_1";
 			File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
-			Projet P = new Projet(titre, minidesc,description, montant , duree ,chemin + file.getOriginalFilename());
+			Projet P = new Projet(titre, minidesc,description, montant , duree , (chemin + file.getOriginalFilename())); //(chemin + file.getOriginalFilename())
 			P.setUser(this.u);
 			boolean ver=true;
 			if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
@@ -213,17 +214,24 @@ public class GController {
 				k.renameTo(new File(servletContext.getRealPath("/Images/")+"/"+P.getTitre()+"_"+P.getId()));
 				projetRepo.save(P);
 			}
-			int nbr=Integer.parseInt(request.getParameter("nbr"));
-			for(int i=1;i<=nbr;i++) {
-				if(ver){
-					float a=Float.parseFloat(request.getParameter("montant_av_"+i));
-					Avantage av = new Avantage(a,request.getParameter("desc_av_"+i));
-					av.setProjet(P);
-					if(avantageRepo!=null) {avantageRepo.saveAndFlush(av); }
-					else ver=false;
+			//int nbr=Integer.parseInt(request.getParameter("nbr"));
+			String [] ad= avDesc.split(";");
+			String [] am= avM.split(";");
+			if(ad.length==am.length){
+				for(int i=0;i<am.length;i++) {
+					if(ver){
+						if(am[i]!="" && ad[i]!=""){
+							float a=Float.parseFloat(am[i]);
+							Avantage av = new Avantage(a,ad[i]);
+							av.setProjet(P);
+							if(avantageRepo!=null) {avantageRepo.saveAndFlush(av); }
+							else ver=false;
+						}
+					}
+					else break;
 				}
-				else break;
 			}
+			else ver=false;
 			//boolean ver=true;
 			if(ver) {
 
@@ -274,9 +282,9 @@ public class GController {
 		}	
 	
 
-		@RequestMapping(value = "/afficherProjet", method = RequestMethod.GET)
+		@RequestMapping(value = "/projectDetails", method = RequestMethod.GET)
 		@ResponseBody
-		public String afficherProjet(@ModelAttribute(value = "id_projet") int id) {
+		public String afficherProjet(@ModelAttribute(value = "idProject") int id) {
 				
 			Projet p=projetRepo.findOne((long) id);
 			
@@ -311,13 +319,10 @@ public class GController {
 						+ "backers : \""+nombreDeConstribution+"\","
 						+ "daysToGo : \""+aujourdhui.compareTo(d)+"\","
 						+ "ImgUrl : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
-<<<<<<< HEAD
 						+ "categorie : \""+categoriesOfProjet+","
 						+ "description : \""+p.getDescription()+"\","
-=======
 						+ "categorie : \""+categoriesOfProjet+"\","
 						+ "description : \""+p.getMiniDescription()+"\","
->>>>>>> ad4698b33ffa53a50de9e0bf83a66d3d0be73b6c
 						+ "error : \"false\""
 						+ "}";
 			}
