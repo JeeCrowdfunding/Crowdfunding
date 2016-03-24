@@ -48,7 +48,13 @@ public class GController {
 
 	private ServletContext servletContext;
 
+	// formulaire d'inscrption
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
+	public String inscription() {
+		return "inscription";
+	}
 	
+	//formulaire de nouveau projet
 	@RequestMapping(value = "/nouveauProjet", method = RequestMethod.GET)
 	public String nouveauProjet() {
 		return "NouveauProjet";
