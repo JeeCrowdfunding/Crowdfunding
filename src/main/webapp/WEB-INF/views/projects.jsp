@@ -11,12 +11,14 @@
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/resp.css" rel="stylesheet">
     <link href="assets/css/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     
     <style type="text/css"></style>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/appJs.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="assets/js/project.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
 
 	<script>
 		$(document).ready(function () {
@@ -49,7 +51,7 @@
 			          duration: 1000
 			        }
 			 });
-		
+			 makeCnx();
 			 id_projet= location.search.split('id=')[1];
 			 setInterval('getCommentaire();', 250);
 			 updateLike();
@@ -59,11 +61,11 @@
 	</script>
 </head>
 
-<body id="ProjectDetailsCtrl">
+<body >
 
 	<!--  Forms for Log in and regester ! -->
-    <div id="loginForm" title="Log-in"  ng-controller="LoginCtrl">
-      <form >
+    <div id="loginForm" title="Log-in" >
+      <form id="loginFormP" action="cnx.html" method="post">
         <div >
           <h3>Login information</h3>
           <label for="usrnm" class="ui-hidden-accessible">Username:</label>
@@ -72,7 +74,7 @@
           <input type="password"  ng-model="pwd"  name="pwd" id="pswd" placeholder="Password">
           <label for="log">Keep me logged in</label>
           <input type="checkbox" name="login" id="log" value="1" data-mini="true">
-          <input type="submit" ng-click="send()" data-inline="true" value="Log in">
+          <input type="button" onclick="loginFunction()" data-inline="true" value="Log in">
         </div>
       </form>
     </div>
@@ -154,7 +156,7 @@
     </div>
 </div>
 
-<div class="container-fluid line contentt description_page">
+<div class="container-fluid line contentt description_page" id="ProjectDetailsCtrl">
 
 <div class="clear"></div>
 <div class="content description">

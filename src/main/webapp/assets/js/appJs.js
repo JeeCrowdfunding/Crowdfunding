@@ -2,21 +2,7 @@
  * 
  */
 
-$(document).ready(function () {
-    $.ajax({
-        url: "makeConnexion.html",
-        type: "GET",
-        success: function (my_text) {
-			 if(my_text.indexOf("Erreur")==-1){
-				 var my=JSON.parse(my_text);
-				 if(my.isLogged) {
-					 changeHeader(true);				 
-				 }
-			 }
-			 else alert(""+my_text);
-        }
-    });
-});    
+
 var dialog_login, dialog_register;
 var sherchForProject;
 var okAccordion=false;
@@ -91,26 +77,39 @@ function accordionAfterClick(e, id) {
 	}
 	
 }
-/*
-function login(){
-	
-    var $form = $(this);
-    var formdata = (window.FormData) ? new FormData($form[0]) : null;
-    var data = (formdata !== null) ? formdata : $form.serialize();
 
+function loginFunction(){
+    var $form = $("#loginFormP");
     $.ajax({
         url: $form.attr('action'),
         type: $form.attr('method'),
-        data: data,
+        data: $form.serialize(),
         success: function (response) {
             if(response.indexOf("Erreur")==-1) {
-            	document.getElementById("id_desc").value+="<img src=\"http://localhost:8080"+response+"\" />";
-            	ed.updateFrame();
+           	 	changeHeader(true);
+           	 	dialog_login.dialog( 'close' );
             }
             else alert(""+response);
         }
     });
 	
-}*/
+}
 
+function makeCnx(){
+	
+    $.ajax({
+        url: "makeConnexion.html",
+        type: "GET",
+        success: function (my_text) {
+			 if(my_text.indexOf("Erreur")==-1){
+				 var my=JSON.parse(my_text);
+				 if(my.isLogged) {
+					 changeHeader(true);				 
+				 }
+			 }
+			 else alert(""+my_text);
+        }
+    });
+    
+}
 
