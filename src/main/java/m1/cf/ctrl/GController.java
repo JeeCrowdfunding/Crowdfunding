@@ -344,19 +344,16 @@ public class GController {
 		public String afficherProjet(@ModelAttribute(value = "idProject") int id) {
 				
 			Projet p=projetRepo.findOne((long) id);
-			
 			if(p!=null) { 
 				Date d=p.getCree_le();
 				d.setTime( ( d.getTimezoneOffset()+p.getDuree() ) );
 				Date aujourdhui = new Date();
 				
 				List<APourCategorie> ap=apcRepo.findAPourCategorieByProjet(p);
-				String categoriesOfProjet="[ ";
+				String categoriesOfProjet="";
 				for(int i=0;i<ap.size();i++) {
-					if(i<ap.size()-1) categoriesOfProjet+=ap.get(i).getCategorie().getTitre()+", ";
-					else categoriesOfProjet+=ap.get(i).getCategorie().getTitre();
+					categoriesOfProjet+=ap.get(i).getCategorie().getTitre()+" ";
 				}
-				categoriesOfProjet+=" ]";
 				int nombreDeConstribution=0;
 				float mantatConstribution=0.0f;
 				List<Avantage> av=avantageRepo.findAvantageByProjet(p);
@@ -365,8 +362,11 @@ public class GController {
 					for(int j=0;j<constribution.size();j++) {
 						mantatConstribution+=constribution.get(i).getMontant();
 						nombreDeConstribution++;
+						
 					}
+					
 				}
+				/*
 				return "{"
 						+ "\"idProject\" : \""+p.getId()+"\","
 						+ "\"projectName\" : \""+p.getTitre()+"\","
@@ -376,12 +376,28 @@ public class GController {
 						+ "\"backers\" : \""+nombreDeConstribution+"\","
 						+ "\"daysToGo\" : \""+aujourdhui.compareTo(d)+"\","
 						+ "\"ImgUrl\" : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
-						+ "\"categorie\" : \""+categoriesOfProjet+","
-						+ "\"description\" : \""+p.getDescription()+"\","
 						+ "\"categorie\" : \""+categoriesOfProjet+"\","
-						+ "\"description\" : \""+p.getMiniDescription()+"\","
+						+ "\"description\" : \""+p.getDescription()+"\","
+						+ "\"miniDescription\" : \""+p.getMiniDescription()+"\","
 						+ "\"error\" : \"false\""
-						+ "}";
+						+ "}";*/
+				return ""
+					+ ""+p.getId()+";"
+					+ ""+p.getTitre()+";"
+					+ ""+p.getUser().getNom()+" "+p.getUser().getPrenom()+";"
+					+ ""+p.getMontant()+";"
+					+ ""+mantatConstribution+";"
+					+ ""+nombreDeConstribution+";"
+					+ ""+aujourdhui.compareTo(d)+";"
+					+ "Images/"+p.getImage()+";"
+					+ ""+categoriesOfProjet+";"
+					+ ""+p.getDescription()+";"
+					+ ""+p.getMiniDescription()+";"
+					+ ""+p.getUser().getDescription()+";"
+					+ ""+p.getUser().getNumtel()+";"
+					+ ""+p.getUser().getPhoto()+";";
+				
+				//return ""+p.getId()+";"+p.getTitre()+";"+p.getUser().getId()+";"+
 			}
 				
 			else return "{ \"error\" : \"Project not find\" }";
@@ -389,8 +405,9 @@ public class GController {
 
 		@RequestMapping(value = "/getprojects", method = RequestMethod.GET)
 		@ResponseBody
-		public String projets() {
-			Page<Projet> pp=projetRepo.findAll(new PageRequest(0, 100, new Sort(Sort.Direction.DESC, "id")));
+		public String projets(@ModelAttribute(value = "page") int page) {
+			page--;
+			Page<Projet> pp=projetRepo.findAll(new PageRequest(page, 6, new Sort(Sort.Direction.DESC, "id")));
 			List<Projet> p= pp.getContent();
 			String myP="[";		
 			for(int i=0;i<p.size();i++) {
@@ -425,6 +442,7 @@ public class GController {
 						+ "\"daysToGo\" : \""+aujourdhui.compareTo(d)+"\","
 						+ "\"ImgUrl\" : \"Images/"+p.get(i).getImage()+"\","
 						+ "\"categorie\" : \""+categoriesOfProjet+"\","
+						+ "\"nbrPages\" : \""+pp.getTotalPages()+"\", "
 						+ "\"description\" : \""+p.get(i).getMiniDescription()+"\","
 						+ "\"error\" : \"false\""
 						+ "}";

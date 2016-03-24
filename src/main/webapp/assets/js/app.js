@@ -1,7 +1,6 @@
 var myApp = angular.module("myApp", []);
-var projects ;
 
-/*
+
 angular.element(document).ready(function ($log) {
 	
     $.ajax({
@@ -19,51 +18,6 @@ angular.element(document).ready(function ($log) {
     });
     
     
-    
-});*/
-
-myApp.factory("projectsService", function() {
-	
-	return {
-		getProjects: function() {
-			return projects;
-		},
-		setProjects: function(data) {
-			 projects=data;
-		},
-		addProject: function(project) {
-			
-		}
-	}
-});
-/*
-(function() {
-	  var initInjector = angular.injector(['ng']);
-	  var $http = initInjector.get('$http');
-	 
-	  $http.get('getprojects.html').then(
-	    function (response) {
-	      angular.module('config', []).constant('CONFIG', response.data);
-	      projectsService.setProjects(response.data);
-	      $scope.projectDetails = projectService.getProject();
-	      angular.element(document).ready(function() {
-	          angular.bootstrap(document, ['myApp']);
-	        });
-	    }
-	  );
-	})();
-*/
-
-myApp.run(function ($http, projectsService) {
-	
-	angular.element(document).ready(function ($http,$scope,projectsService) {
-		
-		$http.get('getprojects.html').success(function (data) {
-	    	projectsService.setProjects(data);
-	    		
-
-	    });
-	});
     
 });
 
@@ -182,7 +136,7 @@ myApp.run(function ($http, projectsService) {
              });
      };
  }]);
-/*
+
  myApp.controller("ProjectsCtrl", ['$scope', '$log', '$http','projectsService', function($scope, $log, $http,projectsService) {
                
                 //
@@ -212,15 +166,150 @@ myApp.run(function ($http, projectsService) {
                 };
             }]);
 
-*/
-/*
+
+
 myApp.controller("ProjectDetailsCtrl", function($scope,projectService) {
 	$scope.projectDetails = projectService.getProject();
 
 });
-*/
 
 
+
+myApp.factory("projectsService", function() {
+	projects = [
+		{
+			idProject:"1",
+			projectName: "Project Name 1",
+			authorName: "Author Name 1",
+			pledgedGoal:"400",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			ImgUrl:"/adresse",
+			categorie:"creative developments",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{	
+			idProject:"2",
+			projectName: "Project Name 2",
+			pledgedGoal:"500",
+			authorName: "AuthorName 2",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{	
+			idProject:"3",
+			pledgedGoal:"500",
+			projectName: "Project Name 3",
+			authorName: "AuthorName 3",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			idProject:"1",
+			projectName: "Project Name 1",
+			authorName: "Author Name 1",
+			pledgedGoal:"400",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			ImgUrl:"/adresse",
+			categorie:"creative developments",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{	
+			idProject:"2",
+			projectName: "Project Name 2",
+			pledgedGoal:"500",
+			authorName: "AuthorName 2",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{	
+			idProject:"3",
+			pledgedGoal:"500",
+			projectName: "Project Name 3",
+			authorName: "AuthorName 3",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		},
+		{
+			projectName: "Project Name",
+			authorName: "AuthorName",
+			pledged: "25",
+			backers: "10",
+			daysToGo:"25",
+			percentageReached :"50",
+			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+		}		
+	];
+	
+	return {
+		getProjects: function() {
+			return projects;
+		},
+		addProject: function(project) {
+			
+		}
+	}
+});
 
 myApp.factory("projectService", function() {
 	

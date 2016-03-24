@@ -2,9 +2,10 @@
  * 
  */
 
-var id_projet;
+	var id_projet;
 	var contunieToGetComment=true;
 	var isCharging=false;
+	
     function getCommentaire() {
     	var scrollPosition = window.pageYOffset;
     	var clientHeight =document.documentElement.clientHeight; // Height de la page qui s'affiche au client 
@@ -46,7 +47,10 @@ var id_projet;
 					 else contunieToGetComment=false;
 	            }
 	        });
+	        
     	}
+    	
+    	else document.getElementById("image_chargement").style.display="none";
   	
     }
     
@@ -145,3 +149,34 @@ var id_projet;
     }
     
 
+    function getMyProjet(){
+    	
+    	
+        $.ajax({
+            url: "projectDetails.html?idProject="+id_projet,
+            type: "GET",
+            success: function (my_text) {
+    			 if(my_text.indexOf("Erreur")==-1){
+    				 var a=my_text.split(";");
+    				 var mydiv=document.getElementById("ProjectDetailsCtrl").innerHTML;	 
+   
+    					 mydiv=mydiv.replace(/##idProjet##/g,""+id_projet);
+    					 mydiv=mydiv.replace("##projetName##",""+a[1]);
+    					 mydiv=mydiv.replace("##userProjetName##",""+a[2]);
+    					 mydiv=mydiv.replace("##projetDisc## ",""+a[9]);
+    					 mydiv=mydiv.replace("##projetMiniDisc## ",""+a[10]);
+    					 mydiv=mydiv.replace("##imgProjet##",""+a[7]);
+    					 mydiv=mydiv.replace("##montantProjet##",""+a[3]);
+    					 mydiv=mydiv.replace("##gevinToProjet##",""+a[4]);
+    					 mydiv=mydiv.replace("##dureeProjet##",""+a[6]);
+    					 mydiv=mydiv.replace("##projetCategorie##",""+a[8]);
+    					 mydiv=mydiv.replace("##userProjetDesc##",""+a[12]);
+    					 mydiv=mydiv.replace("##userProjetTel##",""+a[11]);
+    					 mydiv=mydiv.replace("##userProjetImg##",""+a[13]);
+    					 //alert("ok"+a[1]);
+    					 document.getElementById("ProjectDetailsCtrl").innerHTML=mydiv;
+    			 }
+    			 else alert(""+my_text);
+            }
+        });
+    }

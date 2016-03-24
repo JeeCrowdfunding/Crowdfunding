@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en" ng-app="myApp">
 <head>
     <meta charset="utf-8">
     <title>Crowdfunding Site</title>
@@ -22,8 +22,6 @@
     <link rel="apple-touch-icon" href="assets/img/touch-icon.html" />
     <link rel="image_src" href="assets/img/touch-icon.html" />
 	<script src="assets/js/appJs.js"></script>
-    <script src="assets/js/angular.min.js"></script>
-    <script src="assets/js/app.js"></script>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/CLEditor/jquery.cleditor.js"></script>
 	<script src="assets/js/addProjet.js"></script>
@@ -50,8 +48,7 @@
 			
 		}*/
 		
-		
-		var dialog_login, dialog_register;
+		var dialog, dialog_add_cat;
 	    $(document).ready(function () {
 	    	//makeConnection();
 			$(".editeur").cleditor({
@@ -103,20 +100,22 @@
 			        }
 			 });
 			 
-			    $( ".progressbar" ).progressbar({
-			        value: false
-			      });
+
 			    
 			$(".cleditorToolbar").append( "<div class=\"cleditorGroup\" style=\"width: 49px;\"><button type=\"button\"style=\"width: 25px; height: 25px;\" id=\"bf\"><img style=\"width: 25px; height: 25px;margin-left: -15px; margin-top: -6px\" src=\"Images/pi.png\"/></button> </div>" );
 			$( "#bf" ).button().on( "click", function() {
 				      dialog.dialog( "open" );
 			});
 		    ed=$(".editeur").cleditor()[0];
-
+		    getProjects(1);
 		    getCat();
+		    
 	    });
 
-	
+	</script>
+
+ 
+    <script>
         /* <![CDATA[ */
         $(window).scroll(function fade() {
             if ($(window).scrollTop() > 400) {
@@ -523,43 +522,43 @@
                 </div>
                 
     <!-------------------------------------------- Projects ---------------------------------->
+			<div id="projetShow" style="display:none;">
+                <div class="portfolio-container" >
 
-                <div class="portfolio-container" ng-repeat="project in projects">
-
-                    <div class="portfolio-listing {{project.categorie}} block"  ng-if="$index < 6" style="display: block;">
-                        <div class="span4 bordered" ng-click="chooseProject(project)">
+                    <div class="portfolio-listing block" style="display: block;">
+                        <div class="span4 bordered" >
                             <div class="folder">
-                            <h4 class="text-center title"><a href="projects.html#proj{{project.idProject}}">{{project.projectName}}</a></h4>
+                            <h4 class="text-center title"><a href="projects.html?id=##idProjet##">##projetName##</a></h4>
                             </div>
                             <div class="proj_name">
                                 <div class="clear"></div>
-                                <span class="fleft author">{{project.authorName}}</span>
+                                <span class="fleft author">##userNameOfProjet##</span>
                                 <table class="icons">
                                     <tbody>
                                     <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj{{project.idProject}}.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="assets/img/icon_lock.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a class="group1" href="##imgProjet##" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a href="projects.html?id=##idProjet##"><img src="assets/img/icon_lock.png" alt=""></a></td>
                                     </tr>
                                     </tbody>
                                  </table>
                                 <div class="clear"></div>
                            </div>
-                            <div class="folder border"><a href="projects.html#proj{{project.idProject}}"><div class="author_proj proj_{{project.idProject}}" ></div></a></div>
+                            <div class="folder border"><a href="projects.html?id=##idProjet##"><div class="author_proj" ></div></a></div>
                             <div class="folder lorem lines">
-                                <progress labels="oooooooook" id="project{{$index+7}}" title="40%" value="{{project.pledged}}" max="{{project.pledgedGoal}}"></progress>
+                                <progress  title="##progTitle##" value="##progValue##" max="##progMax##"></progress>
                             </div>
-                            <p class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate egestas sem, eu cursus ligula ullamcorper non. Curabitur tristique velit eu</p>
+                            <p class="descr">##descProjet##</p>
                             <div class="folder price topbordered">
                                 <div class="span4">
-                                    <strong class="green"><span>$</span><span class="project_value" href="#project{{$index+1}}">200</span></strong>
+                                    <strong class="green"><span>$</span><span class="project_value"> ##montantProjet##</span></strong>
                                     <p>pledged</p>
                                 </div>
                                 <div class="span4 bleft">
-                                    <strong>50</strong>
+                                    <strong>##gevinToProjet##</strong>
                                     <p>backers</p>
                                 </div>
                                 <div class="span4 bleft">
-                                    <strong>5</strong>
+                                    <strong>##dureeProjet##</strong>
                                     <p>days to go</p>
                                 </div>
                             </div>
@@ -567,52 +566,11 @@
                     </div>
 
                 </div>
-                <!--
-                <div class="portfolio-container" ng-repeat="project in projects">
-
-                    <div class="portfolio-listing development other movies block"  ng-if="$index > 10" style="display: block;">
-                        <div class="span4 bordered">
-                            <div class="folder"><h4 class="text-center title"><a href="projects.html#proj4">{{project.projectName}}</a></h4></div>
-                            <div class="proj_name">
-                                <div class="clear"></div>
-                                <span class="fleft author">{{project.authorName}}</span>
-                                <table class="icons">
-                                    <tbody>
-                                    <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj4.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj4"><img src="assets/img/icon_lock.png" alt=""></a></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="folder border"><a href="projects.html#proj4"><div class="author_proj proj_4"></div></a></div>
-                            <div class="folder lorem lines">
-                                <div id="project4" value="234" class="slider"></div>
-                            </div>
-                            <p class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate egestas sem, eu cursus ligula ullamcorper non. Curabitur tristique velit eu</p>
-                            <div class="folder price topbordered">
-                                <div class="span4">
-                                    <strong class="green"><span>$</span><span class="project_value" href="#project4">190</span></strong>
-                                    <p>pledged</p>
-                                </div>
-                                <div class="span4 bleft">
-                                    <strong>80</strong>
-                                    <p>backers</p>
-                                </div>
-                                <div class="span4 bleft">
-                                    <strong>25</strong>
-                                    <p>days to go</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                 -->
-
+			</div>
 
             </div><!-- end of .zone-content -->
+        
+        	<div id="projetsBord"></div>
         </div><!-- end of .content-wrapper -->
 
     </section>
@@ -620,12 +578,8 @@
 <div class="btns">
     <div class="btn-toolbar text-center">
         <div class="decoration text-center proj">
-                    <div class="btn-group nobacgr">
-                        <button class="btn"><span class="gray">1</span></button>
-                        <button class="btn mleft10">2</button>
-                        <button class="btn mleft10">3</button>
-                        <button class="btn mleft10">4</button>
-                        <button class="btn mleft10">5</button>
+                    <div class="btn-group nobacgr" id="pagination">
+						
                     </div>
                     <a name="id_reg" id="registr"></a>
         </div>

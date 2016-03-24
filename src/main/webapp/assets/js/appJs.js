@@ -2,7 +2,22 @@
  * 
  */
 
-var dialog, dialog_add_cat;
+$(document).ready(function () {
+    $.ajax({
+        url: "makeConnexion.html",
+        type: "GET",
+        success: function (my_text) {
+			 if(my_text.indexOf("Erreur")==-1){
+				 var my=JSON.parse(my_text);
+				 if(my.isLogged) {
+					 changeHeader(true);				 
+				 }
+			 }
+			 else alert(""+my_text);
+        }
+    });
+});    
+var dialog_login, dialog_register;
 var sherchForProject;
 var okAccordion=false;
 function findProjectByTitle(){
@@ -76,3 +91,26 @@ function accordionAfterClick(e, id) {
 	}
 	
 }
+/*
+function login(){
+	
+    var $form = $(this);
+    var formdata = (window.FormData) ? new FormData($form[0]) : null;
+    var data = (formdata !== null) ? formdata : $form.serialize();
+
+    $.ajax({
+        url: $form.attr('action'),
+        type: $form.attr('method'),
+        data: data,
+        success: function (response) {
+            if(response.indexOf("Erreur")==-1) {
+            	document.getElementById("id_desc").value+="<img src=\"http://localhost:8080"+response+"\" />";
+            	ed.updateFrame();
+            }
+            else alert(""+response);
+        }
+    });
+	
+}*/
+
+

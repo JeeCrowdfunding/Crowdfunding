@@ -156,5 +156,47 @@
 	}*/
 
 
+    function getProjects(page) {
+    	
+        var div=document.getElementById("projetShow").innerHTML;
+        var projets=document.getElementById("projetsBord");
+        var p=document.getElementById("pagination");
+        projets.innerHTML="<center><img src=\"Images/chargement.gif\" /></center>";
+        p.innerHTML="";
+        $.ajax({
+            url: "getprojects.html?page="+page,
+            type: "GET",
+            success: function (my_text) {
+    			 if(my_text.indexOf("Erreur")==-1){
+    				 projets.innerHTML="";
+    				 var my=JSON.parse(my_text);
+    				 for(var i=0;i<my.length;i++) {
+    					 var mydiv=div;
+    					 a=my[i];
+    					 mydiv=mydiv.replace(/##idProjet##/g,""+a.idProject);
+    					 mydiv=mydiv.replace("##projetName##",""+a.projectName);
+    					 mydiv=mydiv.replace("##userNameOfProjet##",""+a.authorName);
+    					 mydiv=mydiv.replace("##descProjet##",""+a.description);
+    					 mydiv=mydiv.replace("##imgProjet##",""+a.ImgUrl);
+    					 mydiv=mydiv.replace("##montantProjet##",""+a.pledgedGoal);
+    					 mydiv=mydiv.replace("##gevinToProjet##",""+a.pledged);
+    					 mydiv=mydiv.replace("##dureeProjet##",""+a.daysToGo);
+    					 mydiv=mydiv.replace("##progTitle##",""+(a.pledged/a.pledgedGoal*100));
+    					 mydiv=mydiv.replace("##progValue##",""+a.pledged);
+    					 mydiv=mydiv.replace("##progMax##",""+a.pledgedGoal);
+    					 projets.innerHTML+=mydiv;
+    				 }
+    				 var nbr=my[0].nbrPages;
+    				 if(nbr<=0) nbr=1;
+    				 for(var i=1;i<=nbr;i++) {
+    						if(i==page) p.innerHTML+= '<button class="btn" onclick="getProjects('+i+')" ><span class="gray">'+i+'</span></button>';
+    						else p.innerHTML+= '<button class="btn" onclick="getProjects('+i+')" >'+i+'</button>';
+    				 }
+    			 }
+    			 else alert(""+my_text);
+            }
+        });    
+        
+    }
 
 

@@ -10,17 +10,90 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/resp.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet">
+    
     <style type="text/css"></style>
-    <script src="assets/js/angular.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="assets/js/jquery.js"></script>
     <script src="assets/js/appJs.js"></script>
 	<script src="assets/js/project.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
+	<script>
+		$(document).ready(function () {
+			 dialog_login = $( "#loginForm" ).dialog({
+			      autoOpen: false,
+			      height: 350,
+			      width: 350,
+			      modal: true,
+			      show: {
+			          effect: "explode",
+			          duration: 1000
+			        },
+			        hide: {
+			          effect: "explode",
+			          duration: 1000
+			        }
+			 });
+		
+			 dialog_registre = $( "#registreForm" ).dialog({
+			      autoOpen: false,
+			      height: 600,
+			      width: 350,
+			      modal: true,
+			      show: {
+			          effect: "blind",
+			          duration: 1000
+			        },
+			        hide: {
+			          effect: "explode",
+			          duration: 1000
+			        }
+			 });
+		
+			 id_projet= location.search.split('id=')[1];
+			 setInterval('getCommentaire();', 250);
+			 updateLike();
+			 getMyProjet();
+		});
+	
+	</script>
 </head>
 
-<body ng-controller="ProjectDetailsCtrl">
+<body id="ProjectDetailsCtrl">
 
-
+	<!--  Forms for Log in and regester ! -->
+    <div id="loginForm" title="Log-in"  ng-controller="LoginCtrl">
+      <form >
+        <div >
+          <h3>Login information</h3>
+          <label for="usrnm" class="ui-hidden-accessible">Username:</label>
+          <input type="text"  ng-model="email"  name="email" id="usrnm" placeholder="Username">
+          <label for="pswd" class="ui-hidden-accessible">Password:</label>
+          <input type="password"  ng-model="pwd"  name="pwd" id="pswd" placeholder="Password">
+          <label for="log">Keep me logged in</label>
+          <input type="checkbox" name="login" id="log" value="1" data-mini="true">
+          <input type="submit" ng-click="send()" data-inline="true" value="Log in">
+        </div>
+      </form>
+    </div>
+    
+     <div id="registreForm" title="Register form" >
+      <form action="inscription.html" method="post" enctype="multipart/form-data">
+        <div>
+          <h3>Register information</h3>
+			 <input type="text" ng-model="name" name="name" placeholder="Name"> <br/>
+	         <input type="text" ng-model="surname"  name="surname" placeholder="Surname"> <br/>
+	         <input type="text" ng-model="email"  name="email" placeholder="Email"><br/>
+	         <input type="text" ng-model="phone"  name="phone" placeholder="Phone"><br/>
+	         <input type="password" ng-model="pwd"  name="pwd" placeholder="Password"><br/>
+	         <input type="password" ng-model="rpwd"  name="rpwd" placeholder="Repeat Password"><br/>
+	         <input type="file" ng-model="img" name="image" ><br/>
+	         <textarea name="shortDesc" ng-model="shortDesc" class="inputp search-query span3"  rows="5" placeholder="Short Description"></textarea><br/>
+			 <input type="submit"  class="inputp search-query span3" data-inline="true" value="Register">
+        </div>
+      </form>
+    </div>
+    
 <div id="header" class="header">
     <div class="width titul">
           <div class="reg inline" id="hideLogin">
@@ -87,21 +160,21 @@
 <div class="content description">
 <div class="row-fluid cols">
 <div class="left_content_descr span8">
-<h1 class="decoration text-center"><span class="nobacgr">Project Name</span></h1>
+<h1 class="decoration text-center"><span class="nobacgr">##projetName##</span></h1>
 <div class="video">
-    <div id="myCarousel" class="carousel slide">
+    <div id="myCarousel" class="carousel slide" style="z-index:0;">
         <div class="carousel-inner content" style="width: 100%">
 
             <div class="item active">
                 <div>
-                    <img src="http://placehold.it/620x380">
+                    <img src="##imgProjet##">
                 </div>
             </div>
-            <div class="item">
+        <!--     <div class="item">
                 <div>
                     <img src="http://placehold.it/620x380">
                 </div>
-            </div>
+            </div>  -->
         </div>
         <div id="visiblepanel" class="visiblepanel">
             <a class="left carousel-control" href="#myCarousel" data-slide="prev" id="slide_left"></a>
@@ -121,8 +194,8 @@
     <div class="tab-content" style="padding-bottom: 9px;" >
         <div class="tab-pane active" id="tab1">
             <div id="description_content">
-                <div class="title_description_content"> {{projectDetails.content.titleDescription}} </div>
-                <div class="text_description_content"> {{projectDetails.content.textDescription}} </div>
+                <div class="title_description_content"> ##projetMiniDisc## </div>
+                <div class="text_description_content"> ##projetDisc## </div>
             </div>
         </div>
        
@@ -131,7 +204,7 @@
 </div>
 
 <div id="social_uncategorized">
-    <div class="left_social_uncategorized"><span>Uncategorized</span></div>
+    <div class="left_social_uncategorized"><span>##projetCategorie##</span></div>
     <div class="social inline fright">
         <ul id="social_mid" class="bleft_social">
             <li><a href="https://twitter.com/" target="_blank"  original-title="twitter"><img src="img/social/icon_header_face.png" alt=""></a></li>
@@ -149,7 +222,7 @@
     <h3 class="decoration text-center"><span class="nobacgr">Author</span></h3>
     <div id="face_social_text">
         <div class="left_face_social_text span4">
-            <div class="face_big span9"><div class="pix_author"></div></div>
+            <div class="face_big span9"><img src="##userProjetImg##" ></div>
             <div class="social_link_author">
                 <div class="social_bord"><a href="#" >
                     <img class="social_decc" src="img/description/facebook_author_icon.png" alt="">
@@ -163,9 +236,9 @@
             </div>
         </div>
         <div class="right_face_social_text span8">
-            <div class="name_surname">{{projectDetails.authorDetails.name}}</div>
-            <div class="proff">{{projectDetails.authorDetails.job}}</div>
-            <div class="text_author_right">{{projectDetails.authorDetails.about}}</div>
+            <div class="name_surname">##userProjetName##</div>
+            <div class="proff">##userProjetTel##</div>
+            <div class="text_author_right">##userProjetDesc##</div>
         </div>
     </div>
 </div>
@@ -336,7 +409,6 @@
     </div>
 </div>
 
-    <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/jquery.placeholder.js"></script>
     <script src="assets/js/css3-mediaqueries.js"></script>
@@ -496,9 +568,7 @@
         });
     });
     /* ]]> */
-     id_projet=document.getElementById("id_projet").value;
-	 setInterval('getCommentaire();', 250);
-	 updateLike();
+
 </script>
 
 </body>
