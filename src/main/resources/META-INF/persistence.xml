@@ -11,6 +11,7 @@
 		<class>m1.cf.db.Categorie</class>
 		<class>m1.cf.db.APourCategorie</class>
 		<class>m1.cf.db.Commentaire</class>
+		<class>m1.cf.db.LikeProject</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 </persistence>

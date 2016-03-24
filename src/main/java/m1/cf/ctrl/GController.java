@@ -56,6 +56,8 @@ public class GController {
 	@Autowired
 	private CommentaireRepo comRepo;
 	@Autowired
+	private LikeProjectRepo lpRepo;
+	@Autowired
 	private ServletContext servletContext;
 
 	
@@ -67,21 +69,46 @@ public class GController {
 		return "index";
 	}
 	
+	@RequestMapping(value = "/projects", method = RequestMethod.GET)
+	public String proj() {
+		return "projects";
+	}
+	
 	/* =========>  users   <========= */
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup() {
-		return "inscription";
-	}
 
-	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public String signin() {
-		return "signin";
+	@RequestMapping(value = "/makeConnexion", method = RequestMethod.GET)
+	@ResponseBody
+	public String makeConnexion(HttpServletRequest request) {
+		
+		if(isConnected(request)){
+			return "{ \"error\":false,"
+					+ "\"isLogged\": true"
+					+ "}";
+		}
+		
+		else {
+			
+			return "{ \"error\":false,"
+					+ "\"isLogged\": false"
+					+ "}";
+		}
+		
 	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@ResponseBody
+	public String logout(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		session.invalidate();
+		return "ok";
+		
+	}	
 
 	@RequestMapping(value = "/cnx", method = RequestMethod.POST)
 	@ResponseBody
-	public String cnx( @ModelAttribute(value = "log") String email,
-			@ModelAttribute(value = "mp") String mp, HttpServletRequest request) {
+	public String cnx( @ModelAttribute(value = "email") String email,
+			@ModelAttribute(value = "pwd") String mp, HttpServletRequest request) {
 		
 		
 		User tmp =new User(email,mp);
@@ -89,34 +116,58 @@ public class GController {
 		if(n!=null) {
 			HttpSession session = request.getSession();
 			session.setAttribute( "SessionCR", n );
-			return "{ error : false }";
+			System.out.println("=================== ok ================");
+			return "{ \"error\":false,"
+					+ "\"isLogged\": true"
+					+ "}";
 		}
-		else return "{ error : \"Login ou mot de passe invalide\" }";
+		else {
+			System.out.println("=================== No ================");
+			return "{ \"error\":\"Login ou mot de passe invalide\" "
+					+ "\"isLogged\": false"
+					+ "}";
+		}
 	}
 	
 	@RequestMapping(value = "/inscription", method = RequestMethod.POST)
 	@ResponseBody
 	public String inscription(@ModelAttribute(value = "name") String nom, @ModelAttribute(value = "surname")String prenom, 
 			@ModelAttribute(value = "email") String email, @ModelAttribute(value = "phone") String numtel, 
-			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp) {
-
-			User user = new User(nom, prenom, email, numtel, mdp);			
-			if(utilisateurRepo.saveAndFlush(user)!=null) {
-				return "{ error : \"false\" }";
+			@ModelAttribute(value = "pwd") String mdp, @ModelAttribute(value = "rpwd") String confmdp,
+			@ModelAttribute(value = "shortDesc") String desc, @RequestParam(value = "image", required = false) MultipartFile file, HttpServletRequest request) {
+		
+			String img="",error="";
+			if (file!=null && !file.isEmpty()) {
+				try {
+					
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(new File(servletContext.getRealPath("/Images/profileImages/")+"/"+email+"_"+file.getOriginalFilename())));
+	                FileCopyUtils.copy(file.getInputStream(), stream);
+					stream.close();
+					img="Images/profileImages/"+email+"_"+file.getOriginalFilename();
+				}
+				catch (Exception e) {
+					return "<script>  alert(\"error : You failed to upload  => "+e.getMessage()+"\");  </script>";
+				}
 			}
 
-
-			return "{ error : \"user was not able to be regetered\" }";
+			else img="Images/profileImages/user.png";
+			User user = new User(nom, prenom, email, mdp, numtel,desc,img);			
+			if(utilisateurRepo.saveAndFlush(user)!=null) {
+				error="Vieullez ce Connectez ";
+				HttpSession session = request.getSession();
+				session.setAttribute( "SessionCR", user);
+			}
+			else error="Error : server error : you're compte was not added";
+			return "<script> "
+						+ " alert(\" "+error+" \"); "
+						+ " document.location.replace('index.html'); "
+						+ " </script>";
 
 	}
 
 
 	/* =========>  contribution   <========= */
-	// formulaire de contribution
-	@RequestMapping(value = "/contribution", method = RequestMethod.GET)
-	public String cContribution() {
-		return "Contribution";
-	}
 	
 	//ajouter une contribution
 		@RequestMapping(value = "/contribuer", method = RequestMethod.POST)
@@ -124,8 +175,8 @@ public class GController {
 		public String addCont( @ModelAttribute(value = "montant")float montant) {
 		//return	"redirect:/allpersons";
 		
-			User user = new User("driss", "ben", "benjbara@gmail.com", "06617", "123456" );
-			User user2 = new User("ddd", "s44", "sjdf@gmail.com", "060617", "1234756" );
+			User user = new User("driss", "ben", "benjbara@gmail.com", "06617", "123456", "Description", "Images/user.png");
+			User user2 = new User("ddd", "s44", "sjdf@gmail.com", "060617", "1234756", "Description", "Images/user.png" );
 			
 			utilisateurRepo.saveAndFlush(user);
 			utilisateurRepo.saveAndFlush(user2);
@@ -156,13 +207,6 @@ public class GController {
 
 		/* =========>  Les Projet  <========= */
 		
-		@RequestMapping(value = "/nouveauProjet", method = RequestMethod.GET)
-		public String nouveauProjet(HttpServletRequest request) {
-			HttpSession session = request.getSession();
-			User n=(User) session.getAttribute("SessionCR");
-			if(n!=null) return "NouveauProjet";
-			else return "NouveauProjet";
-		}
 		
 		// ajouter un nouveau projet (emprunter)
 		@RequestMapping(value = "/addProject", method = RequestMethod.POST)
@@ -174,13 +218,14 @@ public class GController {
 				@ModelAttribute(value = "shortDesc") String  minidesc,
 				@ModelAttribute(value = "descAventage") String  avDesc, @ModelAttribute(value = "montantAventage") String  avM,
 				 HttpServletRequest request){
-			/*if(!this.isConnected(request)) {
-				return "{"
-						+ "error : \"user not connected\" "
+				if(!this.isConnected(request)) {
+							
+					return "{ \"error\":\"user not connected\" "
+						+ "\"isLogged\": false"
 						+ "}";
-			}*/
-			this.u=new User("elf","ismail","elfaqir963@gmail.com","123456","06502222");
-			utilisateurRepo.saveAndFlush(this.u);
+				}
+			
+			
 			if (!file.isEmpty()) {
 				try {
 					
@@ -194,9 +239,9 @@ public class GController {
 				}
 			}
 			 
-			String name_of_dir_images="new_1";
+			String name_of_dir_images="new_"+this.u.getId();
 			File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
-			Projet P = new Projet(titre, minidesc,description, montant , duree , (chemin + file.getOriginalFilename())); //(chemin + file.getOriginalFilename())
+			Projet P = new Projet(titre, minidesc,description, montant , duree , ""); //(chemin + file.getOriginalFilename())
 			P.setUser(this.u);
 			boolean ver=true;
 			if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
@@ -220,7 +265,7 @@ public class GController {
 			if(ad.length==am.length){
 				for(int i=0;i<am.length;i++) {
 					if(ver){
-						if(am[i]!="" && ad[i]!=""){
+						if(am[i]!="" && ad[i]!="" && am[i]!=null &&  ad[i]!=null ){
 							float a=Float.parseFloat(am[i]);
 							Avantage av = new Avantage(a,ad[i]);
 							av.setProjet(P);
@@ -240,9 +285,14 @@ public class GController {
 					APourCategorie ac= new APourCategorie(P,categ);
 					apcRepo.saveAndFlush(ac);
 				}
-				return "{"
+				/*return "{"
 						+ "error : \"false\""
-						+ "}";
+						+ "}";*/
+				
+				return "<script> "
+						+ " alert(\"You're project is added !\"); "
+						+ " document.location.replace('index.html'); "
+						+ " </script>";
 			}
 			else return "{ error : \"Project Error\" }";
 
@@ -252,9 +302,16 @@ public class GController {
 		@RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
 		@ResponseBody
 		public String imageUpload(@RequestParam("image") MultipartFile file,
-									   RedirectAttributes redirectAttributes) {
+					  RedirectAttributes redirectAttributes, HttpServletRequest request) {
 			
-			int user_id=1;
+			if(!this.isConnected(request)) {
+				
+				return "{ \"error\":\"user not connected\" "
+					+ "\"isLogged\": false"
+					+ "}";
+			}
+			
+			long user_id=this.u.getId();
 			File k= new File(servletContext.getRealPath("/Images/")+"/new_"+user_id);
 			if (!file.isEmpty()) {
 				try {			
@@ -311,55 +368,152 @@ public class GController {
 					}
 				}
 				return "{"
-						+ "idProject : \""+p.getId()+"\","
-						+ "projectName : \""+p.getTitre()+"\","
-						+ "authorName : \""+p.getUser().getId()+"\","
-						+ "pledgedGoal : \""+p.getMontant()+"\","
-						+ "pledged : \""+mantatConstribution+"\","
-						+ "backers : \""+nombreDeConstribution+"\","
-						+ "daysToGo : \""+aujourdhui.compareTo(d)+"\","
-						+ "ImgUrl : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
-						+ "categorie : \""+categoriesOfProjet+","
-						+ "description : \""+p.getDescription()+"\","
-						+ "categorie : \""+categoriesOfProjet+"\","
-						+ "description : \""+p.getMiniDescription()+"\","
-						+ "error : \"false\""
+						+ "\"idProject\" : \""+p.getId()+"\","
+						+ "\"projectName\" : \""+p.getTitre()+"\","
+						+ "\"authorName\" : \""+p.getUser().getId()+"\","
+						+ "\"pledgedGoal\" : \""+p.getMontant()+"\","
+						+ "\"pledged\" : \""+mantatConstribution+"\","
+						+ "\"backers\" : \""+nombreDeConstribution+"\","
+						+ "\"daysToGo\" : \""+aujourdhui.compareTo(d)+"\","
+						+ "\"ImgUrl\" : \"http://localhost:8080/crowdfunding/Images/"+p.getImage()+"\","
+						+ "\"categorie\" : \""+categoriesOfProjet+","
+						+ "\"description\" : \""+p.getDescription()+"\","
+						+ "\"categorie\" : \""+categoriesOfProjet+"\","
+						+ "\"description\" : \""+p.getMiniDescription()+"\","
+						+ "\"error\" : \"false\""
 						+ "}";
 			}
 				
-			else return "{ error : Project not find }";
+			else return "{ \"error\" : \"Project not find\" }";
 		}
 
-		@RequestMapping(value = "/projects", method = RequestMethod.GET)
+		@RequestMapping(value = "/getprojects", method = RequestMethod.GET)
+		@ResponseBody
 		public String projets() {
-			Page<Projet> pp=projetRepo.findAll(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id")));
+			Page<Projet> pp=projetRepo.findAll(new PageRequest(0, 100, new Sort(Sort.Direction.DESC, "id")));
 			List<Projet> p= pp.getContent();
-			String myP="";			
+			String myP="[";		
 			for(int i=0;i<p.size();i++) {
-				myP+= "<center> "
-						+ "<h1> Projet ==> "+(i+1)+" "+p.get(i).getTitre()+"</h1>"
-						+"Photo de projet : <br/> <img width=\"200\" src=\"http://localhost:8080/crowdfunding/"+p.get(i).getImage()+"\" />"
-						+ " </center><br/>";
+				Date d=p.get(i).getCree_le();
+				d.setTime( ( d.getTimezoneOffset()+p.get(i).getDuree() ) );
+				Date aujourdhui = new Date();
+				
+				List<APourCategorie> ap=apcRepo.findAPourCategorieByProjet(p.get(i));
+				String categoriesOfProjet="[ ";
+				for(int j=0;j<ap.size();j++) {
+					if(j<ap.size()-1) categoriesOfProjet+=ap.get(j).getCategorie().getTitre()+", ";
+					else categoriesOfProjet+=ap.get(j).getCategorie().getTitre();
+				}
+				categoriesOfProjet+=" ]";
+				int nombreDeConstribution=0;
+				float mantatConstribution=0.0f;
+				List<Avantage> av=avantageRepo.findAvantageByProjet(p.get(i));
+				for(int j=0;j<av.size();j++) {
+					List<Contribution> constribution = contributionRepo.findContributionByAvantage(av.get(j));
+					for(int k=0;k<constribution.size();k++) {
+						mantatConstribution+=constribution.get(k).getMontant();
+						nombreDeConstribution++;
+					}
+				}
+				myP+= "{"
+						+ "\"idProject\" : \""+p.get(i).getId()+"\","
+						+ "\"projectName\" : \""+p.get(i).getTitre()+"\","
+						+ "\"authorName\" : \""+p.get(i).getUser().getNom()+"\","
+						+ "\"pledgedGoal\" : \""+p.get(i).getMontant()+"\","
+						+ "\"pledged\" : \""+mantatConstribution+"\","
+						+ "\"backers\" : \""+nombreDeConstribution+"\","
+						+ "\"daysToGo\" : \""+aujourdhui.compareTo(d)+"\","
+						+ "\"ImgUrl\" : \"Images/"+p.get(i).getImage()+"\","
+						+ "\"categorie\" : \""+categoriesOfProjet+"\","
+						+ "\"description\" : \""+p.get(i).getMiniDescription()+"\","
+						+ "\"error\" : \"false\""
+						+ "}";
+				if(i<(p.size()-1)) myP+=",";
 			}
-				myP +="Page "+(pp.getNumber()+1)+" of "+pp.getTotalPages()+" affichage par => "+pp.getSize()+"<br/>";
-				return "projects";
-
+				//myP +="Page "+(pp.getNumber()+1)+" of "+pp.getTotalPages()+" affichage par => "+pp.getSize()+"<br/>";
+				myP+="]";
+				return myP;
+				
 		}	
 
 		// rechercher un projet par son titre
 		@RequestMapping(value = "/findProjet", method = RequestMethod.GET)
 		@ResponseBody
 		public String getProjets(@ModelAttribute(value = "titre") String titre,
-				@ModelAttribute(value = "page") int page) {
+				@ModelAttribute(value = "page") int page, @ModelAttribute(value = "type") int type) {
 			page--;
 			List<Projet> p= projetRepo.findByTitreContaining(titre, new PageRequest(page, 10));
 			String myP="";			
 			for(int i=0;i<p.size();i++) {
-				myP+= ""+p.get(i).getId()+" "+p.get(i).getTitre()+";";
-			}
+				if(type==0) {
+					myP+= ""+p.get(i).getTitre();
+					if(i<(p.size()-1)) myP+=",";
+				}
+				
+ 			}
 			if(myP!="") return myP;
 			else return "Erreur : Pas de produit ...";
 		}
+		
+		// project like or dislike 
+		
+		@RequestMapping(value = "/projetLike", method = RequestMethod.GET)
+		@ResponseBody
+		public String likeProject(@ModelAttribute(value = "id_projet") long id_projet,
+			 @ModelAttribute(value = "like") int like, HttpServletRequest request) {
+			
+			if(!this.isConnected(request)) {	
+				return "Erreur : you're not connected !";
+			}
+		
+			int lik=0, disl=0;
+			Projet p=projetRepo.findOne(id_projet);
+			if(like==1) lik=1;
+			else disl=1;
+			
+			LikeProject l=lpRepo.findLikeProjectByUserAndProjet(u, p);
+			if(l==null) {
+				l=new LikeProject(p, u, lik, disl);
+			}
+			else {
+				l.setLiked(lik);
+				l.setDislike(disl);			
+			}
+			if(lpRepo.saveAndFlush(l)!=null) return "ok";
+			
+			else return "Erreur : An error was trown ...";
+		}	
+		
+		// project getLikes
+		
+		@RequestMapping(value = "/getLikes", method = RequestMethod.GET)
+		@ResponseBody
+		public String getLikes(@ModelAttribute(value = "id_projet") long id_projet,
+				HttpServletRequest request) {
+			
+			if(!this.isConnected(request)) {	
+				return "Erreur : you're not connected !";
+			}
+		
+			int like=0, dislike=0, user_dus=2;
+			Projet p=projetRepo.findOne(id_projet);
+			List<LikeProject> llp=lpRepo.findLikeProjectByProjet(p);
+			for(int i=0;i<llp.size();i++) {
+				if(llp.get(i).getLiked()>0) like++;
+				else if(llp.get(i).getDislike()>0) dislike++;
+				
+				if(this.u!=null) {
+					if(llp.get(i).getUser().getId()==this.u.getId()) {
+						if(llp.get(i).getLiked()>0) user_dus=1;
+						else if(llp.get(i).getDislike()>0) user_dus=0;
+					}
+				}
+				
+			}
+			
+			return ""+like+"|"+dislike+"|"+llp.size()+"|"+user_dus;
+		}
+		
 		
 		/* =========>  Les Catégotrie <========= */
 		
@@ -408,14 +562,22 @@ public class GController {
 		
 		
 		/* =========>  Les Commantaires <========= */
-		@RequestMapping(value = "/addCommentaire", method = RequestMethod.GET)
+		@RequestMapping(value = "/addCommentaire", method = RequestMethod.POST)
 		@ResponseBody
-		public String addCom(@ModelAttribute(value = "id_projet") long id_projet, @ModelAttribute(value = "msg") String msg) {
+		public String addCom(@ModelAttribute(value = "id_projet") long id_projet, @ModelAttribute(value = "msg") String msg, HttpServletRequest request) {
 				
 				Projet p=projetRepo.getOne(id_projet);
-				User u=utilisateurRepo.getOne((long) 1);
+				if(!this.isConnected(request)) {
+					return "Erreur : Not connected !";
+				}
+				//this.u=utilisateurRepo.findOne((long) 1);
 				Commentaire c=new Commentaire (u,p,msg);
-				if(comRepo.saveAndFlush(c)!=null) return ""+c.getId();
+				if(comRepo.saveAndFlush(c)!=null) {
+					return ""+u.getNom()+" "+u.getPrenom()
+							+ ";"+u.getPhoto()
+							+ ";"+c.getCree_le().toString()
+							+ ";"+c.getMsg();
+				}
 				else return "Erreur : une erreur c'est produite !";
 		}		
 		
@@ -429,9 +591,14 @@ public class GController {
 				List<Commentaire> c= comRepo.findByProjetOrderByIdDesc(p,new PageRequest(page, 10));
 				String m="";
 				for(int i=0;i<c.size();i++) {
-					m+=""+c.get(i).getId();
+					User cu=c.get(i).getUser();
+					m+=""+cu.getNom()+" "+cu.getPrenom()
+						+ ";"+cu.getPhoto()
+						+ ";"+c.get(i).getCree_le().toString()
+						+ ";"+c.get(i).getMsg();
+					if(i<(c.size()-1)) m+="|";
 				}
-				return "ok"+m;
+				return ""+m;
 		}		
 		
 		public void setServletContext(ServletContext servletContext) {

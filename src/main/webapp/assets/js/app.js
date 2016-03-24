@@ -1,11 +1,79 @@
 var myApp = angular.module("myApp", []);
+var projects ;
 
+/*
+angular.element(document).ready(function ($log) {
+	
+    $.ajax({
+        url: "makeConnexion.html",
+        type: "GET",
+        success: function (my_text) {
+			 if(my_text.indexOf("Erreur")==-1){
+				 var my=JSON.parse(my_text);
+				 if(my.isLogged) {
+					 changeHeader(true);				 
+				 }
+			 }
+			 else alert(""+my_text);
+        }
+    });
+    
+    
+    
+});*/
+
+myApp.factory("projectsService", function() {
+	
+	return {
+		getProjects: function() {
+			return projects;
+		},
+		setProjects: function(data) {
+			 projects=data;
+		},
+		addProject: function(project) {
+			
+		}
+	}
+});
+/*
+(function() {
+	  var initInjector = angular.injector(['ng']);
+	  var $http = initInjector.get('$http');
+	 
+	  $http.get('getprojects.html').then(
+	    function (response) {
+	      angular.module('config', []).constant('CONFIG', response.data);
+	      projectsService.setProjects(response.data);
+	      $scope.projectDetails = projectService.getProject();
+	      angular.element(document).ready(function() {
+	          angular.bootstrap(document, ['myApp']);
+	        });
+	    }
+	  );
+	})();
+*/
+
+myApp.run(function ($http, projectsService) {
+	
+	angular.element(document).ready(function ($http,$scope,projectsService) {
+		
+		$http.get('getprojects.html').success(function (data) {
+	    	projectsService.setProjects(data);
+	    		
+
+	    });
+	});
+    
+});
 
  myApp.controller("registerUserCtrl", ['$scope', '$log', '$http', function($scope, $log, $http) {
                
                 //
                 $scope.send = function() {
                     // formulaire a envoyé
+                	
+                	
                     var form = new FormData();
                     form.append('name', $scope.name);
                     form.append('surname', $scope.surname);
@@ -13,6 +81,8 @@ var myApp = angular.module("myApp", []);
                     form.append('email', $scope.email);
                     form.append('pwd', $scope.pwd);
                     form.append('rpwd', $scope.rpwd);
+                    form.append('img', $scope.img);
+                    form.append('shortDesc', $scope.shortDesc);
                     $http.post('inscription.html', form, {
                             withCredentials: true,
                             headers: {
@@ -31,6 +101,35 @@ var myApp = angular.module("myApp", []);
                 };
             }]);
  
+ 
+ myApp.controller("LoginCtrl", ['$scope', '$log', '$http', function($scope, $log, $http) {
+     
+     //
+     $scope.send = function() {
+         // formulaire a envoyé
+         var form = new FormData();
+         form.append('email', $scope.email);
+         form.append('pwd', $scope.pwd);
+         $http.post('cnx.html', form, {
+                 withCredentials: true,
+                 headers: {
+                     'Content-Type': undefined
+                 },
+                 transformRequest: angular.identity
+             })
+             .success(function(result) {
+                 // 7el console sur firebug pour voir message
+            	 $log.info(result);
+            	 changeHeader(true);
+            	 dialog_login.dialog( 'close' );
+                 
+             })
+             .error(function(data, status) {
+                 $log.info(data);
+                 $log.info(status);
+             });
+     };
+ }]);
  
  myApp.controller("addProjectCtrl", ['$scope', '$log', '$http', function($scope, $log, $http) {
      
@@ -51,8 +150,11 @@ var myApp = angular.module("myApp", []);
     			 multipleSelect: []
     	 };
     	 
+    	 $scope.montantAventage=document.getElementById("id_real_montant_av").value;
+    	 $scope.descAventage=document.getElementById("id_desc").value;
          // formulaire a envoyé
     	 //var categorieSelect = $scope.categorie;
+    	 $scope.desc=document.getElementById("id_real_desc_av").value
          var form = new FormData();
          form.append('title', $scope.title);
          form.append('shortDesc', $scope.shortDesc);
@@ -80,7 +182,7 @@ var myApp = angular.module("myApp", []);
              });
      };
  }]);
-
+/*
  myApp.controller("ProjectsCtrl", ['$scope', '$log', '$http','projectsService', function($scope, $log, $http,projectsService) {
                
                 //
@@ -110,150 +212,15 @@ var myApp = angular.module("myApp", []);
                 };
             }]);
 
-
-
+*/
+/*
 myApp.controller("ProjectDetailsCtrl", function($scope,projectService) {
 	$scope.projectDetails = projectService.getProject();
 
 });
+*/
 
 
-
-myApp.factory("projectsService", function() {
-	projects = [
-		{
-			idProject:"1",
-			projectName: "Project Name 1",
-			authorName: "Author Name 1",
-			pledgedGoal:"400",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			ImgUrl:"/adresse",
-			categorie:"creative developments",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{	
-			idProject:"2",
-			projectName: "Project Name 2",
-			pledgedGoal:"500",
-			authorName: "AuthorName 2",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{	
-			idProject:"3",
-			pledgedGoal:"500",
-			projectName: "Project Name 3",
-			authorName: "AuthorName 3",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			projectName: "Project Name",
-			authorName: "AuthorName",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			projectName: "Project Name",
-			authorName: "AuthorName",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			projectName: "Project Name",
-			authorName: "AuthorName",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			idProject:"1",
-			projectName: "Project Name 1",
-			authorName: "Author Name 1",
-			pledgedGoal:"400",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			ImgUrl:"/adresse",
-			categorie:"creative developments",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{	
-			idProject:"2",
-			projectName: "Project Name 2",
-			pledgedGoal:"500",
-			authorName: "AuthorName 2",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{	
-			idProject:"3",
-			pledgedGoal:"500",
-			projectName: "Project Name 3",
-			authorName: "AuthorName 3",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			projectName: "Project Name",
-			authorName: "AuthorName",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			projectName: "Project Name",
-			authorName: "AuthorName",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		},
-		{
-			projectName: "Project Name",
-			authorName: "AuthorName",
-			pledged: "$25",
-			backers: "10",
-			daysToGo:"25",
-			percentageReached :"50",
-			description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-		}		
-	];
-	
-	return {
-		getProjects: function() {
-			return projects;
-		},
-		addProject: function(project) {
-			
-		}
-	}
-});
 
 myApp.factory("projectService", function() {
 	
@@ -287,31 +254,31 @@ myApp.factory("projectService", function() {
 	//pledges
 	pledges = [
 		{
-			pledged: "$5",
+			pledged: "5",
 			backers: "10",
 			estimateDelivery: "12-08-2016",
 			details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 		},
 		{
-			pledged: "$10",
+			pledged: "10",
 			backers: "15",
 			estimateDelivery: "12-08-2016",
 			details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 		},
 		{
-			pledged: "$15",
+			pledged: "15",
 			backers: "20",
 			estimateDelivery: "12-08-2016",
 			details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 		},
 		{
-			pledged: "$20",
+			pledged: "20",
 			backers: "25",
 			estimateDelivery: "12-08-2016",
 			details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 		},
 		{
-			pledged: "$25",
+			pledged: "25",
 			backers: "30",
 			estimateDelivery: "12-08-2016",
 			details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."

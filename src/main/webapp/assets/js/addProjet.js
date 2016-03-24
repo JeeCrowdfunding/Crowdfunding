@@ -4,8 +4,7 @@
  */
 
 	var ed; 
-	var dialog, dialog_add_cat;
-	
+	var ch="";
     function getCat() {
     	
     	var sel=document.getElementById("id_categorie");
@@ -24,9 +23,9 @@
 				    	  }
 				     }
 				      sel.innerHTML+="<option value=\"0\">Autre</option>";
-				      document.getElementById("cat").innerHTML ="Catégorie";
+				      document.getElementById("cat").innerHTML ="Categorie";
 				 }			 
-				 else alert(""+my_text);
+				 //else alert(""+my_text);
             }
         });
   	
@@ -109,6 +108,7 @@
                         if(response.indexOf("Erreur")==-1) {
                         	dialog_add_cat.dialog('close');
                         	document.getElementById("id_categorie").innerHTML+="<option value=\""+response+"\">"+titre+"</option>";
+                        	document.getElementById("titre_categorie").value="";
                         }
                         else alert(""+response);
                     }
@@ -120,3 +120,41 @@
     	
     }
     
+    
+
+    
+    	/*	
+	function getRes(){
+	    var s=document.getElementById("id_cherche").value;
+		
+		if(s.length>1 && ch!=s){
+				ch=s;
+				if (window.XMLHttpRequest) {
+					// code for IE7+, Firefox, Chrome, Opera, Safari
+					var my_request = new XMLHttpRequest();
+				} else {
+					// code for IE6, IE5
+					var my_request = new ActiveXObject("Microsoft.XMLHTTP");}
+				
+				var url="rechercher.php?cherche="+s;
+				
+				 my_request.onreadystatechange=function() {
+				 
+					 if (my_request.readyState==4 && my_request.status==200) {
+					 
+					 var my_text=my_request.responseText; 
+					 var t=my_text.split(",");
+					  	$( "#id_cherche" ).autocomplete({
+							source: t
+						});
+					 }
+				 } 
+				my_request.open("GET", url, true) ;
+				my_request.send();
+	 }
+			
+	}*/
+
+
+
+

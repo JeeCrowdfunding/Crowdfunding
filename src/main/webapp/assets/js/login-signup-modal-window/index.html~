@@ -25,6 +25,13 @@
 		</nav>
 	</header>
 
+	<div class="cd-user-modal"> <!-- this is the entire modal form, including the background -->
+		<div class="cd-user-modal-container"> <!-- this is the container wrapper -->
+			<ul class="cd-switcher">
+				<li><a href="#0">Sign in</a></li>
+				<li><a href="#0">New account</a></li>
+			</ul>
+
 			<div id="cd-login"> <!-- log in form -->
 				<form class="cd-form">
 					<p class="fieldset">
@@ -53,14 +60,6 @@
 				<p class="cd-form-bottom-message"><a href="#0">Forgot your password?</a></p>
 				<!-- <a href="#0" class="cd-close-form">Close</a> -->
 			</div> <!-- cd-login -->
-	<div class="cd-user-modal"> <!-- this is the entire modal form, including the background -->
-		<div class="cd-user-modal-container"> <!-- this is the container wrapper -->
-			<ul class="cd-switcher">
-				<li><a href="#0">Sign in</a></li>
-				<li><a href="#0">New account</a></li>
-			</ul>
-
-
 
 			<div id="cd-signup"> <!-- sign up form -->
 				<form class="cd-form">

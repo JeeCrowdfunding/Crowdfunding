@@ -44,8 +44,13 @@ public class User implements Serializable {
 	private String numtel;
 	
 	
-	
-	
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "photo")
+	private String photo;
+
+
 	@OneToMany(mappedBy="user")
 	private Set<Projet> projets;
 	
@@ -72,13 +77,15 @@ public class User implements Serializable {
 		return id;
 	}
 	
-	public User(String nom, String prenom, String email, String mdp, String numtel) {
+	public User(String nom, String prenom, String email, String mdp, String numtel, String desc, String img) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
 		this.email = email;
 		this.mdp = encryptedPassword(mdp);
 		this.numtel = numtel;
+		description=desc;
+		photo=img;
 	}
 	
 	public User(String email, String mp) {
@@ -132,6 +139,22 @@ public class User implements Serializable {
 	
 	public void setNumtel(String numtel) {
 		this.numtel = numtel;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 	
 	private String encryptedPassword(String pass){

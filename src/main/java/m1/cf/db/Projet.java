@@ -36,9 +36,9 @@ public class Projet implements Serializable {
 	
 	private String miniDescription;
 	
-
 	private String image;
 	
+
 	@ManyToOne
     @JoinColumn(name="id_user")
 	private User user;
@@ -97,6 +97,7 @@ public class Projet implements Serializable {
 	public void setMiniDescription(String miniDescription) {
 		this.miniDescription = miniDescription;
 	}
+	
 	
 	public Projet(String titre, String miniDescription,String description, float montant, int duree, String image) {
 		super();

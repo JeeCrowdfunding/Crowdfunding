@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" >
 <head>
     <meta charset="utf-8">
     <title>Crowdfunding Site</title>
@@ -18,21 +18,42 @@
     <link href="assets/css/colorbox.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/js/CLEditor/jquery.cleditor.css" type="text/css" />
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
- <!-- CSS reset -->
-	<link rel="stylesheet" href="assets/js/login-signup-modal-window/css/style.css">
+
     <link rel="apple-touch-icon" href="assets/img/touch-icon.html" />
     <link rel="image_src" href="assets/img/touch-icon.html" />
-
+	<script src="assets/js/appJs.js"></script>
     <script src="assets/js/angular.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/CLEditor/jquery.cleditor.js"></script>
 	<script src="assets/js/addProjet.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script src="assets/js/login-signup-modal-window/js/modernizr.js"></script>
+	
+	
 		<script type="text/javascript">
-    
-	    $(document).ready(function () { 
+    /*
+		function makeConnection(){
+			    	
+	        $.ajax({
+	            url: "makeConnexion.html",
+	            type: "GET",
+	            success: function (my_text) {
+		       		 if(my_text.indexOf("Erreur")==-1){
+						 var my=JSON.parse(my_text);
+						 if(my.isLogged) {
+							 changeHeader();				 
+						 }
+					 }
+					 else alert(""+my_text);
+	            }
+	        });
+			
+		}*/
+		
+		
+		var dialog_login, dialog_register;
+	    $(document).ready(function () {
+	    	//makeConnection();
 			$(".editeur").cleditor({
 				height: 400,
 				width: 900
@@ -52,47 +73,50 @@
 			      modal: true
 			 });
 			 
+			 dialog_login = $( "#loginForm" ).dialog({
+			      autoOpen: false,
+			      height: 350,
+			      width: 350,
+			      modal: true,
+			      show: {
+			          effect: "explode",
+			          duration: 1000
+			        },
+			        hide: {
+			          effect: "explode",
+			          duration: 1000
+			        }
+			 });
+		
+			 dialog_registre = $( "#registreForm" ).dialog({
+			      autoOpen: false,
+			      height: 600,
+			      width: 350,
+			      modal: true,
+			      show: {
+			          effect: "blind",
+			          duration: 1000
+			        },
+			        hide: {
+			          effect: "explode",
+			          duration: 1000
+			        }
+			 });
+			 
+			    $( ".progressbar" ).progressbar({
+			        value: false
+			      });
+			    
 			$(".cleditorToolbar").append( "<div class=\"cleditorGroup\" style=\"width: 49px;\"><button type=\"button\"style=\"width: 25px; height: 25px;\" id=\"bf\"><img style=\"width: 25px; height: 25px;margin-left: -15px; margin-top: -6px\" src=\"Images/pi.png\"/></button> </div>" );
 			$( "#bf" ).button().on( "click", function() {
 				      dialog.dialog( "open" );
 			});
 		    ed=$(".editeur").cleditor()[0];
-		    document.getElementById("select_cat").style.position ="relative";
-		    document.getElementById("select_cat").style.top="";
-		    //position: absolute; top: -9999px;
-		    //getCat();
+
+		    getCat();
 	    });
 
-	</script>
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!--[if IE 8]>
-    <style type="text/css">
-        input[type="checkbox"], input[type="radio"] {
-            display: inline;
-        }
-        input[type="checkbox"] + label, input[type="radio"] + label{
-            display: inline;
-            background: none;
-            margin-bottom: 15px;
-        }
-        .zone {
-            background-color: #727272;
-            filter: alpha(Opacity=70);
-        }
-        .black {
-            background-color: #727272;
-            filter: alpha(Opacity=70);
-        }
-    </style>
-    <![endif]-->
-
- 
-    <script>
+	
         /* <![CDATA[ */
         $(window).scroll(function fade() {
             if ($(window).scrollTop() > 400) {
@@ -107,10 +131,48 @@
         //for saving last this "accordion"
 		var preClassActive; 
     </script>
-	
+	<style>
+		progress[0] {color:green;}
+	</style>
 </head>
 
 <body>
+	  	
+
+	<!--  Forms for Log in and regester ! -->
+    <div id="loginForm" title="Log-in"  ng-controller="LoginCtrl">
+      <form >
+        <div >
+          <h3>Login information</h3>
+          <label for="usrnm" class="ui-hidden-accessible">Username:</label>
+          <input type="text"  ng-model="email"  name="email" id="usrnm" placeholder="Username">
+          <label for="pswd" class="ui-hidden-accessible">Password:</label>
+          <input type="password"  ng-model="pwd"  name="pwd" id="pswd" placeholder="Password">
+          <label for="log">Keep me logged in</label>
+          <input type="checkbox" name="login" id="log" value="1" data-mini="true">
+          <input type="submit" ng-click="send()" data-inline="true" value="Log in">
+        </div>
+      </form>
+    </div>
+    
+     <div id="registreForm" title="Register form" >
+      <form action="inscription.html" method="post" enctype="multipart/form-data">
+        <div>
+          <h3>Register information</h3>
+			 <input type="text" ng-model="name" name="name" placeholder="Name"> <br/>
+	         <input type="text" ng-model="surname"  name="surname" placeholder="Surname"> <br/>
+	         <input type="text" ng-model="email"  name="email" placeholder="Email"><br/>
+	         <input type="text" ng-model="phone"  name="phone" placeholder="Phone"><br/>
+	         <input type="password" ng-model="pwd"  name="pwd" placeholder="Password"><br/>
+	         <input type="password" ng-model="rpwd"  name="rpwd" placeholder="Repeat Password"><br/>
+	         <input type="file" ng-model="img" name="image" ><br/>
+	         <textarea name="shortDesc" ng-model="shortDesc" class="inputp search-query span3"  rows="5" placeholder="Short Description"></textarea><br/>
+			 <input type="submit"  class="inputp search-query span3" data-inline="true" value="Register">
+        </div>
+      </form>
+    </div>
+    
+
 	<!--  Upload une image pour la description -->
 	<div id="df">
 	   <form id="my_form" method="post" action="imageUpload.html" enctype="multipart/form-data">
@@ -120,18 +182,18 @@
 	</div>
 	
 	<!-- Ajouter une catégorie -->
- 	<div id="add_cat">
+ 	<div id="add_cat" title="Add categorie">
 	   <form id="form_add_cat" method="get" action="addCategorie.html" >
-		    <div class="form-group"  > <label class="control-label">Titre du catégorie :</label> <input type="text" id="titre_categorie" name="titre" /> </div>
+		    <div class="form-group"  > <label class="control-label">Title of categorie :</label> <input type="text" id="titre_categorie" name="titre" /> </div>
 		    <div align="right" class="form-group"> <button type="button" class="form-control btn btn-success" onclick="addCat();">OK</button></div>
 		</form>
 	</div> 
-<div id="header" class="header">
+<div id="header" class="header" >
     <a name="id_home"></a>
         <div class="width titul">
-            <div class="reg inline">
-                <div class="bleft inline login"><a href="#" id="login-link" class="login-link">Login</a></div>
-                <div class="bleft bright inline login"><a href="#" id="reg-link" class="login-link">Register</a></div>
+            <div class="reg inline" id="hideLogin">
+                <div class="bleft inline login"><a href="#loginForm" id="login-link" onclick="dialog_login.dialog( 'open' );" class="login-link">Login</a></div> 
+                <div class="bleft bright inline login"><a href="#registreForm" onclick="dialog_registre.dialog( 'open' );" data-rel="popup" id="reg-link" class="login-link">Register</a></div>
             </div>
 
             <div class="social inline fright">
@@ -205,7 +267,7 @@
             <div class="search_top">
                 <div class="search" id="searchh">
                     <span class="white"><strong>Find a project:</strong></span>
-                    <input id="autocomplete" title="" type="text" class="span7 search-query">
+                    <input id="autocomplete" onfocus="setActivSherchForProject()" onblur="stopActivSherchForProject()" title="" type="text" class="span7 search-query">
                     <input type="submit" class="submit" value="search" name="submit">
                 </div>
             </div>
@@ -247,7 +309,7 @@
                            </div>
                             <div class="folder border"><a href="projects.html#proj{{project.idProject}}"><div class="author_proj proj_{{project.idProject}}" ></div></a></div>
                             <div class="folder lorem lines">
-                                <div id="project{{$index+7}}" value="{{project.pledgedGoal}}" class="slider"></div>
+                              <progress id="project{{$index+7}}" value="{{project.pledged}}" max="{{project.pledgedGoal}}"></progress>
                             </div>
                             <p class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate egestas sem, eu cursus ligula ullamcorper non. Curabitur tristique velit eu</p>
                             <div class="folder price topbordered">
@@ -484,7 +546,7 @@
                            </div>
                             <div class="folder border"><a href="projects.html#proj{{project.idProject}}"><div class="author_proj proj_{{project.idProject}}" ></div></a></div>
                             <div class="folder lorem lines">
-                                <div id="project{{$index+1}}" value="{{project.pledgedGoal}}" class="slider"></div>
+                                <progress labels="oooooooook" id="project{{$index+7}}" title="40%" value="{{project.pledged}}" max="{{project.pledgedGoal}}"></progress>
                             </div>
                             <p class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate egestas sem, eu cursus ligula ullamcorper non. Curabitur tristique velit eu</p>
                             <div class="folder price topbordered">
@@ -576,8 +638,8 @@
 <h1 class="decoration text-center proj"><span class="nobacgr">Create Your Project</span></h1>
 <div class="create_projects" ng-controller="addProjectCtrl">
 
-<!--  <form class="form-search" action="addProject.html" method="post" enctype="multipart/form-data">
--->
+ <form class="form-search" action="addProject.html" method="post" enctype="multipart/form-data">
+
 <!-----------------------------------------According: Create a Project ---------------------------------------->
 
 <div class="container" >
@@ -586,35 +648,11 @@
      
      <div id="accordion-first" class="clearfix">
                         <div class="accordion" id="accordion2">
-                          <div class="accordion-group">
-                            <div class="accordion-heading">
-                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" onclick="accordionAfterClick(this,1)">
-                                <em class="icon-fixed-width fa fa-plus"></em>Step 1: <span class="green">Registration</span>
-                              </a>
-                            </div>
-                            <div style="height: 0px;" id="collapse_1" class="accordion-body collapse">
-                              <div class="accordion-inner">
-                                <div class="row-fluid border_proj duration">
-                                <div class="span10 ">
-                                    <div class="column_project">
-                                        <h4 class="text-center">Personal Info:</h4>
-                                            <input type="text" class="inputp search-query span12" placeholder="Name">
-                                            <input type="text" class="inputp search-query span12" placeholder="Surname">
-                                            <input type="text" class="inputp search-query span12" placeholder="Email">
-                                            <input type="text" class="inputp search-query span12" placeholder="Phone">
-                                            <input type="text" class="inputp search-query span12" placeholder="Password">
-                                            <input type="text" class="inputp search-query span12" placeholder="Repeat Password">
-                                    </div>
-                                </div>
-                                </div>
 
-                              </div>
-                            </div>
-                          </div>
                           <div class="accordion-group">
                             <div class="accordion-heading">
                               <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" onclick="accordionAfterClick(this,2)">
-                                <em class="icon-fixed-width fa fa-plus"></em>Step 2: <span class="green">Project Summary
+                                <em class="icon-fixed-width fa fa-plus"></em>Step 1: <span class="green">Project Summary
                               </a>
                             </div>
                             <div style="height: 0px;" id="collapse_2" class="accordion-body collapse">
@@ -636,13 +674,11 @@
 										 				<textarea name="shortDesc" ng-model="shortDesc" class="inputp search-query span12"  rows="5" placeholder="Short Description"></textarea>
 										 				<div class="clear"></div>
 										 		 		<label class="control-label" id="cat" >Categorie : </label>
-											 			<select id="select_cat" ng-model="data.multipleSelect" class="inputp search-query span12" name="categorie"  multiple>
-											 				<option value="1">Informatique</option>
-											 				
+											 			<select id="id_categorie" ng-model="data.multipleSelect" class="inputp search-query span12" name="categorie"  multiple>
 											 			</select>
+											 			<input type="button" value="+" onclick="javascript: dialog_add_cat.dialog('open');" /> 
 											 			 <p>{{data.multipleSelect}}</p>
 											 			  <input class="inputp search-query span12" type="file" id="file" name="image"/>
-  														<button ng-click="addImg()">Add</button>
 											 			<input type="hidden" ng-model="descAventage" id="id_real_desc_av" name="descAventage"/>
 											 			<input type="hidden" ng-model="montantAventage" id="id_real_montant_av"  name="montantAventage"/>
 											 		</div><br/><br/>
@@ -674,7 +710,7 @@
                           <div class="accordion-group">
                             <div class="accordion-heading">
                               <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree" onclick="accordionAfterClick(this,3)" >
-                                <em class="icon-fixed-width fa fa-plus"></em>Step 3: <span class="green">Project page</span>
+                                <em class="icon-fixed-width fa fa-plus"></em>Step 2: <span class="green">Project page</span>
                               </a>
                             </div>
                             <div style="height: 0px;" id="collapse_3" class="accordion-body collapse">
@@ -694,7 +730,7 @@
                           <div class="accordion-group">
                             <div class="accordion-heading">
                               <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" onclick="accordionAfterClick(this,4)">
-                                <em class="icon-fixed-width fa fa-plus"></em>Step 4: <span class="green">Project Duration</span>
+                                <em class="icon-fixed-width fa fa-plus"></em>Step 3: <span class="green">Project Duration</span>
                               </a>
                             </div>
                             <div style="height: 0px;" id="collapse_4" class="accordion-body collapse">
@@ -732,9 +768,9 @@
 </div>
 
 
-
-    <div class="decoration text-center create_butt"><span class="nobacgr_whit"><button class="btn btn-large search-query" ng-click="addProject()" type="button"> <span class="butt_small"><strong>CREATE</strong></span></button></span><a name="id_cont"></a></div>
-<!-- </form> -->
+	<!--  <input type="submit" value="ok" ng-click="addProject()" > -->
+    <div class="decoration text-center create_butt"><span class="nobacgr_whit"><button class="btn btn-large search-query"  type="submit"> <span class="butt_small"><strong>CREATE</strong></span></button></span><a name="id_cont"></a></div>
+ </form> 
 </div>
 
 
@@ -865,51 +901,7 @@
     /* ]]> */
 
 </script>
-<script>
-    /* <![CDATA[ */
-    $(function() {
 
-        var availableTags = [
-            "ActionScript",
-            "AppleScript",
-            "Asp",
-            "BASIC",
-            "C",
-            "C++",
-            "Clojure",
-            "COBOL",
-            "ColdFusion",
-            "Erlang",
-            "Fortran",
-            "Groovy",
-            "Haskell",
-            "Java",
-            "JavaScript",
-            "Lisp",
-            "Perl",
-            "PHP",
-            "Python",
-            "Ruby",
-            "Scala",
-            "Scheme"
-        ];
-        $( "#autocomplete" ).autocomplete({
-            source: availableTags
-        });
-
-        // Hover states on the static widgets
-        $( "#dialog-link, #icons li" ).hover(
-                function() {
-                    $( this ).addClass( "ui-state-hover" );
-                },
-                function() {
-                    $( this ).removeClass( "ui-state-hover" );
-                }
-        );
-    });
-    /* ]]> */
-
-</script>
 <script>
     /* <![CDATA[ */
     function scrollToAnchor(aid){
@@ -957,7 +949,6 @@
 
 <script src="assets/js/jquery.selectbox.min.js"></script>
 <script src="assets/js/bootstrap.js"></script>
-<script src="assets/js/jquery-uii.js"></script>
 <script src="assets/js/contact.js"></script>
 <script src="assets/js/jquery.colorbox.js"></script>
 <script src="assets/js/jquery.placeholder.js"></script>
@@ -1011,19 +1002,7 @@
 
 
 <script>
-// Accordion Toggle Items
-   
 
-function accordionAfterClick(e, id) {
-	
-	for(var i= 1 ;i<=4 ;i++) {
-		document.getElementById('collapse_'+i).style.height='0';
-	}
-	if(preClassActive !=null) preClassActive.className="accordion-toggle";
-	document.getElementById('collapse_'+id).style.height='auto';
-	e.className="accordion-toggle active";
-	preClassActive=e;
-}
 </script>
 
 

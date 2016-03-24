@@ -11,22 +11,22 @@
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/resp.css" rel="stylesheet">
     <style type="text/css"></style>
-
     <script src="assets/js/angular.min.js"></script>
     <script src="assets/js/app.js"></script>
-
-
+    <script src="assets/js/appJs.js"></script>
+	<script src="assets/js/project.js"></script>
 
 </head>
 
 <body ng-controller="ProjectDetailsCtrl">
 
+
 <div id="header" class="header">
     <div class="width titul">
-        <div class="reg inline">
-            <div class="bleft inline login"><a href="#" id="login-link" class="login-link">Login</a></div>
-            <div class="bleft bright inline login"><a href="#" id="reg-link" class="login-link">Register</a></div>
-        </div>
+          <div class="reg inline" id="hideLogin">
+                <div class="bleft inline login"><a href="#loginForm" id="login-link" onclick="dialog_login.dialog( 'open' );" class="login-link">Login</a></div> 
+                <div class="bleft bright inline login"><a href="#registreForm" onclick="dialog_registre.dialog( 'open' );" data-rel="popup" id="reg-link" class="login-link">Register</a></div>
+            </div>
 
         <div class="social inline fright">
             <ul id="social">
@@ -123,7 +123,6 @@
             <div id="description_content">
                 <div class="title_description_content"> {{projectDetails.content.titleDescription}} </div>
                 <div class="text_description_content"> {{projectDetails.content.textDescription}} </div>
-               
             </div>
         </div>
        
@@ -174,47 +173,41 @@
 <div class="clear"></div>
 <h4 class="decoration text-center"><span class="nobacgr">Ask a Question</span></h4>
 <div id="asc_a_question" >
-
-    <div class="reply_user main_reply">
-        <div class="row-fluid">
-            <div class="span2">
-                <div class="image_face"></div>
-            </div>
-            <div class="span10">
-                <div class="name_and_date"><span class="user_name">{{projectDetails.messageDetails.user}}</span> - {{projectDetails.messageDetails.time}} - <span class="reply_t">Reply</span></div>
-                <div class="text_reply">{{projectDetails.messageDetails.msg}}</div>
-
-            </div>
+	<input type="hidden" id="idPageComment" value="1">
+    <div class="reply_user main_reply" id="comments">
+    	<div id="oneComment" style="display: none;">
+	        <div class="row-fluid">
+	            <div class="span2">
+	                <div class="image_face">
+	                	<img src="##imgUser##" /> 
+	                </div>
+	            </div>
+	            <div class="span10">
+	                <div class="name_and_date"><span class="user_name">##nameUser##</span> - ##timeUser## - </div>
+	                <div class="text_reply">##msgUser##</div>
+	
+	            </div>
+	        </div>
         </div>
+        
     </div>
+    
+    <img src="Images/chargement.gif" width="120"  id="image_chargement" />
 
-    <div class="reply_user subreply">
-        <div class="row-fluid">
-            <div class="span2">
-                <div class="image_face"></div>
-            </div>
-            <div class="span10">
-                <div class="name_and_date"><span class="user_name">{{projectDetails.messageDetails.user}}</span> - {{projectDetails.messageDetails.time}} - <span class="reply_t">Reply</span></div>
-                <div class="text_reply">{{projectDetails.messageDetails.msg}}</div>
-
-            </div>
-        </div>
-    </div>
 </div>
 <div id="asc_a_question_form">
     <h3 class="text-center asc_question_form_name">Ask a <span class="h3_quest">Question</span></h3>
     <div class="form_question">
         <div class="row-fluid">
             <div class="controls controls-row message">
-                <input class="inputp search-query span4" type="text" placeholder="Name*">
-                <input class="inputp search-query span4" type="text" placeholder="Email*">
-                <input class="inputp search-query span4" type="text" placeholder="Website*">
-                <div class="clear"></div>
-                <textarea id="redex" class="inputp search-query span12"  rows="5" placeholder="Project description"></textarea>
-                <div class="clear"></div>
-                <div class="tmargin20">
-                    <button type="submit" class="btn"><strong>Send Message</strong></button>
-                </div>
+            	<form id="addCommentForm" action="addCommentaire.html" method="post" >
+	                <textarea id="commentMsg" class="inputp search-query span12" name="msg" rows="5" placeholder="Project description"></textarea>
+	                <input type="hidden" value="5" id="id_projet" name="id_projet" /> <!-- {{projectDetails.idProject}} -->
+	                <div class="clear"></div>
+	                <div class="tmargin20">
+	                    <button type="button" onclick="addComment()" class="btn"><strong>Send Message</strong></button>
+	                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -253,11 +246,27 @@
             </div>
         </div>
     </div>
+    <br/>
+    <div id="vote" align="center">
+        <a href="javascript: like(1);">
+          	<img id="like_vote" src="Images/no_like.png" width="37"/>
+        </a>
+        <a href="javascript: like(0);">
+          	<img id="dislike_vote" src="Images/no_dislike.png" width="50"/>
+        </a>
+        <br/>
+        <progress id="jaime" value="0" max="0" ></progress><br/>
+        <progress id="jaimepas" value="0" max="0"></progress>
+    </div>
+    
+     <br/>
     <div class="back_this_project_button">
         <button class="btn btn-large back_project" type="button">
             <small>BACK THIS PROJECT</small>
         </button>
+        
     </div>
+
     <div id="pledges_block" >
         <h3 class="decoration text-center"><span class="nobacgr_desc">Pledges</span></h3>
         <div class="pledges_block_info" ng-repeat="pledge in projectDetails.pledges">
@@ -487,7 +496,9 @@
         });
     });
     /* ]]> */
-
+     id_projet=document.getElementById("id_projet").value;
+	 setInterval('getCommentaire();', 250);
+	 updateLike();
 </script>
 
 </body>
