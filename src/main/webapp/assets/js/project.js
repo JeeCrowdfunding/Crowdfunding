@@ -157,26 +157,53 @@
             type: "GET",
             success: function (my_text) {
     			 if(my_text.indexOf("Erreur")==-1){
-    				 var a=my_text.split(";");
+    				 var a=my_text.split(";;");
     				 var mydiv=document.getElementById("ProjectDetailsCtrl").innerHTML;	 
    
     					 mydiv=mydiv.replace(/##idProjet##/g,""+id_projet);
     					 mydiv=mydiv.replace("##projetName##",""+a[1]);
     					 mydiv=mydiv.replace("##userProjetName##",""+a[2]);
-    					 mydiv=mydiv.replace("##projetDisc## ",""+a[9]);
+    					 mydiv=mydiv.replace("##projetDisc##",""+a[9]);
     					 mydiv=mydiv.replace("##projetMiniDisc## ",""+a[10]);
     					 mydiv=mydiv.replace("##imgProjet##",""+a[7]);
-    					 mydiv=mydiv.replace("##montantProjet##",""+a[3]);
-    					 mydiv=mydiv.replace("##gevinToProjet##",""+a[4]);
-    					 mydiv=mydiv.replace("##dureeProjet##",""+a[6]);
+    					 mydiv=mydiv.replace("{{projectDetails.pledgedGoal}}",""+a[3]);
+    					 mydiv=mydiv.replace("{{projectDetails.pledged}}",""+a[4]);
+    					 mydiv=mydiv.replace("{{projectDetails.daysToGo}}",""+a[6]);
+    					 mydiv=mydiv.replace("{{projectDetails.backers}}",""+a[5]);
     					 mydiv=mydiv.replace("##projetCategorie##",""+a[8]);
     					 mydiv=mydiv.replace("##userProjetDesc##",""+a[12]);
     					 mydiv=mydiv.replace("##userProjetTel##",""+a[11]);
     					 mydiv=mydiv.replace("##userProjetImg##",""+a[13]);
     					 //alert("ok"+a[1]);
     					 document.getElementById("ProjectDetailsCtrl").innerHTML=mydiv;
+    					 //getAventages();
     			 }
     			 else alert(""+my_text);
             }
         });
     }
+    
+    function getAventages(){
+    	
+        $.ajax({
+            url: "aventages.html?idProject="+id_projet,
+            type: "GET",
+            success: function (my_text) {
+    			 if(my_text.indexOf("Erreur")==-1){
+    				 var a=my_text.split(";;");
+    				 var mydiv=document.getElementById("ProjectDetailsCtrl").innerHTML;	 
+   
+    					 mydiv=mydiv.replace(/##idProjet##/g,""+id_projet);
+    					 mydiv=mydiv.replace("##projetName##",""+a[1]);
+    					 mydiv=mydiv.replace("##userProjetName##",""+a[2]);
+    					 mydiv=mydiv.replace("##projetDisc##",""+a[9]);
+    					 //alert("ok"+a[1]);
+    					 document.getElementById("ProjectDetailsCtrl").innerHTML=mydiv;
+    					 getAventages();
+    			 }
+    			 else alert(""+my_text);
+            }
+        });
+    	
+    }
+    

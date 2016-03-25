@@ -34,10 +34,49 @@ function setActivSherchForProject() { sherchForProject=setInterval('findProjectB
 
 function stopActivSherchForProject() {clearInterval(sherchForProject);}	
     
+function getResultatOfSherch(){
+    var div=document.getElementById("projetShow").innerHTML;
+    var projets=document.getElementById("ProjectsCtrl");
+    projets.innerHTML="<center><img src=\"Images/chargement.gif\" /></center>";
+    var title=document.getElementById("autocomplete").value;
+    $.ajax({
+        url: "findProjet.html?titre="+title+"&page=1&type=1",
+        type: "GET",
+        success: function (my_text) {
+			 if(my_text.indexOf("Erreur")==-1){
+				 projets.innerHTML="";
+				 var my=my_text.split("|");
+				 for(var i=0;i<my.length;i++) {
+					 var mydiv;
+					 if(i<3) { mydiv="<div class=\"item active\" >"+div+"</div>"; }
+					 else { mydiv="<div class=\"item\" >"+div+"</div>"; }
+					 a=my[i].split(";");
+					 mydiv=mydiv.replace(/##idProjet##/g,""+a[0]);
+					 mydiv=mydiv.replace("##projetName##",""+a[1]);
+					 mydiv=mydiv.replace("##userNameOfProjet##",""+a[2]);
+					 mydiv=mydiv.replace("##descProjet##",""+a[9]);
+					 mydiv=mydiv.replace("##imgProjet##",""+a[7]);
+					 mydiv=mydiv.replace("##montantProjet##",""+a[3]);
+					 mydiv=mydiv.replace("##gevinToProjet##",""+a[4]);
+					 mydiv=mydiv.replace("##dureeProjet##",""+a[6]);
+					 mydiv=mydiv.replace("##progTitle##",""+(a[4]/a[3]*100)+"%");
+					 mydiv=mydiv.replace("##progValue##",""+a[3]);
+					 mydiv=mydiv.replace("##progMax##",""+a[4]);
+					 projets.innerHTML+=mydiv;
+				 }
+				 document.getElementById("advanced-search").style.display="";
+			 }
+			 else alert(""+my_text);
+        }
+    }); 
+	
+}
+
 function changeHeader(b){
 	var h=document.getElementById("hideLogin");
 	if(b){	
-		h.innerHTML="<div class=\"bleft inline login\"><a href=\"#\" id=\"login-link\" onclick=\"logout()\" class=\"login-link\">Logout</a></div>";	
+		h.innerHTML="<div class=\"bleft inline login\"><a href=\"#\" id=\"login-link\" onclick=\"logout()\" class=\"login-link\">Logout</a></div>";
+		h.innerHTML+="<div class=\"bleft inline login\"><a href=\"index.html?projetShow=1\" class=\"login-link\">My Projects</a></div> ";
 		okAccordion=true;
 	}
 	else {
@@ -75,6 +114,8 @@ function accordionAfterClick(e, id) {
 		e.className="accordion-toggle active";
 		preClassActive=e;
 	}
+	
+	else dialog_login.dialog( 'open' );
 	
 }
 

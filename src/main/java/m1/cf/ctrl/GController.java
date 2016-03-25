@@ -40,7 +40,7 @@ import m1.cf.db.*;
 public class GController {
 
 	//static String chemin = "/home/etudiant/Documents/crowdfunding/Crowdfunding/src/main/webapp/Images/";
-	static String chemin = "./Images/";
+	static String chemin = "Images/";
 	@Autowired
 	private UserRepo utilisateurRepo;	
 	@Autowired
@@ -204,7 +204,27 @@ public class GController {
 			else return "objet vide";
 		}
 	
-
+		/* =========>  Aventages  <========= */
+		@RequestMapping(value = "/aventages", method = RequestMethod.GET)
+		@ResponseBody
+		public String getAvantages( @ModelAttribute(value = "idProject") long id_projet) {
+		
+				Projet p= projetRepo.findOne(id_projet);
+				List<Avantage> a =avantageRepo.findAvantageByProjet(p);
+				String projetAv="";
+				for(int i=0;i<a.size();i++){
+					projetAv+=""+a.get(i).getId()+";;"
+							+ ""+a.get(i).getMontant()+";;"
+							+ ""+a.get(i).getDescription()+";;"
+							+ ""+a.size();
+					
+					if(i<a.size()-1) projetAv+="|";
+				}
+				
+				if(projetAv!="") return projetAv;
+				else return "Erreur : avantages not find !";
+		}	
+		
 		/* =========>  Les Projet  <========= */
 		
 		
@@ -241,7 +261,7 @@ public class GController {
 			 
 			String name_of_dir_images="new_"+this.u.getId();
 			File k= new File(servletContext.getRealPath("/Images/")+"/"+name_of_dir_images);
-			Projet P = new Projet(titre, minidesc,description, montant , duree , ""); //(chemin + file.getOriginalFilename())
+			Projet P = new Projet(titre, minidesc,description, montant , duree , (chemin + file.getOriginalFilename())); //
 			P.setUser(this.u);
 			boolean ver=true;
 			if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
@@ -382,20 +402,20 @@ public class GController {
 						+ "\"error\" : \"false\""
 						+ "}";*/
 				return ""
-					+ ""+p.getId()+";"
-					+ ""+p.getTitre()+";"
-					+ ""+p.getUser().getNom()+" "+p.getUser().getPrenom()+";"
-					+ ""+p.getMontant()+";"
-					+ ""+mantatConstribution+";"
-					+ ""+nombreDeConstribution+";"
-					+ ""+aujourdhui.compareTo(d)+";"
-					+ "Images/"+p.getImage()+";"
-					+ ""+categoriesOfProjet+";"
-					+ ""+p.getDescription()+";"
-					+ ""+p.getMiniDescription()+";"
-					+ ""+p.getUser().getDescription()+";"
-					+ ""+p.getUser().getNumtel()+";"
-					+ ""+p.getUser().getPhoto()+";";
+					+ ""+p.getId()+";;"
+					+ ""+p.getTitre()+";;"
+					+ ""+p.getUser().getNom()+" "+p.getUser().getPrenom()+";;"
+					+ ""+p.getMontant()+";;"
+					+ ""+mantatConstribution+";;"
+					+ ""+nombreDeConstribution+";;"
+					+ ""+aujourdhui.compareTo(d)+";;"
+					+ ""+p.getImage()+";;"
+					+ ""+categoriesOfProjet+";;"
+					+ ""+p.getDescription()+";;"
+					+ ""+p.getMiniDescription()+";;"
+					+ ""+p.getUser().getDescription()+";;"
+					+ ""+p.getUser().getNumtel()+";;"
+					+ ""+p.getUser().getPhoto()+";;";
 				
 				//return ""+p.getId()+";"+p.getTitre()+";"+p.getUser().getId()+";"+
 			}
@@ -409,19 +429,18 @@ public class GController {
 			page--;
 			Page<Projet> pp=projetRepo.findAll(new PageRequest(page, 6, new Sort(Sort.Direction.DESC, "id")));
 			List<Projet> p= pp.getContent();
-			String myP="[";		
+			String myP="";		
 			for(int i=0;i<p.size();i++) {
 				Date d=p.get(i).getCree_le();
 				d.setTime( ( d.getTimezoneOffset()+p.get(i).getDuree() ) );
 				Date aujourdhui = new Date();
 				
 				List<APourCategorie> ap=apcRepo.findAPourCategorieByProjet(p.get(i));
-				String categoriesOfProjet="[ ";
+				String categoriesOfProjet="";
 				for(int j=0;j<ap.size();j++) {
-					if(j<ap.size()-1) categoriesOfProjet+=ap.get(j).getCategorie().getTitre()+", ";
-					else categoriesOfProjet+=ap.get(j).getCategorie().getTitre();
+					categoriesOfProjet+=ap.get(j).getCategorie().getTitre()+" ";
 				}
-				categoriesOfProjet+=" ]";
+
 				int nombreDeConstribution=0;
 				float mantatConstribution=0.0f;
 				List<Avantage> av=avantageRepo.findAvantageByProjet(p.get(i));
@@ -432,24 +451,74 @@ public class GController {
 						nombreDeConstribution++;
 					}
 				}
-				myP+= "{"
-						+ "\"idProject\" : \""+p.get(i).getId()+"\","
-						+ "\"projectName\" : \""+p.get(i).getTitre()+"\","
-						+ "\"authorName\" : \""+p.get(i).getUser().getNom()+"\","
-						+ "\"pledgedGoal\" : \""+p.get(i).getMontant()+"\","
-						+ "\"pledged\" : \""+mantatConstribution+"\","
-						+ "\"backers\" : \""+nombreDeConstribution+"\","
-						+ "\"daysToGo\" : \""+aujourdhui.compareTo(d)+"\","
-						+ "\"ImgUrl\" : \"Images/"+p.get(i).getImage()+"\","
-						+ "\"categorie\" : \""+categoriesOfProjet+"\","
-						+ "\"nbrPages\" : \""+pp.getTotalPages()+"\", "
-						+ "\"description\" : \""+p.get(i).getMiniDescription()+"\","
-						+ "\"error\" : \"false\""
-						+ "}";
-				if(i<(p.size()-1)) myP+=",";
+				  myP+= ""+p.get(i).getId()+";;"
+								+ ""+p.get(i).getTitre()+";;"
+								+ ""+p.get(i).getUser().getNom()+" "+p.get(i).getUser().getPrenom()+";;"
+								+ ""+p.get(i).getMontant()+";;"
+								+ ""+mantatConstribution+";;"
+								+ ""+nombreDeConstribution+";;"
+								+ ""+aujourdhui.compareTo(d)+";;"
+								+ ""+p.get(i).getImage()+";;"
+								+ ""+categoriesOfProjet+";;"
+								+ ""+p.get(i).getMiniDescription()+";;"
+								+ ""+pp.getTotalPages()+";;";
+
+				if(i<(p.size()-1)) myP+="|";
 			}
 				//myP +="Page "+(pp.getNumber()+1)+" of "+pp.getTotalPages()+" affichage par => "+pp.getSize()+"<br/>";
-				myP+="]";
+				return myP;
+				
+		}	
+
+		@RequestMapping(value = "/getMyprojects", method = RequestMethod.GET)
+		@ResponseBody
+		public String getMyprojects(@ModelAttribute(value = "page") int page, HttpServletRequest request) {
+			
+			if(!this.isConnected(request)) {
+				
+				return "Erreur : Not connected !";
+			}
+			
+			page--;
+			Page<Projet> pp=projetRepo.findByUser(this.u, new PageRequest(page, 6, new Sort(Sort.Direction.DESC, "id")));
+			List<Projet> p= pp.getContent();
+			String myP="";		
+			for(int i=0;i<p.size();i++) {
+				Date d=p.get(i).getCree_le();
+				d.setTime( ( d.getTimezoneOffset()+p.get(i).getDuree() ) );
+				Date aujourdhui = new Date();
+				
+				List<APourCategorie> ap=apcRepo.findAPourCategorieByProjet(p.get(i));
+				String categoriesOfProjet="";
+				for(int j=0;j<ap.size();j++) {
+					categoriesOfProjet+=ap.get(j).getCategorie().getTitre()+" ";
+				}
+
+				int nombreDeConstribution=0;
+				float mantatConstribution=0.0f;
+				List<Avantage> av=avantageRepo.findAvantageByProjet(p.get(i));
+				for(int j=0;j<av.size();j++) {
+					List<Contribution> constribution = contributionRepo.findContributionByAvantage(av.get(j));
+					for(int k=0;k<constribution.size();k++) {
+						mantatConstribution+=constribution.get(k).getMontant();
+						nombreDeConstribution++;
+					}
+				}
+				  myP+= ""+p.get(i).getId()+";;"
+								+ ""+p.get(i).getTitre()+";;"
+								+ ""+p.get(i).getUser().getNom()+" "+p.get(i).getUser().getPrenom()+";;"
+								+ ""+p.get(i).getMontant()+";;"
+								+ ""+mantatConstribution+";;"
+								+ ""+nombreDeConstribution+";;"
+								+ ""+aujourdhui.compareTo(d)+";;"
+								+ ""+p.get(i).getImage()+";;"
+								+ ""+categoriesOfProjet+";;"
+								+ ""+p.get(i).getMiniDescription()+";;"
+								+ ""+pp.getTotalPages()+";;";
+
+				if(i<(p.size()-1)) myP+="|";
+			}
+				//myP +="Page "+(pp.getNumber()+1)+" of "+pp.getTotalPages()+" affichage par => "+pp.getSize()+"<br/>";
 				return myP;
 				
 		}	
@@ -467,10 +536,45 @@ public class GController {
 					myP+= ""+p.get(i).getTitre();
 					if(i<(p.size()-1)) myP+=",";
 				}
-				
+				else {
+					
+					Date d=p.get(i).getCree_le();
+					d.setTime( ( d.getTimezoneOffset()+p.get(i).getDuree() ) );
+					Date aujourdhui = new Date();
+					
+					List<APourCategorie> ap=apcRepo.findAPourCategorieByProjet(p.get(i));
+					String categoriesOfProjet="[ ";
+					for(int j=0;j<ap.size();j++) {
+						if(j<ap.size()-1) categoriesOfProjet+=ap.get(j).getCategorie().getTitre()+", ";
+						else categoriesOfProjet+=ap.get(j).getCategorie().getTitre();
+					}
+					categoriesOfProjet+=" ]";
+					int nombreDeConstribution=0;
+					float mantatConstribution=0.0f;
+					List<Avantage> av=avantageRepo.findAvantageByProjet(p.get(i));
+					for(int j=0;j<av.size();j++) {
+						List<Contribution> constribution = contributionRepo.findContributionByAvantage(av.get(j));
+						for(int k=0;k<constribution.size();k++) {
+							mantatConstribution+=constribution.get(k).getMontant();
+							nombreDeConstribution++;
+						}
+					}
+					
+					myP+=   ""+p.get(i).getId()+";"
+							+ ""+p.get(i).getTitre()+";"
+							+ ""+p.get(i).getUser().getNom()+" "+p.get(i).getUser().getPrenom()+";"
+							+ ""+p.get(i).getMontant()+";"
+							+ ""+mantatConstribution+";"
+							+ ""+nombreDeConstribution+";"
+							+ ""+aujourdhui.compareTo(d)+";"
+							+ ""+p.get(i).getImage()+";"
+							+ ""+categoriesOfProjet+";"
+							+ ""+p.get(i).getMiniDescription()+";";
+					if(i<(p.size()-1)) myP+="|";
+				}
  			}
 			if(myP!="") return myP;
-			else return "Erreur : Pas de produit ...";
+			else return "Erreur : Not find ...";
 		}
 		
 		// project like or dislike 
@@ -510,9 +614,8 @@ public class GController {
 				HttpServletRequest request) {
 			
 			if(!this.isConnected(request)) {	
-				return "Erreur : you're not connected !";
+				//return "Erreur : you're not connected !";
 			}
-		
 			int like=0, dislike=0, user_dus=2;
 			Projet p=projetRepo.findOne(id_projet);
 			List<LikeProject> llp=lpRepo.findLikeProjectByProjet(p);

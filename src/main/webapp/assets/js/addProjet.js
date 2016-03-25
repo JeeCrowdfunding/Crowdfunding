@@ -122,39 +122,6 @@
     
     
 
-    
-    	/*	
-	function getRes(){
-	    var s=document.getElementById("id_cherche").value;
-		
-		if(s.length>1 && ch!=s){
-				ch=s;
-				if (window.XMLHttpRequest) {
-					// code for IE7+, Firefox, Chrome, Opera, Safari
-					var my_request = new XMLHttpRequest();
-				} else {
-					// code for IE6, IE5
-					var my_request = new ActiveXObject("Microsoft.XMLHTTP");}
-				
-				var url="rechercher.php?cherche="+s;
-				
-				 my_request.onreadystatechange=function() {
-				 
-					 if (my_request.readyState==4 && my_request.status==200) {
-					 
-					 var my_text=my_request.responseText; 
-					 var t=my_text.split(",");
-					  	$( "#id_cherche" ).autocomplete({
-							source: t
-						});
-					 }
-				 } 
-				my_request.open("GET", url, true) ;
-				my_request.send();
-	 }
-			
-	}*/
-
 
     function getProjects(page) {
     	
@@ -163,30 +130,32 @@
         var p=document.getElementById("pagination");
         projets.innerHTML="<center><img src=\"Images/chargement.gif\" /></center>";
         p.innerHTML="";
+        var nbr=0;
         $.ajax({
             url: "getprojects.html?page="+page,
             type: "GET",
             success: function (my_text) {
     			 if(my_text.indexOf("Erreur")==-1){
     				 projets.innerHTML="";
-    				 var my=JSON.parse(my_text);
+    				 var my=my_text.split("|");
     				 for(var i=0;i<my.length;i++) {
     					 var mydiv=div;
-    					 a=my[i];
-    					 mydiv=mydiv.replace(/##idProjet##/g,""+a.idProject);
-    					 mydiv=mydiv.replace("##projetName##",""+a.projectName);
-    					 mydiv=mydiv.replace("##userNameOfProjet##",""+a.authorName);
-    					 mydiv=mydiv.replace("##descProjet##",""+a.description);
-    					 mydiv=mydiv.replace("##imgProjet##",""+a.ImgUrl);
-    					 mydiv=mydiv.replace("##montantProjet##",""+a.pledgedGoal);
-    					 mydiv=mydiv.replace("##gevinToProjet##",""+a.pledged);
-    					 mydiv=mydiv.replace("##dureeProjet##",""+a.daysToGo);
-    					 mydiv=mydiv.replace("##progTitle##",""+(a.pledged/a.pledgedGoal*100));
-    					 mydiv=mydiv.replace("##progValue##",""+a.pledged);
-    					 mydiv=mydiv.replace("##progMax##",""+a.pledgedGoal);
+    					 a=my[i].split(";;");
+    					 mydiv=mydiv.replace(/##idProjet##/g,""+a[0]);
+    					 mydiv=mydiv.replace("##projetName##",""+a[1]);
+    					 mydiv=mydiv.replace("##userNameOfProjet##",""+a[2]);
+    					 mydiv=mydiv.replace("##descProjet##",""+a[9]);
+    					 mydiv=mydiv.replace("##imgProjet##",""+a[7]);
+    					 mydiv=mydiv.replace("##montantProjet##",""+a[3]);
+    					 mydiv=mydiv.replace("##gevinToProjet##",""+a[4]);
+    					 mydiv=mydiv.replace("##dureeProjet##",""+a[6]);
+    					 mydiv=mydiv.replace("##progTitle##",""+(a[4]/a[3]*100)+"%");
+    					 mydiv=mydiv.replace("##progValue##",""+a[3]);
+    					 mydiv=mydiv.replace("##progMax##",""+a[4]);
     					 projets.innerHTML+=mydiv;
+    					 if(nbr==0) nbr=a[10];
     				 }
-    				 var nbr=my[0].nbrPages;
+
     				 if(nbr<=0) nbr=1;
     				 for(var i=1;i<=nbr;i++) {
     						if(i==page) p.innerHTML+= '<button class="btn" onclick="getProjects('+i+')" ><span class="gray">'+i+'</span></button>';
@@ -199,4 +168,47 @@
         
     }
 
+    function getMyProject(page){
+        var div=document.getElementById("projetShow").innerHTML;
+        var projets=document.getElementById("projetsBord");
+        var p=document.getElementById("pagination");
+        projets.innerHTML="<center><img src=\"Images/chargement.gif\" /></center>";
+        p.innerHTML="";
+        var nbr=0;
+        $.ajax({
+            url: "getMyprojects.html?page="+page,
+            type: "GET",
+            success: function (my_text) {
+    			 if(my_text.indexOf("Erreur")==-1){
+    				 projets.innerHTML="";
+    				 var my=my_text.split("|");
+    				 for(var i=0;i<my.length;i++) {
+    					 var mydiv=div;
+    					 a=my[i].split(";;");
+    					 mydiv=mydiv.replace(/##idProjet##/g,""+a[0]);
+    					 mydiv=mydiv.replace("##projetName##",""+a[1]);
+    					 mydiv=mydiv.replace("##userNameOfProjet##",""+a[2]);
+    					 mydiv=mydiv.replace("##descProjet##",""+a[9]);
+    					 mydiv=mydiv.replace("##imgProjet##",""+a[7]);
+    					 mydiv=mydiv.replace("##montantProjet##",""+a[3]);
+    					 mydiv=mydiv.replace("##gevinToProjet##",""+a[4]);
+    					 mydiv=mydiv.replace("##dureeProjet##",""+a[6]);
+    					 mydiv=mydiv.replace("##progTitle##",""+(a[4]/a[3]*100)+"%");
+    					 mydiv=mydiv.replace("##progValue##",""+a[3]);
+    					 mydiv=mydiv.replace("##progMax##",""+a[4]);
+    					 projets.innerHTML+=mydiv;
+    					 if(nbr==0) nbr=a[10];
+    				 }
 
+    				 if(nbr<=0) nbr=1;
+    				 for(var i=1;i<=nbr;i++) {
+    						if(i==page) p.innerHTML+= '<button class="btn" onclick="getProjects('+i+')" ><span class="gray">'+i+'</span></button>';
+    						else p.innerHTML+= '<button class="btn" onclick="getProjects('+i+')" >'+i+'</button>';
+    				 }
+    				 document.getElementById("spanTitleOfContent").innerHTML="My Projects";
+    			 }
+    			 else alert(""+my_text);
+            }
+        }); 
+    	
+    }

@@ -11,12 +11,12 @@
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/resp.css" rel="stylesheet">
     <link href="assets/css/jquery-ui.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="assets/js/jquery-ui.css">
     
     <style type="text/css"></style>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/appJs.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
 	<script src="assets/js/project.js"></script>
 
 
@@ -53,9 +53,11 @@
 			 });
 			 makeCnx();
 			 id_projet= location.search.split('id=')[1];
+			 document.getElementById("id_projet").value=id_projet;
 			 setInterval('getCommentaire();', 250);
 			 updateLike();
 			 getMyProjet();
+			 document.getElementById('aventage_bolck').style.height="auto";
 		});
 	
 	</script>
@@ -276,8 +278,8 @@
         <div class="row-fluid">
             <div class="controls controls-row message">
             	<form id="addCommentForm" action="addCommentaire.html" method="post" >
-	                <textarea id="commentMsg" class="inputp search-query span12" name="msg" rows="5" placeholder="Project description"></textarea>
-	                <input type="hidden" value="5" id="id_projet" name="id_projet" /> <!-- {{projectDetails.idProject}} -->
+	                <textarea id="commentMsg" class="inputp search-query span12" name="msg" rows="5" placeholder="Comment"></textarea>
+	                <input type="hidden" value="0" id="id_projet" name="id_projet" /> <!-- {{projectDetails.idProject}} -->
 	                <div class="clear"></div>
 	                <div class="tmargin20">
 	                    <button type="button" onclick="addComment()" class="btn"><strong>Send Message</strong></button>
@@ -291,7 +293,7 @@
 
 <!--------------------------------- OPEN Div: Project Details + pledged +Payment  ----------------------- -->
 
-<div class="sidebar_descr span4">
+<div class="sidebar_descr span4" id="aventage_bolck" >
     <div id="back_this_project_block" >
         <div class="backers_days_blocks first">
             <div class="row-fluid">

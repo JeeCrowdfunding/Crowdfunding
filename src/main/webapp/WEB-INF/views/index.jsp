@@ -17,7 +17,7 @@
     <link href="assets/css/resp.css" rel="stylesheet">
     <link href="assets/css/colorbox.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/js/CLEditor/jquery.cleditor.css" type="text/css" />
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="assets/js/jquery-ui.css">
 
     <link rel="apple-touch-icon" href="assets/img/touch-icon.html" />
     <link rel="image_src" href="assets/img/touch-icon.html" />
@@ -25,7 +25,7 @@
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/CLEditor/jquery.cleditor.js"></script>
 	<script src="assets/js/addProjet.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="assets/js/jquery-ui.min.js"></script>
 	
 	
 		<script type="text/javascript">
@@ -108,8 +108,14 @@
 			});
 		    ed=$(".editeur").cleditor()[0];
 		    makeCnx();
-		    getProjects(1);
+		    var projetShow=location.search.split('projetShow=')[1];
+		    if(projetShow==1) {
+		    	getMyProject(1);
+		    	scrollToAnchor('id3');
+		    }
+		    else getProjects(1);
 		    getCat();
+		    
 		    
 	    });
 
@@ -268,7 +274,7 @@
                 <div class="search" id="searchh">
                     <span class="white"><strong>Find a project:</strong></span>
                     <input id="autocomplete" onfocus="setActivSherchForProject()" onblur="stopActivSherchForProject()" title="" type="text" class="span7 search-query">
-                    <input type="submit" class="submit" value="search" name="submit">
+                    <input type="button" onclick="getResultatOfSherch()" class="submit" value="search" name="submit">
                 </div>
             </div>
     </div>
@@ -286,90 +292,9 @@
 <!-------------------------------------------- Projects Slides ---------------------------------->
 
                 <div class="row-fluid projects font_p" id="top_slide">
-                <div id="myCarousel" class="carousel slide" ng-controller="ProjectsCtrl">
+                <div id="myCarousel" class="carousel slide">
                 <div class="carousel-inner content" >
-                <div class="item active" >
-                <div ng-repeat= "project in projects">
-                   <div class="span4 bordered" ng-if="$index < 3">
-                            <div class="folder">
-                            <h4 class="text-center title"><a href="projects.html#proj{{project.idProject}}">{{project.projectName}}</a></h4>
-                            </div>
-                            <div class="proj_name">
-                                <div class="clear"></div>
-                                <span class="fleft author">{{project.authorName}}</span>
-                                <table class="icons">
-                                    <tbody>
-                                    <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj{{project.idProject}}.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="assets/img/icon_lock.png" alt=""></a></td>
-                                    </tr>
-                                    </tbody>
-                                 </table>
-                                <div class="clear"></div>
-                           </div>
-                            <div class="folder border"><a href="projects.html#proj{{project.idProject}}"><div class="author_proj proj_{{project.idProject}}" ></div></a></div>
-                            <div class="folder lorem lines">
-                              <progress id="project{{$index+7}}" value="{{project.pledged}}" max="{{project.pledgedGoal}}"></progress>
-                            </div>
-                            <p class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate egestas sem, eu cursus ligula ullamcorper non. Curabitur tristique velit eu</p>
-                            <div class="folder price topbordered">
-                                <div class="span4">
-                                    <strong class="green"><span>$</span><span class="project_value" href="#project{{$index+7}}">200</span></strong>
-                                    <p>pledged</p>
-                                </div>
-                                <div class="span4 bleft">
-                                    <strong>50</strong>
-                                    <p>backers</p>
-                                </div>
-                                <div class="span4 bleft">
-                                    <strong>5</strong>
-                                    <p>days to go</p>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                </div>
-                <div class="item" >
-                <div ng-repeat="project in projects"> 
-                    <div class="span4 bordered" ng-if="$index > 2">
-                            <div class="folder">
-                            <h4 class="text-center title"><a href="projects.html#proj{{project.idProject}}">{{project.projectName}}</a></h4>
-                            </div>
-                            <div class="proj_name">
-                                <div class="clear"></div>
-                                <span class="fleft author">{{project.authorName}}</span>
-                                <table class="icons">
-                                    <tbody>
-                                    <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="assets/img/proj{{project.idProject}}.jpg" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
-                                        <td class="icos_proj_sm bleft"><a href="projects.html#proj{{project.idProject}}"><img src="assets/img/icon_lock.png" alt=""></a></td>
-                                    </tr>
-                                    </tbody>
-                                 </table>
-                                <div class="clear"></div>
-                           </div>
-                            <div class="folder border"><a href="projects.html#proj{{project.idProject}}"><div class="author_proj proj_{{project.idProject}}" ></div></a></div>
-                            <div class="folder lorem lines">
-                                <div id="project{{$index+7}}" value="{{project.pledgedGoal}}" class="slider"></div>
-                            </div>
-                            <p class="descr">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate egestas sem, eu cursus ligula ullamcorper non. Curabitur tristique velit eu</p>
-                            <div class="folder price topbordered">
-                                <div class="span4">
-                                    <strong class="green"><span>$</span><span class="project_value" href="#project{{$index+7}}">200</span></strong>
-                                    <p>pledged</p>
-                                </div>
-                                <div class="span4 bleft">
-                                    <strong>50</strong>
-                                    <p>backers</p>
-                                </div>
-                                <div class="span4 bleft">
-                                    <strong>5</strong>
-                                    <p>days to go</p>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                </div>
+                <div id="ProjectsCtrl"></div>
                 </div>
                 <a class="left carousel-control" href="#myCarousel" data-slide="prev"></a>
                 <a class="right carousel-control" href="#myCarousel" data-slide="next"></a>
@@ -493,7 +418,7 @@
         </div>
     </div>
 
-<h1 class="decoration text-center proj"><span class="nobacgr">Projects</span></h1>
+<h1 class="decoration text-center proj"><span id="spanTitleOfContent" class="nobacgr">Projects</span></h1>
 
     <section class="section content" id="portfolio-list">
 
@@ -537,14 +462,14 @@
                                 <table class="icons">
                                     <tbody>
                                     <tr>
-                                        <td class="icos_proj_sm bleft"><a class="group1" href="##imgProjet##" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
+                                        <td class="icos_proj_sm bleft"><a class="group1" href="" title=""><img src="assets/img/icon_search.png" alt=""></a></td>
                                         <td class="icos_proj_sm bleft"><a href="projects.html?id=##idProjet##"><img src="assets/img/icon_lock.png" alt=""></a></td>
                                     </tr>
                                     </tbody>
                                  </table>
                                 <div class="clear"></div>
                            </div>
-                            <div class="folder border"><a href="projects.html?id=##idProjet##"><div class="author_proj" ></div></a></div>
+                            <div class="folder border"><a href="projects.html?id=##idProjet##"><div class="author_proj" > <img src="##imgProjet##" /></div></a></div>
                             <div class="folder lorem lines">
                                 <progress  title="##progTitle##" value="##progValue##" max="##progMax##"></progress>
                             </div>
@@ -735,20 +660,7 @@
     <div class="bborder">
         <p><strong>Send Us a <span class="green">Message</span></strong></p>
     </div>
-    <form id="contact-us-form" class="row-fluid message" data-ajax="true">
-        <div class="controls controls-row">
-            <input class="inputp search-query span4" type="text" name="name" placeholder="Name*">
-            <input class="inputp search-query span4" type="text" name="email" placeholder="Email*">
-            <input class="inputp search-query span4" type="text" name="website" placeholder="Website*">
-            <div class="clear"></div>
-            <textarea id="redex" name="message" class="inputp search-query span12"  rows="5" placeholder="Project description"></textarea>
-            <div class="clear"></div>
-            <div class="tmargin20">
-                <button type="button" class="btn" name="submit" value="submit" id="contact_submit"><strong>Send Message</strong></button>
-            </div>
-            <div id="error_placeholder" class="form-message text-green"></div>
-        </div>
-    </form>
+    
 </div>
 
 </div>
