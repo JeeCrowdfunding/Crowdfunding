@@ -97,8 +97,9 @@
 				 d.src="Images/dislike.png";
 				 l.src="Images/no_like.png"; 
 				 l.style.width="37px";
-				 s.style.width="37px";
+				 d.style.width="37px";
 		 }
+		 //updateLike();
    	
    }
    
@@ -147,7 +148,25 @@
         
     	
     }
-    
+    function isItTheCurrentUser(mytext){
+        $.ajax({
+            url: "projectOfUser.html?idProject="+id_projet,
+            type: "GET",
+            success: function (my_text) {
+    			 if(my_text.indexOf("Erreur")==-1){
+    				 var a=mytext.split(";;");
+    				 document.getElementById("titre").value=a[1];
+    				 document.getElementById("montant").value=a[3];
+    				 document.getElementById("shortDesc").value=a[10];
+    				 document.getElementById("numProjet").value=id_projet;
+    				 document.getElementById("id_desc").value=a[9];
+    			 }
+    			 else {
+    				 document.getElementById("updateForm").style.display="none";
+    			 }
+            }
+        });
+    }
 
     function getMyProjet(){
     	
@@ -174,15 +193,15 @@
     					 mydiv=mydiv.replace("##userProjetDesc##",""+a[12]);
     					 mydiv=mydiv.replace("##userProjetTel##",""+a[11]);
     					 mydiv=mydiv.replace("##userProjetImg##",""+a[13]);
-    					 //alert("ok"+a[1]);
     					 document.getElementById("ProjectDetailsCtrl").innerHTML=mydiv;
     					 //getAventages();
+    					 isItTheCurrentUser(my_text);
     			 }
     			 else alert(""+my_text);
             }
         });
     }
-    
+
     function getAventages(){
     	
         $.ajax({

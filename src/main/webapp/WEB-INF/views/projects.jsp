@@ -10,18 +10,24 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/resp.css" rel="stylesheet">
-    <link href="assets/css/jquery-ui.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/js/jquery-ui.css">
+    <link rel="stylesheet" href="assets/js/CLEditor/jquery.cleditor.css" type="text/css" />
     
     <style type="text/css"></style>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/appJs.js"></script>
     <script src="assets/js/jquery-ui.min.js"></script>
 	<script src="assets/js/project.js"></script>
+	<script src="assets/js/CLEditor/jquery.cleditor.js"></script>
 
 
 	<script>
 		$(document).ready(function () {
+			$(".editeur").cleditor({
+				height: 600,
+				width: 600
+			}); 
+			
 			 dialog_login = $( "#loginForm" ).dialog({
 			      autoOpen: false,
 			      height: 350,
@@ -54,10 +60,12 @@
 			 makeCnx();
 			 id_projet= location.search.split('id=')[1];
 			 document.getElementById("id_projet").value=id_projet;
+			 
 			 setInterval('getCommentaire();', 250);
 			 updateLike();
 			 getMyProjet();
 			 document.getElementById('aventage_bolck').style.height="auto";
+			 document.getElementById("titre").value="ok";
 		});
 	
 	</script>
@@ -113,8 +121,6 @@
                         <li><a href="https://plus.google.com/" target="_blank"  original-title="googleplus"><img src="img/social/icon_header_g.png" alt=""></a></li>
                         <li><a href="https://twitter.com/" title="facebook" target="_blank" ><img src="img/social/icon_header_tw.png" alt=""></a></li>
                         <li><a href="http://www.linkedin.com/" target="_blank" original-title="linkedin"><img src="img/social/icon_header_in.png" alt=""></a></li>
-                        <li><a href="Hicham_domainname.html" target="_self" original-title="mail"><img src="img/social/icon_header_p.png" alt=""></a></li>
-                        <li><a href="Hicham_domainname.html" target="_self" original-title="mail"><img src="img/social/icon_header_ball.png" alt=""></a></li>
                     </ul>
                 </li>
 
@@ -192,18 +198,76 @@
         <ul class=" tabs_pages_ul row-fluid">
             <li class="active span4"><a href="#tab1" data-toggle="tab">DESCRIPTION</a></li>
             <li class="span4"><a href="#tab2" data-toggle="tab">BACKERS</a></li>
-            <li class="span4"><a href="#tab3" data-toggle="tab">UPDATES</a></li>
+            <li class="span4"><a href="#tab3" data-toggle="tab" >UPDATE</a></li>
         </ul>
     </div>
+    
     <div class="tab-content" style="padding-bottom: 9px;" >
         <div class="tab-pane active" id="tab1">
             <div id="description_content">
                 <div class="title_description_content"> ##projetMiniDisc## </div>
                 <div class="text_description_content"> ##projetDisc## </div>
+                
             </div>
         </div>
        
-
+		<div class="tab-pane active" id="tab3">
+		 <form class="form-search" action="updateProjet.html" method="post" enctype="multipart/form-data">
+            <div id="description_content">
+                <div class="title_description_content"> </div>
+                <div class="text_description_content"> 
+                <div class="form-group" id="updateForm" >
+                									<div class="text-center jumbotron"><h4>Project Summary </h4></div>
+										 				<input type="text" name="title" id="titre" class="inputp search-query span12" placeholder="Title" />
+										 				<div class="clear"></div>
+										 				<input type="text" name="montant" id="montant" class="inputp search-query span12" placeholder="Montant"/>
+										 				<div class="clear"></div>
+										 				
+										 				<textarea name="shortDesc"  id="shortDesc" class="inputp search-query span12"  rows="5" placeholder="Short Description"></textarea>
+										 				<div class="clear"></div>
+										 		 
+											 	
+								
+											 			  <input class="inputp search-query span12" type="file" id="file" name="image"/>
+											 			  <input type="hidden" name="numProjet" id="numProjet">
+											 			
+											 			<div class="text-center jumbotron"><h4>Project Page </h4></div>
+											 			<br/> <textarea id="id_desc" name="desc"  class="inputp search-query span12"  rows = "5" cols="30"  ></textarea>
+											 		<br/><br/>
+											 		  <div class="span10">
+                                                <div >
+                                                    <h4 class="text-center jumbotron ">Extend Duration:</h4>
+                                                    <ul>
+                                                        <li>
+                                                            <input ng-model="duration" id="dont" type="radio" name="duration" value="0" checked hidden />
+                                                            <label for="dont">not extend</label>
+                                                        </li>
+                                                        <li>
+                                                            <input ng-model="duration" id="rfirst" type="radio" name="duration" value="30"  hidden />
+                                                            <label for="rfirst">30 Days</label>
+                                                        </li>
+                                                        <li>
+                                                            <input ng-model="duration" id="rsecond" type="radio" name="duration" value="45" hidden />
+                                                            <label for="rsecond">45 Days</label>
+                                                        </li>
+                                                        <li>
+                                                            <input ng-model="duration" id="re" type="radio" name="duration" value="60" hidden />
+                                                            <label for="re">60 Days</label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                                           <div class="decoration text-center create_butt"><span class="nobacgr_whit"><button class="btn btn-large search-query"  type="submit"> <span class="butt_small"><strong>UPDATE</strong></span></button></span><a name="id_cont"></a></div>
+                                            
+							</div>				 		
+	
+											
+                      
+                </div>
+            </div>
+ 
+            </form>
+        </div>
     </div>
 </div>
 
@@ -337,6 +401,7 @@
     </div>
     
      <br/>
+     
     <div class="back_this_project_button">
         <button class="btn btn-large back_project" type="button">
             <small>BACK THIS PROJECT</small>
@@ -511,69 +576,11 @@
         }
     });
 
-    $(function(){
-        var iframe = $('#player1')[0];
-        var player = $f(iframe);
-        var $myCarousel = $('#myCarousel');
 
-        player.addEvent('ready', function() {
-            // player.addEvent('pause', onPause);
-            player.addEvent('play', onPlay);
-            //player.addEvent('playProgress', onPlayProgress);
-        });
-
-
-        $('#myCarousel').bind('slide', function(){
-            player.api('pause');
-            $('#myCarousel').carousel({
-                interval: 6000
-            })
-        });
-
-
-        function onPlay(id) {
-            $myCarousel.carousel('pause');
-        }
-
-
-    });
-
-    /* ]]> */
 
 
 </script>
-<script>
-    /* <![CDATA[ */
-    var a = $('.left_content_descr').height();
-    $('.sidebar_descr').height(a - 70);
-    /* ]]> */
 
-</script>
-
-<script>
-    /* <![CDATA[ */
-    $('#myCarousel').hover(function() {
-        $('#visiblepanel').toggle();
-    });
-    /* ]]> */
-
-
-</script>
-<script>
-    /* <![CDATA[ */
-    $(function(){
-        // bind change event to select
-        $('#dynamic_select').bind('change', function () {
-            var url = $(this).val(); // get selected value
-            if (url) { // require a URL
-                window.location = url; // redirect
-            }
-            return false;
-        });
-    });
-    /* ]]> */
-
-</script>
 
 </body>
 </html>

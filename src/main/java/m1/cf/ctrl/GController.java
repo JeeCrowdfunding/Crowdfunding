@@ -95,6 +95,19 @@ public class GController {
 		
 	}
 	
+	@RequestMapping(value = "/projectOfUser", method = RequestMethod.GET)
+	@ResponseBody
+	public String isProjetOfUser( @ModelAttribute(value = "idProject") long id, HttpServletRequest request) {
+		
+		if(!isConnected(request)){
+			return "Erreur : your not connected";
+		}
+		Projet p=projetRepo.findOne(id);
+		if(this.u.getId()==p.getUser().getId()) return "ok";
+		else return "Erreur : this is not your project !";
+		
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	@ResponseBody
 	public String logout(HttpServletRequest request) {
@@ -139,7 +152,8 @@ public class GController {
 			String img="",error="";
 			if (file!=null && !file.isEmpty()) {
 				try {
-					
+					File myDir=new File(servletContext.getRealPath("/Images/profileImages/"));
+					if(!myDir.exists()) myDir.mkdir();
 					BufferedOutputStream stream = new BufferedOutputStream(
 							new FileOutputStream(new File(servletContext.getRealPath("/Images/profileImages/")+"/"+email+"_"+file.getOriginalFilename())));
 	                FileCopyUtils.copy(file.getInputStream(), stream);
@@ -720,7 +734,56 @@ public class GController {
 					if(i<(c.size()-1)) m+="|";
 				}
 				return ""+m;
-		}		
+		}
+		
+		// ajouter un nouveau projet (emprunter)
+		@RequestMapping(value = "/updateProjet", method = RequestMethod.POST)
+		@ResponseBody
+
+		public String uploadP(@ModelAttribute(value = "title") String titre, @ModelAttribute(value = "desc") String  description,
+				@ModelAttribute(value = "montant") float  montant, @RequestParam(value = "image", required = false) MultipartFile file,
+				@ModelAttribute(value = "duration") int duree, 
+				@ModelAttribute(value = "shortDesc")  String minidesc,  @ModelAttribute(value = "numProjet") long idProjet ,
+				 HttpServletRequest request){
+				if(!this.isConnected(request)) {
+							
+					return "Erreur : your not connected !";
+				}
+			
+				Projet P = projetRepo.findOne(idProjet);
+				
+			if (file!=null && !file.isEmpty()) {
+				try {
+					
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(new File(servletContext.getRealPath("/Images/")+"/" +file.getOriginalFilename())));
+	                FileCopyUtils.copy(file.getInputStream(), stream);
+					stream.close();
+					
+					File of=new File(servletContext.getRealPath("/")+P.getImage());
+					of.delete();
+					P.setImage((chemin + file.getOriginalFilename()));
+				}
+				catch (Exception e) {
+					return "Erreur : \"You failed to upload  => "+e.getMessage()+"\" ";
+				}
+			} 
+			
+			
+			if(titre!=null ) P.setTitre(titre); 
+			if(minidesc!=null) P.setMiniDescription(minidesc); 
+			if(description!=null) P.setDescription(description);
+			if(montant>0)P.setMontant(montant);
+			if(duree>0) P.setDuree(P.getDuree()+duree); 
+			
+			if(projetRepo!=null) {projetRepo.saveAndFlush(P); }
+
+			return "<script> "
+					+ "alert(\"Project added\") ;"
+					+ "document.location.replace('projects.html?id="+idProjet+"');"
+					+ " </script>";
+
+		}
 		
 		public void setServletContext(ServletContext servletContext) {
 			this.servletContext = servletContext;

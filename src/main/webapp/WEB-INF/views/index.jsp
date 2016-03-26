@@ -565,7 +565,7 @@
 											 		<div class="clear"></div>
 											 		<!--  <input type="button" value="+" onclick="javascript: dialog_add_cat.dialog('open');" /> -->
 													<fieldset>
-														<legend>Add new aventage </legend>
+														<legend>Add new avantage </legend>
 															<input class="inputp search-query span4" type="text" id="id_montant_av"  placeholder="Mantant">
             												<div class="clear"></div>
            											 		<textarea id="id_desc_av"  class="inputp search-query span4"  rows="5" placeholder="Description"></textarea>
@@ -622,15 +622,15 @@
                                                     <ul>
                                                         <li>
                                                             <input ng-model="duration" id="rfirst" type="radio" name="duration" value="30" checked hidden />
-                                                            <label for="rfirst">30 Days ($15)</label>
+                                                            <label for="rfirst">30 Days</label>
                                                         </li>
                                                         <li>
                                                             <input ng-model="duration" id="rsecond" type="radio" name="duration" value="45" hidden />
-                                                            <label for="rsecond">45 Days ($20)</label>
+                                                            <label for="rsecond">45 Days</label>
                                                         </li>
                                                         <li>
                                                             <input ng-model="duration" id="re" type="radio" name="duration" value="60" hidden />
-                                                            <label for="re">60 Days ($25)</label>
+                                                            <label for="re">60 Days</label>
                                                         </li>
                                                     </ul>
                                                 </div>
